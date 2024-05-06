@@ -1,0 +1,35 @@
+{
+  "name": "001",
+  "version": "1.2.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build_server": "npx tsc -w -p source/server",
+    "run_server": "node public/server/server.js",
+    "build_server_receiver": "npx tsc -w -p source/server_receiver",
+    "run_server_receiver": "node public/server_receiver/main.js",
+    "build_client": "npx webpack --config source/client/webpack.dev.js --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/hbs": "^4.0.4",
+    "@types/pg": "^8.11.5",
+    "@types/react": "^18.2.39",
+    "@types/react-dom": "^18.2.17",
+    "body-parser": "^1.20.2",
+    "hbs": "^4.2.0",
+    "pg": "^8.11.5",
+    "pg-protocol": "^1.6.1",
+    "pg-types": "^4.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}

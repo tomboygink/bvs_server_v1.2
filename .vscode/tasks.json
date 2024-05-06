@@ -1,0 +1,53 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // Компиляция сервера
+        {
+            "type": "npm",
+            "script": "build_server",
+            "problemMatcher": [],
+            "label": "npm: build_server",
+            "detail": "компиляция сервера",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        // Запуск сервера
+        {
+			"type": "npm",
+			"script": "run_server",
+			"problemMatcher": [],
+			"label": "npm: run_server",
+			"detail": "запуск сервера",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+        // Компиляция сервера приема передачи 
+        {
+			"type": "npm",
+			"script": "build_server_receiver",
+			"problemMatcher": [],
+			"label": "npm: build_server_receiver",
+			"detail": "компиляция сервера передачи данных",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+        // Запусе сервера приема передачи
+		{
+			"type": "npm",
+			"script": "run_server_receiver",
+			"problemMatcher": [],
+			"label": "npm: run_server_receiver",
+			"detail": "запуск сервера передачи данных",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+    ]
+}
