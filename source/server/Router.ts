@@ -1,5 +1,12 @@
 import { User } from "../config/xcore/dbase/User"
 import { Org } from "../config/xcore/dbase/Org"
+import { Jobs } from "../config/xcore/dbase/Jobs"
+import { DevsGroups } from "../config/xcore/dbase/DevsGroups"
+import { Devs } from "../config/xcore/dbase/Devs"
+import { SchemeSvg } from "../config/xcore/dbase/SchemeSvg"
+import { DevSess } from "../config/xcore/dbase/DevSess"
+
+
 
 
 export async function Router(body: any) {
@@ -83,6 +90,31 @@ export async function Router(body: any) {
                 res.user_sess_code = body.sess_code;
             }
         } break;
+        //Обновление организации
+
+
+        //-----------------------------------------ДОЛЖНОСТИ 
+        //Получение должности авторизованного пользователя 
+        case 'get_Jobs':{
+            var j  = new Jobs(body.args, body.sess_code);
+            data = await j.selectJobs();
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в получении данных должности';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+        }
+        break;
+        //Обновление должности
+
+
 
         //-----------------------------------------ДОБАВЛЕНИЕ/ИЗМЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЕМ
         //Добавление пользователя
@@ -106,12 +138,112 @@ export async function Router(body: any) {
                 res.error = null;
             }
         }
-
+        
+        // Изменение данных пользователя
+        // Для изменения данных авторизованного пользователя аргументы без пароля
+        // Для изменения данных другому пользователю необходим аргумент пароль даже если пустой
         case 'set_UpdateUserData': {
-
+            var u = new User(body.args, body.sess_code);
+            data = await u.updateUser();
         } break;
 
 
+
+        //-----------------------------------------ГРУППЫ УСТРОЙСТВ
+        //Получение групп
+        case 'get_DevsGroups':{
+            var dg = new DevsGroups(body.args, body.sess_code);
+            data = await dg.selectDevsGroups();
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в получении данных о группе';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+        }break;
+        //Добавление группы 
+        //Редактирование группы
+
+        //-----------------------------------------SVG-СХЕМА ГРУППЫ
+        //Получение схемы если она имеется 
+        case 'get_SchemeSvg':{
+            var svg = new SchemeSvg(body.args, body.sess_code);
+            data = await svg.selectSchemeSVG();
+
+            //console.log(data);
+
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в получении SVG-схемы возможно она отсутствует';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+
+        }break;
+        //Добавление/обновление схемы SVG группы
+
+
+        //-----------------------------------------УСТРОЙСТВА 
+        //Получение устройств
+        case 'get_Devs':{
+            var d = new Devs(body.args, body.sess_code);
+            data = await d.selectDevs();
+
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в получении данных устройства';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+        }break;
+
+        //Добавление устройств
+        //Редактирование устройств 
+
+
+        //-----------------------------------------ПОСЛЕДНЯЯ ПЕРЕДАННАЯ СЕССИЯ 
+        //Получение последней переданной сессии для отображение цвета маркера 
+        case 'get_LastDevSess':{
+            var ds = new DevSess(body.args, body.sess_code)
+            data = await ds.selectLastDevSess();
+
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в получении последней переданной сессии или данные отсутствуют';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+        }break
+
+        //Установка контрольной сессии
+
+        //Удалениу контрольной сессии
+        
+        //-----------------------------------------ПОВЕРКА 
 
 
         //-----------------------------------------ДРУГИЕ КОДЫ, КОТОРЫЕ НЕ ПРОПИСАНЫ

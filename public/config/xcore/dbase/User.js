@@ -173,7 +173,6 @@ var User = (function () {
                         if (!(checkUser.length === 0)) return [3, 3];
                         pass = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.password).digest('hex');
                         mail_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + this.args.email).digest('hex');
-                        ;
                         re_pass_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + pass).digest('hex');
                         ;
                         return [4, this.db.query("INSERT INTO users (login, password, family, name, father, telephone, " +
@@ -187,6 +186,56 @@ var User = (function () {
                         db_response = _a.sent();
                         return [2, db_response.rows];
                     case 3: return [2];
+                }
+            });
+        });
+    };
+    User.prototype.updateUser = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var checkMail, mail_code, checkMailandPass, pass, re_pass_code, mail_code;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.args.password === undefined)) return [3, 5];
+                        return [4, this.db.query("SELECT email FROM users WHERE id =" + this.args.id)];
+                    case 1:
+                        checkMail = _a.sent();
+                        return [4, this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
+                                " info = \'" + this.args.info + "\' WHERE id = " + this.args.id)];
+                    case 2:
+                        _a.sent();
+                        if (!(checkMail.rows[0].email !== this.args.email)) return [3, 4];
+                        mail_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code)
+                            .update(this.args.login + "_" + this.args.email).digest('hex');
+                        return [4, this.db.query("UPDATE users SET email = \'" + this.args.email + "\', mail_code = \'" + mail_code + "\' , act_mail = false WHERE id = " + this.args.id)];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [3, 11];
+                    case 5: return [4, this.db.query("SELECT email, password FROM users WHERE id =" + this.args.id)];
+                    case 6:
+                        checkMailandPass = _a.sent();
+                        return [4, this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
+                                " info = \'" + this.args.info + "\', deleted = " + this.args.deleted + " WHERE id = " + this.args.id)];
+                    case 7:
+                        _a.sent();
+                        if (!(checkMailandPass.rows[0].pass !== this.args.password && this.args.password !== "")) return [3, 9];
+                        pass = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.password).digest('hex');
+                        re_pass_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + pass).digest('hex');
+                        ;
+                        return [4, this.db.query("UPDATE users SET password = \'" + pass + "\', re_password_code = \'" + re_pass_code + "\' WHERE id = " + this.args.id)];
+                    case 8:
+                        _a.sent();
+                        _a.label = 9;
+                    case 9:
+                        if (!(checkMailandPass.rows[0].email !== this.args.email)) return [3, 11];
+                        mail_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code)
+                            .update(this.args.login + "_" + this.args.email).digest('hex');
+                        return [4, this.db.query("UPDATE users SET email = \'" + this.args.email + "\', mail_code = \'" + mail_code + "\' , act_mail = false WHERE id = " + this.args.id)];
+                    case 10:
+                        _a.sent();
+                        _a.label = 11;
+                    case 11: return [2];
                 }
             });
         });
