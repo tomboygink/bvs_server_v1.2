@@ -35,51 +35,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = __importDefault(require("path"));
-var express_1 = __importDefault(require("express"));
-var http_1 = __importDefault(require("http"));
-var body_parser_1 = __importDefault(require("body-parser"));
-var config_json_1 = __importDefault(require("../config/config.json"));
-var Router_1 = require("./Router");
-var Server = (function () {
-    function Server() {
-        this.app = null;
-        this.server = null;
-        this.app = (0, express_1.default)();
-        this.server = http_1.default.createServer(this.app);
-        this.app.set('view engine', 'hbs');
-        console.log(path_1.default.normalize(path_1.default.join(__dirname, '..', 'views')));
-        this.app.set('views', path_1.default.normalize(path_1.default.join(__dirname, '..', 'views')));
-        console.log(path_1.default.join(__dirname, '..', 'public'));
-        this.app.use('/static', express_1.default.static(path_1.default.join(__dirname, '..', 'public')));
+exports.SchemeSvg = exports.SchemeSvgEntity = void 0;
+var DBase_1 = require("./DBase");
+var SchemeSvgEntity = (function () {
+    function SchemeSvgEntity() {
+        this.id = 0;
+        this.id_devs_groups = 0;
+        this.svg = "";
     }
-    Server.prototype.route = function () {
-        var _this = this;
-        this.app.use(body_parser_1.default.json());
-        this.app.post("/api", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        _b = (_a = res).send;
-                        return [4, (0, Router_1.Router)(req.body)];
+    return SchemeSvgEntity;
+}());
+exports.SchemeSvgEntity = SchemeSvgEntity;
+var SchemeSvg = (function () {
+    function SchemeSvg(_args, _sess_code) {
+        this.db = (0, DBase_1.getDB)();
+        this.args = _args;
+        this.sess_code = _sess_code;
+    }
+    SchemeSvg.prototype.selectSchemeSVG = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response, result, svg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("SELECT * FROM scheme_svg WHERE id_devs_groups = " + this.args.id_devs_groups)];
                     case 1:
-                        _b.apply(_a, [_c.sent()]);
-                        return [2];
+                        db_response = _a.sent();
+                        result = new Array();
+                        for (svg in db_response.rows) {
+                            result.push(db_response.rows[svg]);
+                        }
+                        return [2, result];
                 }
             });
-        }); });
+        });
     };
-    Server.prototype.run = function () {
-        this.route();
-        this.server.listen(config_json_1.default.server_config.port, function () { console.log("\u0421\u0435\u0440\u0432\u0435\u0440 \u0437\u0430\u043F\u0443\u0448\u0435\u043D: http://".concat(config_json_1.default.server_config.host, ":").concat(config_json_1.default.server_config.port)); });
-    };
-    return Server;
+    return SchemeSvg;
 }());
-var srv = new Server();
-srv.run();
-//# sourceMappingURL=Server.js.map
+exports.SchemeSvg = SchemeSvg;
+//# sourceMappingURL=SchemeSvg.js.map

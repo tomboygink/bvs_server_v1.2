@@ -110,6 +110,7 @@ export class User {
         return result;
     }
 
+    // Добавление нового пользователя 
     async insertUser() {
 
         var checkUser = await this.selectUser();
@@ -117,7 +118,7 @@ export class User {
             // Генерация зашифрованного пароля 
             var pass = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.password).digest('hex');
             // Генерация зашифрованного кода подтверждение почты 
-            var mail_code = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.login + "_" + this.args.email).digest('hex');;
+            var mail_code = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.login + "_" + this.args.email).digest('hex');
             // Генерация зашифрованного кода для смены пароля когда пользователь забыл пароль
             var re_pass_code = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.login + "_" + pass).digest('hex');;
 
@@ -132,6 +133,51 @@ export class User {
 
             return db_response.rows;
         }
+    }
+
+    // Обновление данных пользователя 
+    async updateUser() {
+
+        // Проверка по наличию пароля 
+        // Если пароля нет то пользователь редачит сам себя 
+        if (this.args.password === undefined) {
+            var checkMail = await this.db.query("SELECT email FROM users WHERE id =" + this.args.id);
+            await this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
+                " info = \'" + this.args.info + "\' WHERE id = " + this.args.id)
+            //Редактирование данных почты 
+            if (checkMail.rows[0].email !== this.args.email) {
+                var mail_code = crypto.createHmac('sha256', CONFIG.crypto_code)
+                    .update(this.args.login + "_" + this.args.email).digest('hex');
+                await this.db.query("UPDATE users SET email = \'" + this.args.email + "\', mail_code = \'" + mail_code + "\' , act_mail = false WHERE id = " + this.args.id)
+            }
+        }
+        //Иначе если есть то пользователь редачит другого 
+        else {
+            var checkMailandPass = await this.db.query("SELECT email, password FROM users WHERE id =" + this.args.id);
+
+            await this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
+                " info = \'" + this.args.info + "\', deleted = "+this.args.deleted+" WHERE id = " + this.args.id);
+
+            //Редактирование данных с паролем 
+            if (checkMailandPass.rows[0].pass !== this.args.password && this.args.password!=="") {
+                // Генерация зашифрованного пароля 
+                var pass = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.password).digest('hex');
+                // Генерация зашифрованного кода для смены пароля когда пользователь забыл пароль
+                var re_pass_code = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.login + "_" + pass).digest('hex');;
+                
+                await this.db.query("UPDATE users SET password = \'" + pass + "\', re_password_code = \'" + re_pass_code + "\' WHERE id = " + this.args.id)
+
+            }
+
+
+            //Редактирование данных почты 
+            if (checkMailandPass.rows[0].email !== this.args.email) {
+                var mail_code = crypto.createHmac('sha256', CONFIG.crypto_code)
+                    .update(this.args.login + "_" + this.args.email).digest('hex');
+                await this.db.query("UPDATE users SET email = \'" + this.args.email + "\', mail_code = \'" + mail_code + "\' , act_mail = false WHERE id = " + this.args.id)
+            }
+        }
+
     }
 
 }

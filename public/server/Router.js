@@ -39,9 +39,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Router = void 0;
 var User_1 = require("../config/xcore/dbase/User");
 var Org_1 = require("../config/xcore/dbase/Org");
+var Jobs_1 = require("../config/xcore/dbase/Jobs");
+var DevsGroups_1 = require("../config/xcore/dbase/DevsGroups");
+var Devs_1 = require("../config/xcore/dbase/Devs");
+var SchemeSvg_1 = require("../config/xcore/dbase/SchemeSvg");
+var DevSess_1 = require("../config/xcore/dbase/DevSess");
 function Router(body) {
     return __awaiter(this, void 0, void 0, function () {
-        var res, data, _a, u, user_sess_code, u, o, u;
+        var res, data, _a, u, user_sess_code, u, o, j, u, u, dg, svg, d, ds;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -57,10 +62,15 @@ function Router(body) {
                         case 'get_UserByAuth': return [3, 1];
                         case 'get_UserBySessionCode': return [3, 6];
                         case 'get_Org': return [3, 11];
-                        case 'set_NewUser': return [3, 13];
-                        case 'set_UpdateUserData': return [3, 15];
+                        case 'get_Jobs': return [3, 13];
+                        case 'set_NewUser': return [3, 15];
+                        case 'set_UpdateUserData': return [3, 17];
+                        case 'get_DevsGroups': return [3, 19];
+                        case 'get_SchemeSvg': return [3, 21];
+                        case 'get_Devs': return [3, 23];
+                        case 'get_LastDevSess': return [3, 25];
                     }
-                    return [3, 16];
+                    return [3, 27];
                 case 1:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.insertSessionCode()];
@@ -81,7 +91,7 @@ function Router(body) {
                     res.data = data;
                     res.user_sess_code = user_sess_code;
                     _b.label = 5;
-                case 5: return [3, 17];
+                case 5: return [3, 28];
                 case 6:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.selectUser()];
@@ -102,7 +112,7 @@ function Router(body) {
                     res.data = data;
                     res.user_sess_code = body.sess_code;
                     _b.label = 10;
-                case 10: return [3, 17];
+                case 10: return [3, 28];
                 case 11:
                     o = new Org_1.Org(body.args, body.sess_code);
                     return [4, o.selectOrg()];
@@ -120,11 +130,29 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 17];
+                    return [3, 28];
                 case 13:
+                    j = new Jobs_1.Jobs(body.args, body.sess_code);
+                    return [4, j.selectJobs()];
+                case 14:
+                    data = _b.sent();
+                    if (data.length === 0 || data[0] === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в получении данных должности';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = data;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 28];
+                case 15:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.insertUser()];
-                case 14:
+                case 16:
                     data = _b.sent();
                     if (data === null || data === undefined) {
                         res.cmd = body.cmd;
@@ -138,20 +166,94 @@ function Router(body) {
                         res.data = null;
                         res.error = null;
                     }
-                    _b.label = 15;
-                case 15:
-                    {
+                    _b.label = 17;
+                case 17:
+                    u = new User_1.User(body.args, body.sess_code);
+                    return [4, u.updateUser()];
+                case 18:
+                    data = _b.sent();
+                    return [3, 28];
+                case 19:
+                    dg = new DevsGroups_1.DevsGroups(body.args, body.sess_code);
+                    return [4, dg.selectDevsGroups()];
+                case 20:
+                    data = _b.sent();
+                    if (data.length === 0 || data[0] === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в получении данных о группе';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
                     }
-                    return [3, 17];
-                case 16:
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = data;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 28];
+                case 21:
+                    svg = new SchemeSvg_1.SchemeSvg(body.args, body.sess_code);
+                    return [4, svg.selectSchemeSVG()];
+                case 22:
+                    data = _b.sent();
+                    if (data.length === 0 || data[0] === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в получении SVG-схемы возможно она отсутствует';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = data;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 28];
+                case 23:
+                    d = new Devs_1.Devs(body.args, body.sess_code);
+                    return [4, d.selectDevs()];
+                case 24:
+                    data = _b.sent();
+                    if (data.length === 0 || data[0] === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в получении данных устройства';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = data;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 28];
+                case 25:
+                    ds = new DevSess_1.DevSess(body.args, body.sess_code);
+                    return [4, ds.selectLastDevSess()];
+                case 26:
+                    data = _b.sent();
+                    if (data.length === 0 || data[0] === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в получении последней переданной сессии или данные отсутствуют';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = data;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 28];
+                case 27:
                     {
                         res.cmd = body.cmd;
                         res.error = "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \"".concat(body.cmd, "\" \u043D\u0435 \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u0430");
                         res.data = [],
                             res.user_sess_code = body.sess_code;
                     }
-                    _b.label = 17;
-                case 17: return [2, JSON.stringify(res)];
+                    _b.label = 28;
+                case 28: return [2, JSON.stringify(res)];
             }
         });
     });
