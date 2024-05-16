@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Org = exports.OrgsEntity = void 0;
 var DBase_1 = require("./DBase");
+var DateStr_1 = require("./DateStr");
 var OrgsEntity = (function () {
     function OrgsEntity() {
         this.id = 0;
@@ -80,6 +81,35 @@ var Org = (function () {
                             result.push(db_response.rows[o]);
                         }
                         return [2, result];
+                }
+            });
+        });
+    };
+    Org.prototype.insertOrg = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, (this.db.query("INSERT INTO orgs(name, full_name, inn, address, latitude, longitude, created_at, info)" +
+                            "VALUES (\'" + this.args.name + "\', \'" + this.args.full_name + "\', \'" + this.args.inn + "\', \'" + this.args.address +
+                            "\', \'0.0\', \'0.0\', \'" + (0, DateStr_1.dateTimeToSQL)(new Date(Date.now())) + "\', \'" + this.args.info + "\') RETURNING id"))];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows[0]];
+                }
+            });
+        });
+    };
+    Org.prototype.updateOrg = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, (this.db.query("UPDATE orgs SET name = \'" + this.args.name + "\', full_name =\'" + this.args.full_name +
+                            "\', inn=\'" + this.args.inn + "\', address = \'" + this.args.address + "\', info = \'" + this.args.info + "\' WHERE id =" + this.args.id + "RETURNING id"))];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows];
                 }
             });
         });

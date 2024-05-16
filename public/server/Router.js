@@ -46,7 +46,7 @@ var SchemeSvg_1 = require("../config/xcore/dbase/SchemeSvg");
 var DevSess_1 = require("../config/xcore/dbase/DevSess");
 function Router(body) {
     return __awaiter(this, void 0, void 0, function () {
-        var res, data, _a, u, user_sess_code, u, o, j, u, u, dg, svg, d, ds;
+        var res, data, _a, u, user_sess_code, u, o, o, o, j, j, j, u, u, dg, dg, dg, svg, svg, d, d, d, ds, ds, ds, ds;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -62,15 +62,27 @@ function Router(body) {
                         case 'get_UserByAuth': return [3, 1];
                         case 'get_UserBySessionCode': return [3, 6];
                         case 'get_Org': return [3, 11];
-                        case 'get_Jobs': return [3, 13];
-                        case 'set_NewUser': return [3, 15];
-                        case 'set_UpdateUserData': return [3, 17];
-                        case 'get_DevsGroups': return [3, 19];
-                        case 'get_SchemeSvg': return [3, 21];
-                        case 'get_Devs': return [3, 23];
-                        case 'get_LastDevSess': return [3, 25];
+                        case 'set_Org': return [3, 13];
+                        case 'set_ChangeOrg': return [3, 15];
+                        case 'get_Job': return [3, 17];
+                        case 'set_Job': return [3, 19];
+                        case 'set_ChangeJob': return [3, 21];
+                        case 'set_User': return [3, 23];
+                        case 'set_UpdateUserData': return [3, 25];
+                        case 'get_DevsGroups': return [3, 27];
+                        case 'set_DevsGroups': return [3, 29];
+                        case 'set_UpdateDevsGroups': return [3, 31];
+                        case 'get_SchemeSvg': return [3, 33];
+                        case 'set_SchemeSvg': return [3, 35];
+                        case 'get_Devs': return [3, 37];
+                        case 'set_Devs': return [3, 39];
+                        case 'set_ChangeDevs': return [3, 41];
+                        case 'get_LastDevSess': return [3, 42];
+                        case 'get_ControlDevSess': return [3, 44];
+                        case 'set_ControlDevSess': return [3, 46];
+                        case 'set_deleteControlDevSess': return [3, 48];
                     }
-                    return [3, 27];
+                    return [3, 50];
                 case 1:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.insertSessionCode()];
@@ -91,7 +103,7 @@ function Router(body) {
                     res.data = data;
                     res.user_sess_code = user_sess_code;
                     _b.label = 5;
-                case 5: return [3, 28];
+                case 5: return [3, 51];
                 case 6:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.selectUser()];
@@ -112,7 +124,7 @@ function Router(body) {
                     res.data = data;
                     res.user_sess_code = body.sess_code;
                     _b.label = 10;
-                case 10: return [3, 28];
+                case 10: return [3, 51];
                 case 11:
                     o = new Org_1.Org(body.args, body.sess_code);
                     return [4, o.selectOrg()];
@@ -130,11 +142,47 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 28];
+                    return [3, 51];
                 case 13:
-                    j = new Jobs_1.Jobs(body.args, body.sess_code);
-                    return [4, j.selectJobs()];
+                    o = new Org_1.Org(body.args, body.sess_code);
+                    return [4, o.insertOrg()];
                 case 14:
+                    data = _b.sent();
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в добавлении новой организации';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 15:
+                    o = new Org_1.Org(body.args, body.sess_code);
+                    return [4, o.updateOrg()];
+                case 16:
+                    data = _b.sent();
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка при изменении данных организации';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 17:
+                    j = new Jobs_1.Jobs(body.args, body.sess_code);
+                    return [4, j.selectJob()];
+                case 18:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
@@ -148,11 +196,47 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 28];
-                case 15:
+                    return [3, 51];
+                case 19:
+                    j = new Jobs_1.Jobs(body.args, body.sess_code);
+                    return [4, j.insertJob()];
+                case 20:
+                    data = _b.sent();
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в добавлении новой должности';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 21:
+                    j = new Jobs_1.Jobs(body.args, body.sess_code);
+                    return [4, j.updateJob()];
+                case 22:
+                    data = _b.sent();
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка при изменении данных должности';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 23:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.insertUser()];
-                case 16:
+                case 24:
                     data = _b.sent();
                     if (data === null || data === undefined) {
                         res.cmd = body.cmd;
@@ -166,17 +250,29 @@ function Router(body) {
                         res.data = null;
                         res.error = null;
                     }
-                    _b.label = 17;
-                case 17:
+                    return [3, 51];
+                case 25:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.updateUser()];
-                case 18:
+                case 26:
                     data = _b.sent();
-                    return [3, 28];
-                case 19:
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка при изменении данных пользователя';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 27:
                     dg = new DevsGroups_1.DevsGroups(body.args, body.sess_code);
                     return [4, dg.selectDevsGroups()];
-                case 20:
+                case 28:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
@@ -190,11 +286,47 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 28];
-                case 21:
+                    return [3, 51];
+                case 29:
+                    dg = new DevsGroups_1.DevsGroups(body.args, body.sess_code);
+                    return [4, dg.insertDevsGroup()];
+                case 30:
+                    data = _b.sent();
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в добавлении новой группы';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 31:
+                    dg = new DevsGroups_1.DevsGroups(body.args, body.sess_code);
+                    return [4, dg.updateDevsGroup()];
+                case 32:
+                    data = _b.sent();
+                    if (data === false) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в обновлении данных группы/подгруппы или включенных в группы устройствах';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 33:
                     svg = new SchemeSvg_1.SchemeSvg(body.args, body.sess_code);
                     return [4, svg.selectSchemeSVG()];
-                case 22:
+                case 34:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
@@ -208,11 +340,29 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 28];
-                case 23:
+                    return [3, 51];
+                case 35:
+                    svg = new SchemeSvg_1.SchemeSvg(body.args, body.sess_code);
+                    return [4, svg.newUpdateSchemeSVG()];
+                case 36:
+                    data = _b.sent();
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка при добавлении/обновлении схемы группы';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 37:
                     d = new Devs_1.Devs(body.args, body.sess_code);
                     return [4, d.selectDevs()];
-                case 24:
+                case 38:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
@@ -226,11 +376,47 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 28];
-                case 25:
+                    return [3, 51];
+                case 39:
+                    d = new Devs_1.Devs(body.args, body.sess_code);
+                    return [4, d.insertDevs()];
+                case 40:
+                    data = _b.sent();
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в добавлении нового устройства';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 41:
+                    {
+                        d = new Devs_1.Devs(body.args, body.sess_code);
+                        data = d.updateDevs();
+                        if (data === null || data === undefined) {
+                            res.cmd = body.cmd;
+                            res.error = 'Ошибка в обновлении данных устройства';
+                            res.data = null;
+                            res.user_sess_code = body.sess_code;
+                        }
+                        else {
+                            res.cmd = body.cmd;
+                            res.error = null;
+                            res.data = null;
+                            res.user_sess_code = body.sess_code;
+                        }
+                    }
+                    return [3, 51];
+                case 42:
                     ds = new DevSess_1.DevSess(body.args, body.sess_code);
                     return [4, ds.selectLastDevSess()];
-                case 26:
+                case 43:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
@@ -244,16 +430,70 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 28];
-                case 27:
+                    return [3, 51];
+                case 44:
+                    ds = new DevSess_1.DevSess(body.args, body.sess_code);
+                    return [4, ds.selectControlDevSess()];
+                case 45:
+                    data = _b.sent();
+                    if (data.length === 0 || data[0] === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в получении контрольной сессии или она отсутствует';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = data;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 46:
+                    ds = new DevSess_1.DevSess(body.args, body.sess_code);
+                    return [4, ds.insertControlDevSess()];
+                case 47:
+                    data = _b.sent();
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка в добавлении нового устройства';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 48:
+                    ds = new DevSess_1.DevSess(body.args, body.sess_code);
+                    return [4, ds.deleteControlDevSess()];
+                case 49:
+                    data = _b.sent();
+                    if (data === false) {
+                        res.cmd = body.cmd;
+                        res.error = 'Ошибка при удалении контрольной сессии ';
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 51];
+                case 50:
                     {
                         res.cmd = body.cmd;
                         res.error = "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \"".concat(body.cmd, "\" \u043D\u0435 \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u0430");
                         res.data = [],
                             res.user_sess_code = body.sess_code;
                     }
-                    _b.label = 28;
-                case 28: return [2, JSON.stringify(res)];
+                    _b.label = 51;
+                case 51: return [2, JSON.stringify(res)];
             }
         });
     });

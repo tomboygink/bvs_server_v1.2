@@ -25,7 +25,7 @@ export async function Router(body: any) {
 
     //Поиск команды запроса
     switch (body.cmd) {
-        //-----------------------------------------АВТОРИЗАЦИЯ ПОЛЬЗВОАТЕЛЯ ПО ЛОГИНУ И ПАРОЛЮ
+        //-----------------------------------------АВТОРИЗАЦИЯ ПОЛЬЗВОАТЕЛЯ ПО ЛОГИНУ И ПАРОЛЮ ИЛИ ПО КОДУ СЕСИИ
         // Авторизация по логину и паролю
         case 'get_UserByAuth': {
             var u = new User(body.args, body.sess_code);
@@ -90,14 +90,50 @@ export async function Router(body: any) {
                 res.user_sess_code = body.sess_code;
             }
         } break;
-        //Обновление организации
 
+        //Добавление огранизации 
+        case 'set_Org': {
+            var o = new Org(body.args, body.sess_code);
+            data = await o.insertOrg();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в добавлении новой организации';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+
+        } break;
+
+        //Обновление организации
+        case 'set_ChangeOrg': {
+            var o = new Org(body.args, body.sess_code);
+            data = await o.updateOrg();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка при изменении данных организации';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+
+        } break;
 
         //-----------------------------------------ДОЛЖНОСТИ 
-        //Получение должности авторизованного пользователя 
-        case 'get_Jobs':{
-            var j  = new Jobs(body.args, body.sess_code);
-            data = await j.selectJobs();
+        // Получение должности авторизованного пользователя 
+        case 'get_Job': {
+            var j = new Jobs(body.args, body.sess_code);
+            data = await j.selectJob();
             if (data.length === 0 || data[0] === undefined) {
                 res.cmd = body.cmd;
                 res.error = 'Ошибка в получении данных должности';
@@ -110,15 +146,48 @@ export async function Router(body: any) {
                 res.data = data;
                 res.user_sess_code = body.sess_code;
             }
-        }
-        break;
-        //Обновление должности
+        } break;
 
+        // Добавление должности
+        case 'set_Job': {
+            var j = new Jobs(body.args, body.sess_code);
+            data = await j.insertJob();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в добавлении новой должности';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
 
+        // Обновление должности
+        case 'set_ChangeJob': {
+            var j = new Jobs(body.args, body.sess_code);
+            data = await j.updateJob();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка при изменении данных должности';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+
+        } break;
 
         //-----------------------------------------ДОБАВЛЕНИЕ/ИЗМЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЕМ
         //Добавление пользователя
-        case 'set_NewUser': {
+        case 'set_User': {
             var u = new User(body.args, body.sess_code);
             data = await u.insertUser();
 
@@ -137,21 +206,33 @@ export async function Router(body: any) {
                 res.data = null;
                 res.error = null;
             }
-        }
-        
+        } break;
+
         // Изменение данных пользователя
         // Для изменения данных авторизованного пользователя аргументы без пароля
         // Для изменения данных другому пользователю необходим аргумент пароль даже если пустой
         case 'set_UpdateUserData': {
             var u = new User(body.args, body.sess_code);
             data = await u.updateUser();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка при изменении данных пользователя';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
         } break;
 
 
 
         //-----------------------------------------ГРУППЫ УСТРОЙСТВ
-        //Получение групп
-        case 'get_DevsGroups':{
+        // Получение групп
+        case 'get_DevsGroups': {
             var dg = new DevsGroups(body.args, body.sess_code);
             data = await dg.selectDevsGroups();
             if (data.length === 0 || data[0] === undefined) {
@@ -166,18 +247,49 @@ export async function Router(body: any) {
                 res.data = data;
                 res.user_sess_code = body.sess_code;
             }
-        }break;
-        //Добавление группы 
+        } break;
+
+        // Добавление группы 
+        case 'set_DevsGroups': {
+            var dg = new DevsGroups(body.args, body.sess_code);
+            data = await dg.insertDevsGroup();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в добавлении новой группы';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+
         //Редактирование группы
+        case 'set_UpdateDevsGroups': {
+            var dg = new DevsGroups(body.args, body.sess_code);
+            data = await dg.updateDevsGroup();
+            if (data === false) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в обновлении данных группы/подгруппы или включенных в группы устройствах';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
 
         //-----------------------------------------SVG-СХЕМА ГРУППЫ
-        //Получение схемы если она имеется 
-        case 'get_SchemeSvg':{
+        //Получение схемы, если она имеется 
+        case 'get_SchemeSvg': {
             var svg = new SchemeSvg(body.args, body.sess_code);
             data = await svg.selectSchemeSVG();
-
-            //console.log(data);
-
             if (data.length === 0 || data[0] === undefined) {
                 res.cmd = body.cmd;
                 res.error = 'Ошибка в получении SVG-схемы возможно она отсутствует';
@@ -190,14 +302,28 @@ export async function Router(body: any) {
                 res.data = data;
                 res.user_sess_code = body.sess_code;
             }
-
-        }break;
+        } break;
         //Добавление/обновление схемы SVG группы
-
+        case 'set_SchemeSvg': {
+            var svg = new SchemeSvg(body.args, body.sess_code);
+            data = await svg.newUpdateSchemeSVG();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка при добавлении/обновлении схемы группы';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
 
         //-----------------------------------------УСТРОЙСТВА 
         //Получение устройств
-        case 'get_Devs':{
+        case 'get_Devs': {
             var d = new Devs(body.args, body.sess_code);
             data = await d.selectDevs();
 
@@ -213,15 +339,48 @@ export async function Router(body: any) {
                 res.data = data;
                 res.user_sess_code = body.sess_code;
             }
-        }break;
+        } break;
 
         //Добавление устройств
+        case 'set_Devs': {
+            var d = new Devs(body.args, body.sess_code);
+            data = await d.insertDevs();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в добавлении нового устройства';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+
         //Редактирование устройств 
+        case 'set_ChangeDevs': {
+            var d = new Devs(body.args, body.sess_code);
+            data = d.updateDevs();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в обновлении данных устройства';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
 
 
-        //-----------------------------------------ПОСЛЕДНЯЯ ПЕРЕДАННАЯ СЕССИЯ 
+        //-----------------------------------------СЕССИИ УСТРОЙСТВ
         //Получение последней переданной сессии для отображение цвета маркера 
-        case 'get_LastDevSess':{
+        case 'get_LastDevSess': {
             var ds = new DevSess(body.args, body.sess_code)
             data = await ds.selectLastDevSess();
 
@@ -237,12 +396,64 @@ export async function Router(body: any) {
                 res.data = data;
                 res.user_sess_code = body.sess_code;
             }
-        }break
+        } break;
 
-        //Установка контрольной сессии
+        //Получение контрольной сессии установленной ранее администратором
+        case 'get_ControlDevSess': {
+            var ds = new DevSess(body.args, body.sess_code);
+            data = await ds.selectControlDevSess();
+            if (data.length === 0 || data[0] === undefined) { 
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в получении контрольной сессии или она отсутствует';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            } else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
 
-        //Удалениу контрольной сессии
-        
+        } break;
+
+        // Установка контрольной сессии
+        case 'set_ControlDevSess':{
+            var ds = new DevSess(body.args, body.sess_code);
+            data = await ds.insertControlDevSess();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в добавлении нового устройства';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        }break;
+
+
+        //Удаление контрольной сессии
+        case 'set_deleteControlDevSess':{
+            var ds = new DevSess(body.args, body.sess_code);
+            data = await ds.deleteControlDevSess();
+            if(data === false){
+                res.cmd = body.cmd;
+                res.error = 'Ошибка при удалении контрольной сессии ';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+
+        }break;
+
         //-----------------------------------------ПОВЕРКА 
 
 

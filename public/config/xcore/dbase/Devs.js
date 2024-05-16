@@ -77,6 +77,35 @@ var Devs = (function () {
             });
         });
     };
+    Devs.prototype.insertDevs = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("INSERT INTO devs(group_dev_id, number, name, latitude, longitude, sensors, deleted, info, period_sess) " +
+                            "VALUES (" + this.args.group_dev_id + ", \'" + this.args.number + "\', \'" + this.args.name + "\', \'" + this.args.latitude + "\', \'" +
+                            this.args.longitude + "\', \'" + this.args.sensors + "\', " + this.args.deleted + ", \'" + this.args.info + "\', " + this.args.period_sess + ") RETURNING id")];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows];
+                }
+            });
+        });
+    };
+    Devs.prototype.updateDevs = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("UPDATE devs SET group_dev_id = " + this.args.group_dev_id + ", number = \'" + this.args.number + "\', name = \'" + this.args.name + "\', latitude = \'" + this.args.latitude + "\', " +
+                            "longitude = \'" + this.args.longitude + "\', sensors = \'" + this.args.sensors + "\', deleted = " + this.args.deleted + ", info = \'" + this.args.info + "\', period_sess = " + this.args.period_sess + " RETURNING id")];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows];
+                }
+            });
+        });
+    };
     return Devs;
 }());
 exports.Devs = Devs;
