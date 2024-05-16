@@ -1,203 +1,335 @@
 import { DBase, getDB } from "./DBase";
-import crypto from 'crypto';
-import CONFIG from '../../config.json';
-import { dateTimeToSQL, dateTimeToStr } from './DateStr'
-
-
+import crypto from "crypto";
+import CONFIG from "../../config.json";
+import { dateTimeToSQL, dateTimeToStr } from "./DateStr";
 
 export class UsersEntity {
-    id: number = 0;
-    login: string = '';
-    family: string = '';
-    name: string = '';
-    father: string = '';
-    email: string = '';
-    id_org: number = 0;
-    id_job: number = 0;
-    roles_ids: Object = {};
-    act_mail: boolean = false;
-    deleted: boolean = false;
-    info: string = '';
+  id: number = 0;
+  login: string = "";
+  family: string = "";
+  name: string = "";
+  father: string = "";
+  email: string = "";
+  id_org: number = 0;
+  id_job: number = 0;
+  roles_ids: Object = {};
+  act_mail: boolean = false;
+  deleted: boolean = false;
+  info: string = "";
 
-    constructor() { }
+  constructor() {}
 }
 
 export class User {
-    db: DBase;
-    args: any;
-    sess_code: string;
-    constructor(_args: any, _sess_code: string) {
-        this.db = getDB();
-        this.args = _args;
-        this.sess_code = _sess_code;
+  db: DBase;
+  args: any;
+  sess_code: string;
+  constructor(_args: any, _sess_code: string) {
+    this.db = getDB();
+    this.args = _args;
+    this.sess_code = _sess_code;
+  }
+
+  // Добавление кода сессии пользователя при авторизации
+  async insertSessionCode() {
+    var pass = crypto
+      .createHmac("sha256", CONFIG.crypto_code)
+      .update(this.args.password)
+      .digest("hex");
+    var db_response = await this.db.query(
+      "SELECT id FROM users WHERE login = '" +
+        this.args.login +
+        "' and password = '" +
+        pass +
+        "'"
+    );
+
+    if (db_response.rows.length !== 0) {
+      const date = new Date();
+      date.setDate(date.getDate() + 15);
+      // получаем id для записи
+      var id_q = await this.db.query("SELECT max(id) FROM sessions");
+      var id: number = 0;
+      //если записей в Sessions не было то присваеваем 1
+      if (id_q.rows[0].max === null) {
+        id++;
+      }
+      //иначе к последней записи добавляем 1
+      else {
+        id = parseInt(id_q.rows[0].max) + 1;
+      }
+
+      var sess = crypto
+        .createHmac("sha256", CONFIG.crypto_code)
+        .update(
+          id +
+            "_" +
+            dateTimeToSQL(date) +
+            "_" +
+            db_response.rows[0].selectiduser
+        )
+        .digest("hex");
+
+      //записываем в Sessions
+      await this.db.query(
+        "INSERT INTO sessions (id, uid, expires, created_at, sess_code, sess_data) " +
+          "VALUES (" +
+          id +
+          ", " +
+          db_response.rows[0].id +
+          ", '" +
+          dateTimeToSQL(date) +
+          "', '" +
+          dateTimeToSQL(new Date(Date.now())) +
+          "', '" +
+          sess +
+          "', '{\"data\":[]}')"
+      );
+      return sess;
+    }
+  }
+
+  //Удаление кода сессии пользователя
+  async deleteSessionCode() {
+    await this.db.query(
+      "DELETE FROM sessions WHERE sess_code = '" + this.args.code + "'"
+    );
+  }
+
+  // Получение данных при авторизации
+  async selectUser(): Promise<UsersEntity[]> {
+    var db_response: any = {};
+    //Авторизация по логину паролю
+    if (this.args.code === undefined) {
+      //Шифрование пароля для сверки с базой данных
+      var pass = crypto
+        .createHmac("sha256", CONFIG.crypto_code)
+        .update(this.args.password)
+        .digest("hex");
+
+      db_response = await this.db.query(
+        "SELECT " +
+          "id, login, family, name, father, email, org_id as id_org," +
+          "job_title_id as id_job, roles_ids, act_mail, deleted, info FROM users WHERE login ='" +
+          this.args.login +
+          "' and password = '" +
+          pass +
+          "'"
+      );
     }
 
-    // Добавление кода сессии пользователя при авторизации 
-    async insertSessionCode() {
+    //Авторизация по коду сессии
+    else {
+      var time_for_exit = await this.db.query(
+        "SELECT expires FROM sessions WHERE sess_code = '" +
+          this.args.code +
+          "'"
+      );
 
-        var pass = crypto.createHmac('sha256', CONFIG.crypto_code)
-            .update(this.args.password).digest('hex');
-        var db_response = await this.db.query("SELECT id FROM users WHERE login = \'" + this.args.login
-            + "\' and password = \'" + pass + "\'"
+      if (
+        time_for_exit.rows[0] !== undefined &&
+        time_for_exit.rows[0].expires >= new Date(Date.now())
+      ) {
+        db_response = await this.db.query(
+          "SELECT " +
+            "users.id, users.login, users.family, users.name, " +
+            "users.father, users.email, users.org_id as id_org," +
+            "users.job_title_id as id_job, users.roles_ids, " +
+            "users.act_mail, users.deleted, users.info FROM users INNER JOIN sessions ON " +
+            "users.id=sessions.uid WHERE sessions.sess_code = '" +
+            this.args.code +
+            "'"
         );
-
-        if (db_response.rows.length !== 0) {
-            const date = new Date;
-            date.setDate(date.getDate() + 15);
-            // получаем id для записи 
-            var id_q = await this.db.query("SELECT max(id) FROM sessions");
-            var id: number = 0;
-            //если записей в Sessions не было то присваеваем 1
-            if (id_q.rows[0].max === null) { id++; }
-            //иначе к последней записи добавляем 1 
-            else { id = parseInt(id_q.rows[0].max) + 1 }
-
-            var sess = crypto.createHmac('sha256', CONFIG.crypto_code)
-                .update(id + "_" + dateTimeToSQL(date) + "_" +
-                    db_response.rows[0].selectiduser).digest('hex');
-
-
-            //записываем в Sessions
-            await this.db.query("INSERT INTO sessions (id, uid, expires, created_at, sess_code, sess_data) " +
-                "VALUES (" + id + ", " + db_response.rows[0].id + ", \'" + dateTimeToSQL(date) + "\', \'"
-                + dateTimeToSQL(new Date(Date.now())) + "\', \'" + sess + "\', \'{\"data\":[]}\')");
-            return sess;
-        }
+      } else {
+        console.log("Время авторизации вышло");
+      }
     }
 
-    //Удаление кода сессии пользователя
-    async deleteSessionCode() {
-        await this.db.query("DELETE FROM sessions WHERE sess_code = \'" + this.args.code + "\'")
+    var result: UsersEntity[] = new Array();
+    for (var u in db_response.rows) {
+      result.push(db_response.rows[u]);
     }
+    return result;
+  }
 
-    // Получение данных при авторизации
-    async selectUser(): Promise<UsersEntity[]> {
-        var db_response: any = {};
-        //Авторизация по логину паролю 
-        if (this.args.code === undefined) {
-            //Шифрование пароля для сверки с базой данных
-            var pass = crypto.createHmac('sha256', CONFIG.crypto_code)
-                .update(this.args.password).digest('hex');
+  // Добавление нового пользователя
+  async insertUser() {
+    var checkUser = await this.selectUser();
+    if (checkUser.length === 0) {
+      // Генерация зашифрованного пароля
+      var pass = crypto
+        .createHmac("sha256", CONFIG.crypto_code)
+        .update(this.args.password)
+        .digest("hex");
+      // Генерация зашифрованного кода подтверждение почты
+      var mail_code = crypto
+        .createHmac("sha256", CONFIG.crypto_code)
+        .update(this.args.login + "_" + this.args.email)
+        .digest("hex");
+      // Генерация зашифрованного кода для смены пароля когда пользователь забыл пароль
+      var re_pass_code = crypto
+        .createHmac("sha256", CONFIG.crypto_code)
+        .update(this.args.login + "_" + pass)
+        .digest("hex");
 
-            db_response = await this.db.query("SELECT " +
-                "id, login, family, name, father, email, org_id as id_org," +
-                "job_title_id as id_job, roles_ids, act_mail, deleted, info FROM users WHERE login =\'" +
-                this.args.login + "\' and password = \'" + pass + "\'");
-        }
+      var access = "";
 
-        //Авторизация по коду сессии
-        else {
-            var time_for_exit = await this.db.query("SELECT expires FROM sessions WHERE sess_code = \'" + this.args.code + "\'");
+      //users_r = 1
+      //users_w = 2
+      if (this.args.user_r === false && this.args.user_w === false) {
+        access = '{"roles":[1]}';
+      }
+      if (this.args.user_r === true && this.args.user_w === false) {
+        access = '{"roles":[1]}';
+      }
+      if (this.args.user_r === false && this.args.user_w === true) {
+        access = '{"roles":[1,2]}';
+      }
+      if (this.args.user_r === true && this.args.user_w === true) {
+        access = '{"roles":[1,2]}';
+      }
 
-            if (time_for_exit.rows[0] !== undefined && time_for_exit.rows[0].expires >= new Date(Date.now())) {
-                db_response = await this.db.query("SELECT " +
-                    "users.id, users.login, users.family, users.name, " +
-                    "users.father, users.email, users.org_id as id_org," +
-                    "users.job_title_id as id_job, users.roles_ids, " +
-                    "users.act_mail, users.deleted, users.info FROM users INNER JOIN sessions ON " +
-                    "users.id=sessions.uid WHERE sessions.sess_code = \'" + this.args.code + "\'");
-            }
-            else {
-                console.log("Время авторизации вышло")
-            }
+      // Запрос на добавление пользователя
+      var db_response = await this.db.query(
+        "INSERT INTO users (login, password, family, name, father, telephone, " +
+          "email, org_id, job_title_id, roles_ids, user_data, mail_code, act_mail, re_password_code, " +
+          "deleted, deleted_date, created_at, info) VALUES ('" +
+          this.args.login +
+          "', '" +
+          pass +
+          "', '" +
+          this.args.family +
+          "', '" +
+          this.args.name +
+          "', '" +
+          this.args.father +
+          "', '---', '" +
+          this.args.email +
+          "', " +
+          this.args.id_org +
+          ", " +
+          this.args.id_jobs +
+          ", '" +
+          access +
+          "', '{\"user_data\":[]}', '" +
+          mail_code +
+          "', false , '" +
+          re_pass_code +
+          "', false, null, '" +
+          dateTimeToSQL(new Date(Date.now())) +
+          "','" +
+          this.args.info +
+          "') RETURNING id"
+      );
 
-        }
-
-        var result: UsersEntity[] = new Array();
-        for (var u in db_response.rows) {
-            result.push(db_response.rows[u]);
-        }
-        return result;
+      return db_response.rows;
     }
+  }
 
-    // Добавление нового пользователя 
-    async insertUser() {
-
-        var checkUser = await this.selectUser();
-        if (checkUser.length === 0) {
-            // Генерация зашифрованного пароля 
-            var pass = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.password).digest('hex');
-            // Генерация зашифрованного кода подтверждение почты 
-            var mail_code = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.login + "_" + this.args.email).digest('hex');
-            // Генерация зашифрованного кода для смены пароля когда пользователь забыл пароль
-            var re_pass_code = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.login + "_" + pass).digest('hex');
-
-            var access = '';
-            //users_r = 1
-            //users_w = 2
-            if(this.args.users_r === 0 && this.args.users_w === 0)
-            {
-                access = '{\"roles\":[1]}';
-            }
-            if(this.args.users_r === 1 && this.args.users_w === 0)
-            {
-                access = '{\"roles\":[1]}';
-            }
-            if(this.args.users_r === 0 && this.args.users_w === 1)
-            {
-                access = '{\"roles\":[1,2]}';
-            }
-            if(this.args.users_r === 1 && this.args.users_w === 1)
-            {
-                access = '{\"roles\":[1,2]}';
-            }
-
-            // Запрос на добавление пользователя 
-            var db_response = await this.db.query("INSERT INTO users (login, password, family, name, father, telephone, " +
-                "email, org_id, job_title_id, roles_ids, user_data, mail_code, act_mail, re_password_code, " +
-                "deleted, deleted_date, created_at, info) VALUES (\'" + this.args.login + "\', \'" + pass + "\', \'" +
-                this.args.family + "\', \'" + this.args.name + "\', \'" + this.args.father + "\', \'---\', \'" + this.args.email + "\', " +
-                this.args.id_org + ", " + this.args.id_jobs + ", \'" + access + "\', \'{\"user_data\":[]}\', \'" +
-                mail_code + "\', false , \'" + re_pass_code + "\', false, null, \'" +
-                dateTimeToSQL(new Date(Date.now())) + "\',\'" + this.args.info + "\') RETURNING id");
-
-            return db_response.rows;
-        }
+  // Обновление данных пользователя
+  async updateUser() {
+    // Проверка по наличию пароля
+    // Если пароля нет то пользователь редачит сам себя
+    var db_response: any = {};
+    if (this.args.password === undefined) {
+      var checkMail = await this.db.query(
+        "SELECT email FROM users WHERE id =" + this.args.id
+      );
+      db_response = await this.db.query(
+        "UPDATE users SET family = '" +
+          this.args.family +
+          "', name ='" +
+          this.args.name +
+          "', father = '" +
+          this.args.father +
+          "'," +
+          " info = '" +
+          this.args.info +
+          "' WHERE id = " +
+          this.args.id +
+          "RETURNING id"
+      );
+      //Редактирование данных почты
+      if (checkMail.rows[0].email !== this.args.email) {
+        var mail_code = crypto
+          .createHmac("sha256", CONFIG.crypto_code)
+          .update(this.args.login + "_" + this.args.email)
+          .digest("hex");
+        await this.db.query(
+          "UPDATE users SET email = '" +
+            this.args.email +
+            "', mail_code = '" +
+            mail_code +
+            "' , act_mail = false WHERE id = " +
+            this.args.id
+        );
+      }
     }
+    //Иначе если есть то пользователь редачит другого
+    else {
+      var checkMailandPass = await this.db.query(
+        "SELECT email, password FROM users WHERE id =" + this.args.id
+      );
 
-    // Обновление данных пользователя 
-    async updateUser() {
-        // Проверка по наличию пароля 
-        // Если пароля нет то пользователь редачит сам себя 
-        var db_response:any = {};
-        if (this.args.password === undefined) {
-            var checkMail = await this.db.query("SELECT email FROM users WHERE id =" + this.args.id);
-            db_response = await this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
-                " info = \'" + this.args.info + "\' WHERE id = " + this.args.id + "RETURNING id")
-            //Редактирование данных почты 
-            if (checkMail.rows[0].email !== this.args.email) {
-                var mail_code = crypto.createHmac('sha256', CONFIG.crypto_code)
-                    .update(this.args.login + "_" + this.args.email).digest('hex');
-                await this.db.query("UPDATE users SET email = \'" + this.args.email + "\', mail_code = \'" + mail_code + "\' , act_mail = false WHERE id = " + this.args.id)
-            }
-        }
-        //Иначе если есть то пользователь редачит другого 
-        else {
-            var checkMailandPass = await this.db.query("SELECT email, password FROM users WHERE id =" + this.args.id);
+      db_response = await this.db.query(
+        "UPDATE users SET family = '" +
+          this.args.family +
+          "', name ='" +
+          this.args.name +
+          "', father = '" +
+          this.args.father +
+          "'," +
+          " info = '" +
+          this.args.info +
+          "', deleted = " +
+          this.args.deleted +
+          " WHERE id = " +
+          this.args.id +
+          "RETURNING id"
+      );
 
-            db_response = await this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
-                " info = \'" + this.args.info + "\', deleted = " + this.args.deleted + " WHERE id = " + this.args.id + "RETURNING id");
+      //Редактирование данных с паролем
+      if (
+        checkMailandPass.rows[0].pass !== this.args.password &&
+        this.args.password !== ""
+      ) {
+        // Генерация зашифрованного пароля
+        var pass = crypto
+          .createHmac("sha256", CONFIG.crypto_code)
+          .update(this.args.password)
+          .digest("hex");
+        // Генерация зашифрованного кода для смены пароля когда пользователь забыл пароль
+        var re_pass_code = crypto
+          .createHmac("sha256", CONFIG.crypto_code)
+          .update(this.args.login + "_" + pass)
+          .digest("hex");
 
-            //Редактирование данных с паролем 
-            if (checkMailandPass.rows[0].pass !== this.args.password && this.args.password !== "") {
-                // Генерация зашифрованного пароля 
-                var pass = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.password).digest('hex');
-                // Генерация зашифрованного кода для смены пароля когда пользователь забыл пароль
-                var re_pass_code = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.login + "_" + pass).digest('hex');;
+        await this.db.query(
+          "UPDATE users SET password = '" +
+            pass +
+            "', re_password_code = '" +
+            re_pass_code +
+            "' WHERE id = " +
+            this.args.id
+        );
+      }
 
-                await this.db.query("UPDATE users SET password = \'" + pass + "\', re_password_code = \'" + re_pass_code + "\' WHERE id = " + this.args.id)
-
-            }
-
-            //Редактирование данных почты 
-            if (checkMailandPass.rows[0].email !== this.args.email) {
-                var mail_code = crypto.createHmac('sha256', CONFIG.crypto_code)
-                    .update(this.args.login + "_" + this.args.email).digest('hex');
-                await this.db.query("UPDATE users SET email = \'" + this.args.email + "\', mail_code = \'" + mail_code + "\' , act_mail = false WHERE id = " + this.args.id)
-            }
-        }
-        return db_response.rows;
-
+      //Редактирование данных почты
+      if (checkMailandPass.rows[0].email !== this.args.email) {
+        var mail_code = crypto
+          .createHmac("sha256", CONFIG.crypto_code)
+          .update(this.args.login + "_" + this.args.email)
+          .digest("hex");
+        await this.db.query(
+          "UPDATE users SET email = '" +
+            this.args.email +
+            "', mail_code = '" +
+            mail_code +
+            "' , act_mail = false WHERE id = " +
+            this.args.id
+        );
+      }
     }
-
+    return db_response.rows;
+  }
 }

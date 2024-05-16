@@ -47,17 +47,17 @@ var DateStr_1 = require("./DateStr");
 var UsersEntity = (function () {
     function UsersEntity() {
         this.id = 0;
-        this.login = '';
-        this.family = '';
-        this.name = '';
-        this.father = '';
-        this.email = '';
+        this.login = "";
+        this.family = "";
+        this.name = "";
+        this.father = "";
+        this.email = "";
         this.id_org = 0;
         this.id_job = 0;
         this.roles_ids = {};
         this.act_mail = false;
         this.deleted = false;
-        this.info = '';
+        this.info = "";
     }
     return UsersEntity;
 }());
@@ -74,14 +74,19 @@ var User = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        pass = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code)
-                            .update(this.args.password).digest('hex');
-                        return [4, this.db.query("SELECT id FROM users WHERE login = \'" + this.args.login
-                                + "\' and password = \'" + pass + "\'")];
+                        pass = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.password)
+                            .digest("hex");
+                        return [4, this.db.query("SELECT id FROM users WHERE login = '" +
+                                this.args.login +
+                                "' and password = '" +
+                                pass +
+                                "'")];
                     case 1:
                         db_response = _a.sent();
                         if (!(db_response.rows.length !== 0)) return [3, 4];
-                        date = new Date;
+                        date = new Date();
                         date.setDate(date.getDate() + 15);
                         return [4, this.db.query("SELECT max(id) FROM sessions")];
                     case 2:
@@ -93,12 +98,26 @@ var User = (function () {
                         else {
                             id = parseInt(id_q.rows[0].max) + 1;
                         }
-                        sess = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code)
-                            .update(id + "_" + (0, DateStr_1.dateTimeToSQL)(date) + "_" +
-                            db_response.rows[0].selectiduser).digest('hex');
+                        sess = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(id +
+                            "_" +
+                            (0, DateStr_1.dateTimeToSQL)(date) +
+                            "_" +
+                            db_response.rows[0].selectiduser)
+                            .digest("hex");
                         return [4, this.db.query("INSERT INTO sessions (id, uid, expires, created_at, sess_code, sess_data) " +
-                                "VALUES (" + id + ", " + db_response.rows[0].id + ", \'" + (0, DateStr_1.dateTimeToSQL)(date) + "\', \'"
-                                + (0, DateStr_1.dateTimeToSQL)(new Date(Date.now())) + "\', \'" + sess + "\', \'{\"data\":[]}\')")];
+                                "VALUES (" +
+                                id +
+                                ", " +
+                                db_response.rows[0].id +
+                                ", '" +
+                                (0, DateStr_1.dateTimeToSQL)(date) +
+                                "', '" +
+                                (0, DateStr_1.dateTimeToSQL)(new Date(Date.now())) +
+                                "', '" +
+                                sess +
+                                "', '{\"data\":[]}')")];
                     case 3:
                         _a.sent();
                         return [2, sess];
@@ -111,7 +130,7 @@ var User = (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("DELETE FROM sessions WHERE sess_code = \'" + this.args.code + "\'")];
+                    case 0: return [4, this.db.query("DELETE FROM sessions WHERE sess_code = '" + this.args.code + "'")];
                     case 1:
                         _a.sent();
                         return [2];
@@ -127,25 +146,35 @@ var User = (function () {
                     case 0:
                         db_response = {};
                         if (!(this.args.code === undefined)) return [3, 2];
-                        pass = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code)
-                            .update(this.args.password).digest('hex');
+                        pass = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.password)
+                            .digest("hex");
                         return [4, this.db.query("SELECT " +
                                 "id, login, family, name, father, email, org_id as id_org," +
-                                "job_title_id as id_job, roles_ids, act_mail, deleted, info FROM users WHERE login =\'" +
-                                this.args.login + "\' and password = \'" + pass + "\'")];
+                                "job_title_id as id_job, roles_ids, act_mail, deleted, info FROM users WHERE login ='" +
+                                this.args.login +
+                                "' and password = '" +
+                                pass +
+                                "'")];
                     case 1:
                         db_response = _a.sent();
                         return [3, 6];
-                    case 2: return [4, this.db.query("SELECT expires FROM sessions WHERE sess_code = \'" + this.args.code + "\'")];
+                    case 2: return [4, this.db.query("SELECT expires FROM sessions WHERE sess_code = '" +
+                            this.args.code +
+                            "'")];
                     case 3:
                         time_for_exit = _a.sent();
-                        if (!(time_for_exit.rows[0] !== undefined && time_for_exit.rows[0].expires >= new Date(Date.now()))) return [3, 5];
+                        if (!(time_for_exit.rows[0] !== undefined &&
+                            time_for_exit.rows[0].expires >= new Date(Date.now()))) return [3, 5];
                         return [4, this.db.query("SELECT " +
                                 "users.id, users.login, users.family, users.name, " +
                                 "users.father, users.email, users.org_id as id_org," +
                                 "users.job_title_id as id_job, users.roles_ids, " +
                                 "users.act_mail, users.deleted, users.info FROM users INNER JOIN sessions ON " +
-                                "users.id=sessions.uid WHERE sessions.sess_code = \'" + this.args.code + "\'")];
+                                "users.id=sessions.uid WHERE sessions.sess_code = '" +
+                                this.args.code +
+                                "'")];
                     case 4:
                         db_response = _a.sent();
                         return [3, 6];
@@ -171,29 +200,60 @@ var User = (function () {
                     case 1:
                         checkUser = _a.sent();
                         if (!(checkUser.length === 0)) return [3, 3];
-                        pass = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.password).digest('hex');
-                        mail_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + this.args.email).digest('hex');
-                        re_pass_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + pass).digest('hex');
-                        access = '';
-                        if (this.args.users_r === 0 && this.args.users_w === 0) {
-                            access = '{\"roles\":[1]}';
+                        pass = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.password)
+                            .digest("hex");
+                        mail_code = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.login + "_" + this.args.email)
+                            .digest("hex");
+                        re_pass_code = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.login + "_" + pass)
+                            .digest("hex");
+                        access = "";
+                        if (this.args.user_r === false && this.args.user_w === false) {
+                            access = '{"roles":[1]}';
                         }
-                        if (this.args.users_r === 1 && this.args.users_w === 0) {
-                            access = '{\"roles\":[1]}';
+                        if (this.args.user_r === true && this.args.user_w === false) {
+                            access = '{"roles":[1]}';
                         }
-                        if (this.args.users_r === 0 && this.args.users_w === 1) {
-                            access = '{\"roles\":[1,2]}';
+                        if (this.args.user_r === false && this.args.user_w === true) {
+                            access = '{"roles":[1,2]}';
                         }
-                        if (this.args.users_r === 1 && this.args.users_w === 1) {
-                            access = '{\"roles\":[1,2]}';
+                        if (this.args.user_r === true && this.args.user_w === true) {
+                            access = '{"roles":[1,2]}';
                         }
                         return [4, this.db.query("INSERT INTO users (login, password, family, name, father, telephone, " +
                                 "email, org_id, job_title_id, roles_ids, user_data, mail_code, act_mail, re_password_code, " +
-                                "deleted, deleted_date, created_at, info) VALUES (\'" + this.args.login + "\', \'" + pass + "\', \'" +
-                                this.args.family + "\', \'" + this.args.name + "\', \'" + this.args.father + "\', \'---\', \'" + this.args.email + "\', " +
-                                this.args.id_org + ", " + this.args.id_jobs + ", \'" + access + "\', \'{\"user_data\":[]}\', \'" +
-                                mail_code + "\', false , \'" + re_pass_code + "\', false, null, \'" +
-                                (0, DateStr_1.dateTimeToSQL)(new Date(Date.now())) + "\',\'" + this.args.info + "\') RETURNING id")];
+                                "deleted, deleted_date, created_at, info) VALUES ('" +
+                                this.args.login +
+                                "', '" +
+                                pass +
+                                "', '" +
+                                this.args.family +
+                                "', '" +
+                                this.args.name +
+                                "', '" +
+                                this.args.father +
+                                "', '---', '" +
+                                this.args.email +
+                                "', " +
+                                this.args.id_org +
+                                ", " +
+                                this.args.id_jobs +
+                                ", '" +
+                                access +
+                                "', '{\"user_data\":[]}', '" +
+                                mail_code +
+                                "', false , '" +
+                                re_pass_code +
+                                "', false, null, '" +
+                                (0, DateStr_1.dateTimeToSQL)(new Date(Date.now())) +
+                                "','" +
+                                this.args.info +
+                                "') RETURNING id")];
                     case 2:
                         db_response = _a.sent();
                         return [2, db_response.rows];
@@ -213,14 +273,31 @@ var User = (function () {
                         return [4, this.db.query("SELECT email FROM users WHERE id =" + this.args.id)];
                     case 1:
                         checkMail = _a.sent();
-                        return [4, this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
-                                " info = \'" + this.args.info + "\' WHERE id = " + this.args.id + "RETURNING id")];
+                        return [4, this.db.query("UPDATE users SET family = '" +
+                                this.args.family +
+                                "', name ='" +
+                                this.args.name +
+                                "', father = '" +
+                                this.args.father +
+                                "'," +
+                                " info = '" +
+                                this.args.info +
+                                "' WHERE id = " +
+                                this.args.id +
+                                "RETURNING id")];
                     case 2:
                         db_response = _a.sent();
                         if (!(checkMail.rows[0].email !== this.args.email)) return [3, 4];
-                        mail_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code)
-                            .update(this.args.login + "_" + this.args.email).digest('hex');
-                        return [4, this.db.query("UPDATE users SET email = \'" + this.args.email + "\', mail_code = \'" + mail_code + "\' , act_mail = false WHERE id = " + this.args.id)];
+                        mail_code = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.login + "_" + this.args.email)
+                            .digest("hex");
+                        return [4, this.db.query("UPDATE users SET email = '" +
+                                this.args.email +
+                                "', mail_code = '" +
+                                mail_code +
+                                "' , act_mail = false WHERE id = " +
+                                this.args.id)];
                     case 3:
                         _a.sent();
                         _a.label = 4;
@@ -228,23 +305,53 @@ var User = (function () {
                     case 5: return [4, this.db.query("SELECT email, password FROM users WHERE id =" + this.args.id)];
                     case 6:
                         checkMailandPass = _a.sent();
-                        return [4, this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
-                                " info = \'" + this.args.info + "\', deleted = " + this.args.deleted + " WHERE id = " + this.args.id + "RETURNING id")];
+                        return [4, this.db.query("UPDATE users SET family = '" +
+                                this.args.family +
+                                "', name ='" +
+                                this.args.name +
+                                "', father = '" +
+                                this.args.father +
+                                "'," +
+                                " info = '" +
+                                this.args.info +
+                                "', deleted = " +
+                                this.args.deleted +
+                                " WHERE id = " +
+                                this.args.id +
+                                "RETURNING id")];
                     case 7:
                         db_response = _a.sent();
-                        if (!(checkMailandPass.rows[0].pass !== this.args.password && this.args.password !== "")) return [3, 9];
-                        pass = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.password).digest('hex');
-                        re_pass_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + pass).digest('hex');
-                        ;
-                        return [4, this.db.query("UPDATE users SET password = \'" + pass + "\', re_password_code = \'" + re_pass_code + "\' WHERE id = " + this.args.id)];
+                        if (!(checkMailandPass.rows[0].pass !== this.args.password &&
+                            this.args.password !== "")) return [3, 9];
+                        pass = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.password)
+                            .digest("hex");
+                        re_pass_code = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.login + "_" + pass)
+                            .digest("hex");
+                        return [4, this.db.query("UPDATE users SET password = '" +
+                                pass +
+                                "', re_password_code = '" +
+                                re_pass_code +
+                                "' WHERE id = " +
+                                this.args.id)];
                     case 8:
                         _a.sent();
                         _a.label = 9;
                     case 9:
                         if (!(checkMailandPass.rows[0].email !== this.args.email)) return [3, 11];
-                        mail_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code)
-                            .update(this.args.login + "_" + this.args.email).digest('hex');
-                        return [4, this.db.query("UPDATE users SET email = \'" + this.args.email + "\', mail_code = \'" + mail_code + "\' , act_mail = false WHERE id = " + this.args.id)];
+                        mail_code = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.login + "_" + this.args.email)
+                            .digest("hex");
+                        return [4, this.db.query("UPDATE users SET email = '" +
+                                this.args.email +
+                                "', mail_code = '" +
+                                mail_code +
+                                "' , act_mail = false WHERE id = " +
+                                this.args.id)];
                     case 10:
                         _a.sent();
                         _a.label = 11;

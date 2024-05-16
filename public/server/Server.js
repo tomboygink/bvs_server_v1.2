@@ -45,20 +45,22 @@ var http_1 = __importDefault(require("http"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var config_json_1 = __importDefault(require("../config/config.json"));
 var Router_1 = require("./Router");
+var cors_1 = __importDefault(require("cors"));
 var Server = (function () {
     function Server() {
         this.app = null;
         this.server = null;
         this.app = (0, express_1.default)();
         this.server = http_1.default.createServer(this.app);
-        this.app.set('view engine', 'hbs');
-        console.log(path_1.default.normalize(path_1.default.join(__dirname, '..', 'views')));
-        this.app.set('views', path_1.default.normalize(path_1.default.join(__dirname, '..', 'views')));
-        console.log(path_1.default.join(__dirname, '..', 'public'));
-        this.app.use('/static', express_1.default.static(path_1.default.join(__dirname, '..', 'public')));
+        this.app.set("view engine", "hbs");
+        console.log(path_1.default.normalize(path_1.default.join(__dirname, "..", "views")));
+        this.app.set("views", path_1.default.normalize(path_1.default.join(__dirname, "..", "views")));
+        console.log(path_1.default.join(__dirname, "..", "public"));
+        this.app.use("/static", express_1.default.static(path_1.default.join(__dirname, "..", "public")));
     }
     Server.prototype.route = function () {
         var _this = this;
+        this.app.use((0, cors_1.default)());
         this.app.use(body_parser_1.default.json());
         this.app.post("/api", function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var _a, _b;
@@ -76,7 +78,9 @@ var Server = (function () {
     };
     Server.prototype.run = function () {
         this.route();
-        this.server.listen(config_json_1.default.server_config.port, function () { console.log("\u0421\u0435\u0440\u0432\u0435\u0440 \u0437\u0430\u043F\u0443\u0448\u0435\u043D: http://".concat(config_json_1.default.server_config.host, ":").concat(config_json_1.default.server_config.port)); });
+        this.server.listen(config_json_1.default.server_config.port, function () {
+            console.log("\u0421\u0435\u0440\u0432\u0435\u0440 \u0437\u0430\u043F\u0443\u0448\u0435\u043D: http://".concat(config_json_1.default.server_config.host, ":").concat(config_json_1.default.server_config.port));
+        });
     };
     return Server;
 }());
