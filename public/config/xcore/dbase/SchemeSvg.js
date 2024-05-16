@@ -70,6 +70,20 @@ var SchemeSvg = (function () {
             });
         });
     };
+    SchemeSvg.prototype.newUpdateSchemeSVG = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("UPDATE scheme_svg SET svg = \'" + this.args.group_svg +
+                            "\' WHERE id_devs_groups = " + this.args.id_devs_groups + "RETURNING id")];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows];
+                }
+            });
+        });
+    };
     return SchemeSvg;
 }());
 exports.SchemeSvg = SchemeSvg;

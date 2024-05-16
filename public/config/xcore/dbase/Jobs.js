@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Jobs = exports.JobsEntity = void 0;
 var DBase_1 = require("./DBase");
+var DateStr_1 = require("./DateStr");
 var JobsEntity = (function () {
     function JobsEntity() {
         this.id = 0;
@@ -54,7 +55,7 @@ var Jobs = (function () {
         this.args = _args;
         this.sess_code = _sess_code;
     }
-    Jobs.prototype.selectJobs = function () {
+    Jobs.prototype.selectJob = function () {
         return __awaiter(this, void 0, void 0, function () {
             var db_response, result, j;
             return __generator(this, function (_a) {
@@ -76,6 +77,34 @@ var Jobs = (function () {
                             result.push(db_response.rows[j]);
                         }
                         return [2, result];
+                }
+            });
+        });
+    };
+    Jobs.prototype.insertJob = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, (this.db.query("INSERT INTO jobs_titles(org_id, name, created_at, info)" +
+                            "VALUES(" + this.args.id_org + ", \'" + this.args.name + "\', \'" + (0, DateStr_1.dateTimeToSQL)(new Date(Date.now())) + "\', \'" + this.args.info + "\') RETURNING id"))];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows];
+                }
+            });
+        });
+    };
+    Jobs.prototype.updateJob = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, (this.db.query("UPDATE jobs_titles SET org_id = " + this.args.id_org + ", name = \'" + this.args.name +
+                            "\', info = \'" + this.args.info + "\' WHERE id = " + this.args.id + " RETURNING id"))];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows];
                 }
             });
         });

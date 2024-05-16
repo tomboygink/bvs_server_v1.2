@@ -68,6 +68,57 @@ var DevSess = (function () {
             });
         });
     };
+    DevSess.prototype.insertControlDevSess = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("INSERT INTO control_dev_sess (dev_sess_id, dev_id, dev_number) " +
+                            "VALUES (" + this.args.dev_sess_id + ", " + this.args.dev_id + ", " + this.args.dev_number + ") RETURNING id")];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows];
+                }
+            });
+        });
+    };
+    DevSess.prototype.selectControlDevSess = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response, result, cds;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("SELECT dev_sess.* from dev_sess INNER JOIN control_dev_sess " +
+                            "ON dev_sess.id = control_dev_sess.dev_sess_id WHERE control_dev_sess.dev_number = \'" + this.args.dev_number + "\'")];
+                    case 1:
+                        db_response = _a.sent();
+                        result = new Array();
+                        for (cds in db_response.rows) {
+                            result.push(db_response.rows[cds]);
+                        }
+                        return [2, result];
+                }
+            });
+        });
+    };
+    DevSess.prototype.deleteControlDevSess = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4, this.db.query("DELETE FROM control_dev_sess WHERE dev_sess_id = ('" + this.args.id + "')")];
+                    case 1:
+                        _b.sent();
+                        return [2, true];
+                    case 2:
+                        _a = _b.sent();
+                        return [2, false];
+                    case 3: return [2];
+                }
+            });
+        });
+    };
     return DevSess;
 }());
 exports.DevSess = DevSess;

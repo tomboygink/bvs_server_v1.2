@@ -164,7 +164,7 @@ var User = (function () {
     };
     User.prototype.insertUser = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var checkUser, pass, mail_code, re_pass_code, db_response;
+            var checkUser, pass, mail_code, re_pass_code, access, db_response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, this.selectUser()];
@@ -174,13 +174,25 @@ var User = (function () {
                         pass = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.password).digest('hex');
                         mail_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + this.args.email).digest('hex');
                         re_pass_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + pass).digest('hex');
-                        ;
+                        access = '';
+                        if (this.args.users_r === 0 && this.args.users_w === 0) {
+                            access = '{\"roles\":[1]}';
+                        }
+                        if (this.args.users_r === 1 && this.args.users_w === 0) {
+                            access = '{\"roles\":[1]}';
+                        }
+                        if (this.args.users_r === 0 && this.args.users_w === 1) {
+                            access = '{\"roles\":[1,2]}';
+                        }
+                        if (this.args.users_r === 1 && this.args.users_w === 1) {
+                            access = '{\"roles\":[1,2]}';
+                        }
                         return [4, this.db.query("INSERT INTO users (login, password, family, name, father, telephone, " +
                                 "email, org_id, job_title_id, roles_ids, user_data, mail_code, act_mail, re_password_code, " +
                                 "deleted, deleted_date, created_at, info) VALUES (\'" + this.args.login + "\', \'" + pass + "\', \'" +
                                 this.args.family + "\', \'" + this.args.name + "\', \'" + this.args.father + "\', \'---\', \'" + this.args.email + "\', " +
-                                this.args.id_org + ", " + this.args.id_jobs + ", \'" + this.args.roles_ids + "\', \'{\"user_data\":[]}\', \'" +
-                                mail_code + "\', " + this.args.act_mail + ", \'" + re_pass_code + "\', false, null, \'" +
+                                this.args.id_org + ", " + this.args.id_jobs + ", \'" + access + "\', \'{\"user_data\":[]}\', \'" +
+                                mail_code + "\', false , \'" + re_pass_code + "\', false, null, \'" +
                                 (0, DateStr_1.dateTimeToSQL)(new Date(Date.now())) + "\',\'" + this.args.info + "\') RETURNING id")];
                     case 2:
                         db_response = _a.sent();
@@ -192,18 +204,19 @@ var User = (function () {
     };
     User.prototype.updateUser = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var checkMail, mail_code, checkMailandPass, pass, re_pass_code, mail_code;
+            var db_response, checkMail, mail_code, checkMailandPass, pass, re_pass_code, mail_code;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        db_response = {};
                         if (!(this.args.password === undefined)) return [3, 5];
                         return [4, this.db.query("SELECT email FROM users WHERE id =" + this.args.id)];
                     case 1:
                         checkMail = _a.sent();
                         return [4, this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
-                                " info = \'" + this.args.info + "\' WHERE id = " + this.args.id)];
+                                " info = \'" + this.args.info + "\' WHERE id = " + this.args.id + "RETURNING id")];
                     case 2:
-                        _a.sent();
+                        db_response = _a.sent();
                         if (!(checkMail.rows[0].email !== this.args.email)) return [3, 4];
                         mail_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code)
                             .update(this.args.login + "_" + this.args.email).digest('hex');
@@ -216,9 +229,9 @@ var User = (function () {
                     case 6:
                         checkMailandPass = _a.sent();
                         return [4, this.db.query("UPDATE users SET family = \'" + this.args.family + "\', name =\'" + this.args.name + "\', father = \'" + this.args.father + "\'," +
-                                " info = \'" + this.args.info + "\', deleted = " + this.args.deleted + " WHERE id = " + this.args.id)];
+                                " info = \'" + this.args.info + "\', deleted = " + this.args.deleted + " WHERE id = " + this.args.id + "RETURNING id")];
                     case 7:
-                        _a.sent();
+                        db_response = _a.sent();
                         if (!(checkMailandPass.rows[0].pass !== this.args.password && this.args.password !== "")) return [3, 9];
                         pass = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.password).digest('hex');
                         re_pass_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + pass).digest('hex');
@@ -235,7 +248,7 @@ var User = (function () {
                     case 10:
                         _a.sent();
                         _a.label = 11;
-                    case 11: return [2];
+                    case 11: return [2, db_response.rows];
                 }
             });
         });
