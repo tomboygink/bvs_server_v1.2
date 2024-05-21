@@ -5,6 +5,10 @@ import { DevsGroups } from "../config/xcore/dbase/DevsGroups"
 import { Devs } from "../config/xcore/dbase/Devs"
 import { SchemeSvg } from "../config/xcore/dbase/SchemeSvg"
 import { DevSess } from "../config/xcore/dbase/DevSess"
+import { DevVerif } from "../config/xcore/dbase/DevVerif"
+import { ThermalWell } from "../config/xcore/dbase/ThermalWell"
+
+
 
 
 
@@ -25,7 +29,7 @@ export async function Router(body: any) {
 
     //Поиск команды запроса
     switch (body.cmd) {
-        //-----------------------------------------АВТОРИЗАЦИЯ ПОЛЬЗВОАТЕЛЯ ПО ЛОГИНУ И ПАРОЛЮ ИЛИ ПО КОДУ СЕСИИ
+        //-----------------------------------------АВТОРИЗАЦИЯ
         // Авторизация по логину и паролю
         case 'get_UserByAuth': {
             var u = new User(body.args, body.sess_code);
@@ -185,7 +189,7 @@ export async function Router(body: any) {
 
         } break;
 
-        //-----------------------------------------ДОБАВЛЕНИЕ/ИЗМЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЕМ
+        //-----------------------------------------ПОЛЬЗОВАТЕЛИ
         //Добавление пользователя
         case 'set_User': {
             var u = new User(body.args, body.sess_code);
@@ -207,6 +211,25 @@ export async function Router(body: any) {
                 res.error = null;
             }
         } break;
+
+        // Получение всех пользователей
+        case 'get_AllUsers': {
+            var u = new User(body.args, body.sess_code);
+            data = await u.selectAllUser();
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в получении всех пользователей';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+
 
         // Изменение данных пользователя
         // Для изменения данных авторизованного пользователя аргументы без пароля
@@ -398,26 +421,8 @@ export async function Router(body: any) {
             }
         } break;
 
-        //Получение контрольной сессии установленной ранее администратором
-        case 'get_ControlDevSess': {
-            var ds = new DevSess(body.args, body.sess_code);
-            data = await ds.selectControlDevSess();
-            if (data.length === 0 || data[0] === undefined) { 
-                res.cmd = body.cmd;
-                res.error = 'Ошибка в получении контрольной сессии или она отсутствует';
-                res.data = null;
-                res.user_sess_code = body.sess_code;
-            } else {
-                res.cmd = body.cmd;
-                res.error = null;
-                res.data = data;
-                res.user_sess_code = body.sess_code;
-            }
-
-        } break;
-
         // Установка контрольной сессии
-        case 'set_ControlDevSess':{
+        case 'set_ControlDevSess': {
             var ds = new DevSess(body.args, body.sess_code);
             data = await ds.insertControlDevSess();
             if (data === null || data === undefined) {
@@ -432,14 +437,14 @@ export async function Router(body: any) {
                 res.data = null;
                 res.user_sess_code = body.sess_code;
             }
-        }break;
+        } break;
 
 
         //Удаление контрольной сессии
-        case 'set_deleteControlDevSess':{
+        case 'set_deleteControlDevSess': {
             var ds = new DevSess(body.args, body.sess_code);
             data = await ds.deleteControlDevSess();
-            if(data === false){
+            if (data === false) {
                 res.cmd = body.cmd;
                 res.error = 'Ошибка при удалении контрольной сессии ';
                 res.data = null;
@@ -452,9 +457,209 @@ export async function Router(body: any) {
                 res.user_sess_code = body.sess_code;
             }
 
-        }break;
+        } break;
 
-        //-----------------------------------------ПОВЕРКА 
+        //Получение контрольной сессии установленной ранее администратором
+        case 'get_ControlDevSess': {
+            var ds = new DevSess(body.args, body.sess_code);
+            data = await ds.selectControlDevSess();
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в получении контрольной сессии или она отсутствует';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            } else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+
+        } break;
+
+        // Получение сессий за определённый период
+        case 'get_DevSess': {
+            var ds = new DevSess(body.args, body.sess_code);
+            data = await ds.selectDevSess();
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в получении сессий за установленный период';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            } else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+
+
+        //-----------------------------------------ПОВЕРОЧНЫЙ ИНТЕРВАЛ УСТРОЙСТВ
+        //Установка поверочного интервала 
+        case 'set_DevVerif': {
+            var dv = new DevVerif(body.args, body.sess_code);
+            data = dv.insertDevVerif();
+            if (data.length === 0 || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка при установки поверочного интервала устроства';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+
+
+        //Получение поверочного интервала устройства 
+        case 'get_DevVerif': {
+            var dv = new DevVerif(body.args, body.sess_code);
+            data = dv.selectDevVerif();
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка при получении поверочного интервала устройства или оно отсутствует';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+
+        //-----------------------------------------СКВАЖИНЫ
+        //Добавление скважины 
+        case 'set_ThermalWell': {
+            var tw = new ThermalWell(body.args, body.sess_code);
+            data = tw.insertThermalWell();
+            if (data.length === 0 || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка при добавлении термоскважины';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+
+        //Обноваление скважины 
+        case 'set_ChangeThermalWell': {
+            var tw = new ThermalWell(body.args, body.sess_code);
+            data = tw.updateThremalWell();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в обновлении данных термоскважины';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+
+        //Получение скважин при нажатии на группу 
+        case 'get_ThermalWell': {
+            var tw = new ThermalWell(body.args, body.sess_code);
+            data = tw.selectThermalWell();
+            if (data.length === 0 || data[0] === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка при получении термометрических скважин группы';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = data;
+                res.user_sess_code = body.sess_code;
+            }
+
+        } break;
+
+        //----------------------------------------- ПОЧТА
+        //Отправка сообщения на почту с кодом 
+        case 'set_ActMail': {
+            var u = new User(body.args, body.sess_code)
+            await u.sencConfirmMail();
+        } break;
+
+        //Обновление email пользователя
+        case 'set_MailCode': {
+            var u = new User(body.args, body.sess_code);
+            data = await u.updateMail();
+            if (data === null || data === undefined) {
+                res.cmd = body.cmd;
+                res.error = 'Ошибка в обновлении данных email';
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        }
+
+        //-----------------------------------------ЗАБЫЛИ ПАРОЛЬ
+        //Отправка сообщения на почту на смену пароля 
+        case 'set_ForgPass': {
+            var u = new User(body.args, body.sess_code);
+            data = await u.sendForgPassMail();
+            if (data === false) {
+                res.cmd = body.cmd;
+                res.code = body.sess_code;
+                res.data = null;
+                res.error = "Такого email не существует/email не активирован/проверте введенные данные или обратитесть к администратору системы";
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+        //Обновление пароля 
+        case 'set_Pass': {
+            var u = new User(body.args, body.sess_code);
+            data = await u.updatePassRePass();
+            if (data === false) {
+                res.cmd = body.cmd;
+                res.code = body.sess_code;
+                res.data = null;
+                res.error = "Произошла ошибка при смене пароля";
+            }
+            else {
+                res.cmd = body.cmd;
+                res.error = null;
+                res.data = null;
+                res.user_sess_code = body.sess_code;
+            }
+        } break;
+
+
+        //-----------------------------------------УДАЛЕНИЕ КУКОВ ПОСЛЕ ВЫХОДА 
+        case 'deleteCookie': {
+            var u = new User(body.args, body.sess_code);
+            u.deleteSessionCode();
+            res.cmd = body.cmd;
+            res.code = null;
+            res.data = null;
+            res.error = null;
+        } break;
 
 
         //-----------------------------------------ДРУГИЕ КОДЫ, КОТОРЫЕ НЕ ПРОПИСАНЫ
