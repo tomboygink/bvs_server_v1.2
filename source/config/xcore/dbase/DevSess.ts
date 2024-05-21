@@ -1,4 +1,6 @@
 import { DBase, getDB } from "./DBase";
+import { dateTimeToSQL, dateTimeToStr } from "./DateStr";
+
 
 export class DevSessEntity {
     id: number = 0;
@@ -24,7 +26,7 @@ export class DevSess {
 
     //Получение последней переданной сессии 
     async selectLastDevSess(): Promise<DevSessEntity[]> {
-        var db_response = await this.db.query("SELECT * FROM dev_sess where dev_number = '" + this.args.dev_number + "' order by id desc limit 1;");
+        var db_response = await this.db.query("SELECT * FROM dev_sess WHERE dev_number = '" + this.args.dev_number + "' order by id desc limit 1;");
 
         var result: DevSessEntity[] = new Array();
 
@@ -33,9 +35,9 @@ export class DevSess {
     }
 
     //Добавление контрольной сессии 
-    async insertControlDevSess(){
-        var db_response = await this.db.query("INSERT INTO control_dev_sess (dev_sess_id, dev_id, dev_number) "+
-        "VALUES ("+this.args.dev_sess_id+", "+this.args.dev_id+", "+this.args.dev_number+") RETURNING id");
+    async insertControlDevSess() {
+        var db_response = await this.db.query("INSERT INTO control_dev_sess (dev_sess_id, dev_id, dev_number) " +
+            "VALUES (" + this.args.dev_sess_id + ", " + this.args.dev_id + ", " + this.args.dev_number + ") RETURNING id");
         return db_response.rows;
     }
 
@@ -47,9 +49,27 @@ export class DevSess {
         for (var cds in db_response.rows) { result.push(db_response.rows[cds]); }
         return result;
     }
+
+    async selectDevSess(): Promise<DevSessEntity[]> {
+        var start_date = dateTimeToSQL(new Date(this.args.sess_period_start));
+        var end_date = dateTimeToSQL(new Date(this.args.sess_period_end));
+        
+        var db_response = await this.db.query("SELECT * FROM dev_sess WHERE dev_number = \'" + this.args.dev_number + "\' AND time_dev >= \'" + start_date + "\' AND " +
+            "time_dev<= \'" + end_date + "\' order by time_dev asc");
+
+
+        var result: DevSessEntity[] = new Array();
+        for (var ds in db_response.rows) {
+            result.push(db_response.rows[ds]);
+        }
+        return result;
+
+    }
+
+
     // Удаление контрольной сессии 
-    async deleteControlDevSess(){
-        try{ await this.db.query("DELETE FROM control_dev_sess WHERE dev_sess_id = ('" + this.args.id + "')"); return true;}
-        catch {return false;}
+    async deleteControlDevSess() {
+        try { await this.db.query("DELETE FROM control_dev_sess WHERE dev_sess_id = ('" + this.args.id + "')"); return true; }
+        catch { return false; }
     }
 }

@@ -36,46 +36,34 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DevSess = exports.DevSessEntity = void 0;
+exports.ThermalWell = exports.ThermalWellEntity = void 0;
 var DBase_1 = require("./DBase");
 var DateStr_1 = require("./DateStr");
-var DevSessEntity = (function () {
-    function DevSessEntity() {
+var ThermalWellEntity = (function () {
+    function ThermalWellEntity() {
         this.id = 0;
+        this.number = "";
+        this.org_id = 0;
+        this.group_id = 0;
+        this.dev_id = 0;
+        this.create_at = new Date(Date.now());
     }
-    return DevSessEntity;
+    return ThermalWellEntity;
 }());
-exports.DevSessEntity = DevSessEntity;
-var DevSess = (function () {
-    function DevSess(_args, _sess_code) {
+exports.ThermalWellEntity = ThermalWellEntity;
+var ThermalWell = (function () {
+    function ThermalWell(_args, _sess_code) {
         this.db = (0, DBase_1.getDB)();
         this.args = _args;
         this.sess_code = _sess_code;
     }
-    DevSess.prototype.selectLastDevSess = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var db_response, result, lds;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM dev_sess WHERE dev_number = '" + this.args.dev_number + "' order by id desc limit 1;")];
-                    case 1:
-                        db_response = _a.sent();
-                        result = new Array();
-                        for (lds in db_response.rows) {
-                            result.push(db_response.rows[lds]);
-                        }
-                        return [2, result];
-                }
-            });
-        });
-    };
-    DevSess.prototype.insertControlDevSess = function () {
+    ThermalWell.prototype.insertThermalWell = function () {
         return __awaiter(this, void 0, void 0, function () {
             var db_response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("INSERT INTO control_dev_sess (dev_sess_id, dev_id, dev_number) " +
-                            "VALUES (" + this.args.dev_sess_id + ", " + this.args.dev_id + ", " + this.args.dev_number + ") RETURNING id")];
+                    case 0: return [4, this.db.query("INSERT INTO skvazhiny(number, org_id, group_id, dev_id, create_at) " +
+                            "VALUES(\'" + this.args.number + "\'," + this.args.org_id + "," + this.args.group_id + "," + this.args.dev_id + ",\'" + (0, DateStr_1.dateTimeToSQL)(new Date(Date.now())) + "\') RETURNING  id")];
                     case 1:
                         db_response = _a.sent();
                         return [2, db_response.rows];
@@ -83,65 +71,38 @@ var DevSess = (function () {
             });
         });
     };
-    DevSess.prototype.selectControlDevSess = function () {
+    ThermalWell.prototype.selectThermalWell = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var db_response, result, cds;
+            var db_response, result, tw;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT dev_sess.* from dev_sess INNER JOIN control_dev_sess " +
-                            "ON dev_sess.id = control_dev_sess.dev_sess_id WHERE control_dev_sess.dev_number = \'" + this.args.dev_number + "\'")];
+                    case 0: return [4, this.db.query("SELECT * FROM skvazhiny WHERE group_id = " + this.args.group_dev_id)];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();
-                        for (cds in db_response.rows) {
-                            result.push(db_response.rows[cds]);
+                        for (tw in db_response.rows) {
+                            result.push(db_response.rows[tw]);
                         }
                         return [2, result];
                 }
             });
         });
     };
-    DevSess.prototype.selectDevSess = function () {
+    ThermalWell.prototype.updateThremalWell = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var start_date, end_date, db_response, result, ds;
+            var db_response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        start_date = (0, DateStr_1.dateTimeToSQL)(new Date(this.args.sess_period_start));
-                        end_date = (0, DateStr_1.dateTimeToSQL)(new Date(this.args.sess_period_end));
-                        return [4, this.db.query("SELECT * FROM dev_sess WHERE dev_number = \'" + this.args.dev_number + "\' AND time_dev >= \'" + start_date + "\' AND " +
-                                "time_dev<= \'" + end_date + "\' order by time_dev asc")];
+                    case 0: return [4, this.db.query("UPDATE skvazhiny SET dev_id = " + this.args.dev_id + ", number = \'" + this.args.number + "\', group_id = " +
+                            this.args.group_dev_id + ", org_id = " + this.args.org_id + " WHERE id = " + this.args.id + " RETURNING id")];
                     case 1:
                         db_response = _a.sent();
-                        result = new Array();
-                        for (ds in db_response.rows) {
-                            result.push(db_response.rows[ds]);
-                        }
-                        return [2, result];
+                        return [2, db_response.rows];
                 }
             });
         });
     };
-    DevSess.prototype.deleteControlDevSess = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        return [4, this.db.query("DELETE FROM control_dev_sess WHERE dev_sess_id = ('" + this.args.id + "')")];
-                    case 1:
-                        _b.sent();
-                        return [2, true];
-                    case 2:
-                        _a = _b.sent();
-                        return [2, false];
-                    case 3: return [2];
-                }
-            });
-        });
-    };
-    return DevSess;
+    return ThermalWell;
 }());
-exports.DevSess = DevSess;
-//# sourceMappingURL=DevSess.js.map
+exports.ThermalWell = ThermalWell;
+//# sourceMappingURL=ThermalWell.js.map
