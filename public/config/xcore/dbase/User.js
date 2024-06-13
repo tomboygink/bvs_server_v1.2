@@ -296,7 +296,7 @@ var User = (function () {
                 switch (_a.label) {
                     case 0:
                         db_response = {};
-                        if (!(this.args.password === undefined)) return [3, 5];
+                        if (!(this.args.isAdmin === true)) return [3, 5];
                         return [4, this.db.query("SELECT email FROM users WHERE id =" + this.args.id)];
                     case 1:
                         checkMail = _a.sent();
