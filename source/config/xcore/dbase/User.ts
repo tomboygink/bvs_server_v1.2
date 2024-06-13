@@ -239,10 +239,10 @@ export class User {
 
   // Обновление данных пользователя
   async updateUser() {
-    // Проверка по наличию пароля
-    // Если пароля нет то пользователь редачит сам себя
+    // Проверка по isAdmin
+    // Если isAdmin true то пользователь редачит сам себя
     var db_response: any = {};
-    if (this.args.password === undefined) {
+    if (this.args.isAdmin === true) {
       var checkMail = await this.db.query(
         "SELECT email FROM users WHERE id =" + this.args.id
       );
@@ -276,7 +276,7 @@ export class User {
         );
       }
     }
-    //Иначе если есть то пользователь редачит другого
+    //Иначе если isAdmin=false то пользователь редачит другого
     else {
       var checkMailandPass = await this.db.query(
         "SELECT email, password FROM users WHERE id =" + this.args.id
