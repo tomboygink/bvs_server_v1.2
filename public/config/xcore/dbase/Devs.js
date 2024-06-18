@@ -42,8 +42,8 @@ var DevsEntity = (function () {
     function DevsEntity() {
         this.id = 0;
         this.group_dev_id = 0;
-        this.number = '';
-        this.name = '';
+        this.number = "";
+        this.name = "";
         this.latitude = "";
         this.longitude = "";
         this.sensors = "";
@@ -77,14 +77,48 @@ var Devs = (function () {
             });
         });
     };
+    Devs.prototype.selectAllDevs = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response, result, d;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("SELECT * FROM devs ")];
+                    case 1:
+                        db_response = _a.sent();
+                        result = new Array();
+                        for (d in db_response.rows) {
+                            result.push(db_response.rows[d]);
+                        }
+                        return [2, result];
+                }
+            });
+        });
+    };
     Devs.prototype.insertDevs = function () {
         return __awaiter(this, void 0, void 0, function () {
             var db_response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, this.db.query("INSERT INTO devs(group_dev_id, number, name, latitude, longitude, sensors, deleted, info, period_sess) " +
-                            "VALUES (" + this.args.group_dev_id + ", \'" + this.args.number + "\', \'" + this.args.name + "\', \'" + this.args.latitude + "\', \'" +
-                            this.args.longitude + "\', \'" + this.args.sensors + "\', " + this.args.deleted + ", \'" + this.args.info + "\', " + this.args.period_sess + ") RETURNING id")];
+                            "VALUES (" +
+                            this.args.group_dev_id +
+                            ", '" +
+                            this.args.number +
+                            "', '" +
+                            this.args.name +
+                            "', '" +
+                            this.args.latitude +
+                            "', '" +
+                            this.args.longitude +
+                            "', '" +
+                            this.args.sensors +
+                            "', " +
+                            this.args.deleted +
+                            ", '" +
+                            this.args.info +
+                            "', " +
+                            this.args.period_sess +
+                            ") RETURNING id")];
                     case 1:
                         db_response = _a.sent();
                         return [2, db_response.rows];
@@ -97,8 +131,26 @@ var Devs = (function () {
             var db_response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("UPDATE devs SET group_dev_id = " + this.args.group_dev_id + ", number = \'" + this.args.number + "\', name = \'" + this.args.name + "\', latitude = \'" + this.args.latitude + "\', " +
-                            "longitude = \'" + this.args.longitude + "\', sensors = \'" + this.args.sensors + "\', deleted = " + this.args.deleted + ", info = \'" + this.args.info + "\', period_sess = " + this.args.period_sess + " RETURNING id")];
+                    case 0: return [4, this.db.query("UPDATE devs SET group_dev_id = " +
+                            this.args.group_dev_id +
+                            ", number = '" +
+                            this.args.number +
+                            "', name = '" +
+                            this.args.name +
+                            "', latitude = '" +
+                            this.args.latitude +
+                            "', " +
+                            "longitude = '" +
+                            this.args.longitude +
+                            "', sensors = '" +
+                            this.args.sensors +
+                            "', deleted = " +
+                            this.args.deleted +
+                            ", info = '" +
+                            this.args.info +
+                            "', period_sess = " +
+                            this.args.period_sess +
+                            " RETURNING id")];
                     case 1:
                         db_response = _a.sent();
                         return [2, db_response.rows];

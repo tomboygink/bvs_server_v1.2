@@ -403,6 +403,25 @@ export async function Router(body: any) {
         }
       }
       break;
+    //Получение устройств
+    case "get_AllDevs":
+      {
+        var d = new Devs(body.args, body.sess_code);
+        data = await d.selectAllDevs();
+
+        if (data.length === 0 || data[0] === undefined) {
+          res.cmd = body.cmd;
+          res.error = "Ошибка в получении данных устройства";
+          res.data = null;
+          res.user_sess_code = body.sess_code;
+        } else {
+          res.cmd = body.cmd;
+          res.error = null;
+          res.data = data;
+          res.user_sess_code = body.sess_code;
+        }
+      }
+      break;
 
     //Добавление устройств
     case "set_Devs":
