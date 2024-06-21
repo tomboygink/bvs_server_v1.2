@@ -57,7 +57,26 @@ var DevSess = (function () {
             var db_response, result, lds;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM dev_sess WHERE dev_number = '" + this.args.dev_number + "' order by id desc limit 1;")];
+                    case 0: return [4, this.db.query("SELECT * FROM dev_sess WHERE dev_number = '" +
+                            this.args.dev_number +
+                            "' order by id desc limit 1;")];
+                    case 1:
+                        db_response = _a.sent();
+                        result = new Array();
+                        for (lds in db_response.rows) {
+                            result.push(db_response.rows[lds]);
+                        }
+                        return [2, result];
+                }
+            });
+        });
+    };
+    DevSess.prototype.selectAllLastDevSess = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response, result, lds;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("SELECT * FROM dev_sess order by id desc;")];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();
@@ -75,7 +94,13 @@ var DevSess = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, this.db.query("INSERT INTO control_dev_sess (dev_sess_id, dev_id, dev_number) " +
-                            "VALUES (" + this.args.dev_sess_id + ", " + this.args.dev_id + ", " + this.args.dev_number + ") RETURNING id")];
+                            "VALUES (" +
+                            this.args.dev_sess_id +
+                            ", " +
+                            this.args.dev_id +
+                            ", " +
+                            this.args.dev_number +
+                            ") RETURNING id")];
                     case 1:
                         db_response = _a.sent();
                         return [2, db_response.rows];
@@ -89,7 +114,9 @@ var DevSess = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, this.db.query("SELECT dev_sess.* from dev_sess INNER JOIN control_dev_sess " +
-                            "ON dev_sess.id = control_dev_sess.dev_sess_id WHERE control_dev_sess.dev_number = \'" + this.args.dev_number + "\'")];
+                            "ON dev_sess.id = control_dev_sess.dev_sess_id WHERE control_dev_sess.dev_number = '" +
+                            this.args.dev_number +
+                            "'")];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();
@@ -109,8 +136,14 @@ var DevSess = (function () {
                     case 0:
                         start_date = (0, DateStr_1.dateTimeToSQL)(new Date(this.args.sess_period_start));
                         end_date = (0, DateStr_1.dateTimeToSQL)(new Date(this.args.sess_period_end));
-                        return [4, this.db.query("SELECT * FROM dev_sess WHERE dev_number = \'" + this.args.dev_number + "\' AND time_dev >= \'" + start_date + "\' AND " +
-                                "time_dev<= \'" + end_date + "\' order by time_dev asc")];
+                        return [4, this.db.query("SELECT * FROM dev_sess WHERE dev_number = '" +
+                                this.args.dev_number +
+                                "' AND time_dev >= '" +
+                                start_date +
+                                "' AND " +
+                                "time_dev<= '" +
+                                end_date +
+                                "' order by time_dev asc")];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();
@@ -129,7 +162,9 @@ var DevSess = (function () {
                 switch (_b.label) {
                     case 0:
                         _b.trys.push([0, 2, , 3]);
-                        return [4, this.db.query("DELETE FROM control_dev_sess WHERE dev_sess_id = ('" + this.args.id + "')")];
+                        return [4, this.db.query("DELETE FROM control_dev_sess WHERE dev_sess_id = ('" +
+                                this.args.id +
+                                "')")];
                     case 1:
                         _b.sent();
                         return [2, true];

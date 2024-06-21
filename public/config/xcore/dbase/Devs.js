@@ -35,6 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Devs = exports.DevsEntity = void 0;
 var DBase_1 = require("./DBase");
@@ -79,16 +88,14 @@ var Devs = (function () {
     };
     Devs.prototype.selectAllDevs = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var db_response, result, d;
+            var db_response, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM devs ")];
+                    case 0: return [4, this.db.query("SELECT * FROM devs")];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();
-                        for (d in db_response.rows) {
-                            result.push(db_response.rows[d]);
-                        }
+                        result = __spreadArray([], db_response.rows, true);
                         return [2, result];
                 }
             });

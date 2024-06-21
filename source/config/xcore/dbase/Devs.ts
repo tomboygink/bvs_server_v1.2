@@ -30,6 +30,7 @@ export class Devs {
     var db_response = await this.db.query(
       "SELECT * FROM devs WHERE group_dev_id = " + this.args.group_dev_id
     );
+
     var result: DevsEntity[] = new Array();
     for (var d in db_response.rows) {
       result.push(db_response.rows[d]);
@@ -39,13 +40,36 @@ export class Devs {
 
   //Получение всех устройств
   async selectAllDevs(): Promise<DevsEntity[]> {
-    var db_response = await this.db.query("SELECT * FROM devs ");
+    var db_response = await this.db.query("SELECT * FROM devs");
     var result: DevsEntity[] = new Array();
-    for (var d in db_response.rows) {
-      result.push(db_response.rows[d]);
-    }
+    result = [...db_response.rows];
     return result;
   }
+  // async selectAllDevs(): Promise<DevsEntity[]> {
+  //   var db_response = await this.db.query("SELECT * FROM devs");
+  //   var result: DevsEntity[] = new Array();
+  //   await Promise.all(
+  //     db_response.rows.map(async (dev) => {
+  //       let time;
+  //       const res = await this.db.query(
+  //         ` SELECT time_srv as time from dev_sess WHERE dev_number = '${dev.number}'
+  //           order by id desc limit 1`
+  //       );
+
+  //       const tzoffset = new Date().getTimezoneOffset() * 60000;
+  //       const timeServer = res.rows[0]?.time;
+  //       if (!timeServer) {
+  //         time = null;
+  //       } else {
+  //         time = new Date(timeServer - tzoffset).toISOString().slice(0, -8);
+  //       }
+
+  //       result.push({ ...dev, time });
+  //     })
+  //   );
+
+  //   return result;
+  // }
 
   //Добавление устройств в группу
   async insertDevs() {
