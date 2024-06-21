@@ -393,7 +393,7 @@ export async function Router(body: any) {
         //Редактирование устройств 
         case 'set_ChangeDevs': {
             var d = new Devs(body.args, body.sess_code);
-            data = d.updateDevs();
+            data = await d.updateDevs();
             if (data === null || data === undefined) {
                 res.cmd = body.cmd;
                 res.error = 'Ошибка в обновлении данных устройства';
@@ -507,7 +507,7 @@ export async function Router(body: any) {
         //Установка поверочного интервала 
         case 'set_DevVerif': {
             var dv = new DevVerif(body.args, body.sess_code);
-            data = dv.insertDevVerif();
+            data = await dv.insertDevVerif();
             if (data.length === 0 || data === undefined) {
                 res.cmd = body.cmd;
                 res.error = 'Ошибка при установки поверочного интервала устроства';
@@ -526,7 +526,7 @@ export async function Router(body: any) {
         //Получение поверочного интервала устройства 
         case 'get_DevVerif': {
             var dv = new DevVerif(body.args, body.sess_code);
-            data = dv.selectDevVerif();
+            data = await dv.selectDevVerif();
             if (data.length === 0 || data[0] === undefined) {
                 res.cmd = body.cmd;
                 res.error = 'Ошибка при получении поверочного интервала устройства или оно отсутствует';
@@ -545,7 +545,7 @@ export async function Router(body: any) {
         //Добавление скважины 
         case 'set_ThermalWell': {
             var tw = new ThermalWell(body.args, body.sess_code);
-            data = tw.insertThermalWell();
+            data = await tw.insertThermalWell();
             if (data.length === 0 || data === undefined) {
                 res.cmd = body.cmd;
                 res.error = 'Ошибка при добавлении термоскважины';
@@ -563,7 +563,7 @@ export async function Router(body: any) {
         //Обноваление скважины 
         case 'set_ChangeThermalWell': {
             var tw = new ThermalWell(body.args, body.sess_code);
-            data = tw.updateThremalWell();
+            data =  await tw.updateThremalWell();
             if (data === null || data === undefined) {
                 res.cmd = body.cmd;
                 res.error = 'Ошибка в обновлении данных термоскважины';
@@ -581,7 +581,7 @@ export async function Router(body: any) {
         //Получение скважин при нажатии на группу 
         case 'get_ThermalWell': {
             var tw = new ThermalWell(body.args, body.sess_code);
-            data = tw.selectThermalWell();
+            data = await tw.selectThermalWell();
             if (data.length === 0 || data[0] === undefined) {
                 res.cmd = body.cmd;
                 res.error = 'Ошибка при получении термометрических скважин группы';
