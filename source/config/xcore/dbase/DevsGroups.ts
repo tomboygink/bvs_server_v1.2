@@ -81,7 +81,7 @@ export class DevsGroups {
           this.args.latitude +
           "', longitude = '" +
           this.args.longitude +
-          "' org_id = " +
+          "', org_id = " +
           this.args.org_id +
           ", deleted = " +
           this.args.deleted +
