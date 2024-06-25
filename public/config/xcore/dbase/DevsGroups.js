@@ -130,19 +130,19 @@ var DevsGroups = (function () {
                         _b.trys.push([0, 16, , 17]);
                         return [4, this.db.query("UPDATE devs_groups SET parent_id =" +
                                 this.args.parent_id +
-                                ", g_name = '" +
+                                ", g_name = \'" +
                                 this.args.g_name +
-                                "', latitude = '" +
+                                "\', latitude = \'" +
                                 this.args.latitude +
-                                "', longitude = '" +
+                                "\', longitude = \'" +
                                 this.args.longitude +
-                                "', org_id = " +
+                                "\', org_id = " +
                                 this.args.org_id +
                                 ", deleted = " +
                                 this.args.deleted +
-                                ", g_info = " +
+                                ", g_info = \'" +
                                 this.args.g_info +
-                                " WHERE id = " +
+                                "\' WHERE id = " +
                                 this.args.id)];
                     case 1:
                         _b.sent();
