@@ -47,6 +47,8 @@ export class DevsGroups {
   }
   // Добавление новой группы
   async insertDevsGroup() {
+
+    //добавление группы
     var db_response = await this.db.query(
       "INSERT INTO devs_groups(parent_id, g_name, latitude, longitude, org_id, ord_num, deleted, g_info)" +
         "VALUES(" +
@@ -65,6 +67,11 @@ export class DevsGroups {
         this.args.g_info +
         "') RETURNING id"
     );
+
+    //Добавление пустого SVG
+    await this.db.query("INSERT INTO scheme_svg (id_devs_groups, svg) VALUES ("+db_response.rows[0].id+", \'\')");
+
+
     return db_response.rows;
   }
 

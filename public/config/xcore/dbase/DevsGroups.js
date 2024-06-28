@@ -116,6 +116,9 @@ var DevsGroups = (function () {
                             "') RETURNING id")];
                     case 1:
                         db_response = _a.sent();
+                        return [4, this.db.query("INSERT INTO scheme_svg (id_devs_groups, svg) VALUES (" + db_response.rows[0].id + ", \'\')")];
+                    case 2:
+                        _a.sent();
                         return [2, db_response.rows];
                 }
             });
