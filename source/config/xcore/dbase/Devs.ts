@@ -98,6 +98,20 @@ export class Devs {
     return db_response.rows;
   }
 
+  //Добавление нескольких устройств в группу
+  async insertManyDevs() {
+    const db_response = await this.db.query(
+      `INSERT INTO devs(group_dev_id, number, name, latitude, longitude, sensors, deleted, info, period_sess) VALUES 
+      ${this.args.map(
+        (item: DevsEntity) =>
+          ` ('${item.group_dev_id}', '${item.number}','${item.name}', '${item.latitude}', '${item.longitude}', '${item.sensors}', ${item.deleted}, '${item.info}', '${item.period_sess}')`
+      )}
+       RETURNING id`
+    );
+
+    return db_response.rows;
+  }
+
   //Обновление данных устройсва
   async updateDevs() {
     var db_response = await this.db.query(
