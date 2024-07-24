@@ -442,6 +442,25 @@ export async function Router(body: any) {
       }
       break;
 
+    //Добавление нескольких устройств
+    case "set_manyDevs":
+      {
+        var d = new Devs(body.args, body.sess_code);
+        data = await d.insertManyDevs();
+        if (data === null || data === undefined) {
+          res.cmd = body.cmd;
+          res.error = "Ошибка в добавлении нового устройства";
+          res.data = null;
+          res.user_sess_code = body.sess_code;
+        } else {
+          res.cmd = body.cmd;
+          res.error = null;
+          res.data = null;
+          res.user_sess_code = body.sess_code;
+        }
+      }
+      break;
+
     //Редактирование устройств
     case "set_ChangeDevs":
       {

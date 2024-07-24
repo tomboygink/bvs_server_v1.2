@@ -133,6 +133,21 @@ var Devs = (function () {
             });
         });
     };
+    Devs.prototype.insertManyDevs = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("INSERT INTO devs(group_dev_id, number, name, latitude, longitude, sensors, deleted, info, period_sess) VALUES \n      ".concat(this.args.map(function (item) {
+                            return " ('".concat(item.group_dev_id, "', '").concat(item.number, "','").concat(item.name, "', '").concat(item.latitude, "', '").concat(item.longitude, "', '").concat(item.sensors, "', ").concat(item.deleted, ", '").concat(item.info, "', '").concat(item.period_sess, "')");
+                        }), "\n       RETURNING id"))];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows];
+                }
+            });
+        });
+    };
     Devs.prototype.updateDevs = function () {
         return __awaiter(this, void 0, void 0, function () {
             var db_response;

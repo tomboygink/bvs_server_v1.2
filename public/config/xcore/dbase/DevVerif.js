@@ -63,7 +63,17 @@ var DevVerif = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, this.db.query("INSERT INTO dev_povs(dev_id, dev_number, start_povs, end_povs, old_dev_povs) " +
-                            "VALUES(" + this.args.dev_id + ", \'" + this.args.dev_number + "\', \'" + (0, DateStr_1.dateTimeToSQL)(this.args.start_povs) + "\', \'" + (0, DateStr_1.dateTimeToSQL)(this.args.end_povs) + "\', " + this.args.old_dev_povs + ") " +
+                            "VALUES(" +
+                            this.args.dev_id +
+                            ", '" +
+                            this.args.dev_number +
+                            "', '" +
+                            (0, DateStr_1.dateTimeToSQL)(this.args.start_povs) +
+                            "', '" +
+                            (0, DateStr_1.dateTimeToSQL)(this.args.end_povs) +
+                            "', " +
+                            this.args.old_dev_povs +
+                            ") " +
                             "RETURNING id")];
                     case 1:
                         db_response = _a.sent();
@@ -77,7 +87,11 @@ var DevVerif = (function () {
             var db_response, result, dv;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM dev_povs WHERE dev_id = " + this.args.dev_id + " AND dev_number = \'" + this.args.dev_number + "\'")];
+                    case 0: return [4, this.db.query("SELECT * FROM dev_povs WHERE dev_id = " +
+                            this.args.dev_id +
+                            " AND dev_number = '" +
+                            this.args.dev_number +
+                            "'")];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();

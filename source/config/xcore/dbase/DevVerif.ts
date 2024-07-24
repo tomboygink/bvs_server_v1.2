@@ -14,32 +14,50 @@ export class DevVerifEntity {
   constructor() {}
 }
 
-export class DevVerif{
-    db: DBase;
-    args: any;
-    sess_code: string;
-    constructor(_args: any, _sess_code: string) {
-      this.db = getDB();
-      this.args = _args;
-      this.sess_code = _sess_code;
-    }
+export class DevVerif {
+  db: DBase;
+  args: any;
+  sess_code: string;
+  constructor(_args: any, _sess_code: string) {
+    this.db = getDB();
+    this.args = _args;
+    this.sess_code = _sess_code;
+  }
 
-    //Добавление поверочного интервала 
-    async insertDevVerif(){
-        var db_response = await this.db.query("INSERT INTO dev_povs(dev_id, dev_number, start_povs, end_povs, old_dev_povs) "+
-        "VALUES("+this.args.dev_id+", \'"+this.args.dev_number+"\', \'"+dateTimeToSQL(this.args.start_povs)+"\', \'"+dateTimeToSQL(this.args.end_povs)+"\', "+this.args.old_dev_povs+") "+
-        "RETURNING id");
-        return db_response.rows;
-    }
+  //Добавление поверочного интервала
+  async insertDevVerif() {
+    var db_response = await this.db.query(
+      "INSERT INTO dev_povs(dev_id, dev_number, start_povs, end_povs, old_dev_povs) " +
+        "VALUES(" +
+        this.args.dev_id +
+        ", '" +
+        this.args.dev_number +
+        "', '" +
+        dateTimeToSQL(this.args.start_povs) +
+        "', '" +
+        dateTimeToSQL(this.args.end_povs) +
+        "', " +
+        this.args.old_dev_povs +
+        ") " +
+        "RETURNING id"
+    );
 
-    //Получение поверочного интервала 
-    async selectDevVerif():Promise<DevVerifEntity[]>{
-        var db_response = await this.db.query("SELECT * FROM dev_povs WHERE dev_id = "+this.args.dev_id+" AND dev_number = \'"+this.args.dev_number+"\'");
-        var result:DevVerifEntity[] = new Array();
-        for (var dv in db_response.rows){
-            result.push(db_response.rows[dv]);
-        }
-        return result;
+    return db_response.rows;
+  }
 
+  //Получение поверочного интервала
+  async selectDevVerif(): Promise<DevVerifEntity[]> {
+    var db_response = await this.db.query(
+      "SELECT * FROM dev_povs WHERE dev_id = " +
+        this.args.dev_id +
+        " AND dev_number = '" +
+        this.args.dev_number +
+        "'"
+    );
+    var result: DevVerifEntity[] = new Array();
+    for (var dv in db_response.rows) {
+      result.push(db_response.rows[dv]);
     }
+    return result;
+  }
 }
