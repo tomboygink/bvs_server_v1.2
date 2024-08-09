@@ -384,6 +384,25 @@ export async function Router(body: any) {
       break;
 
     //-----------------------------------------УСТРОЙСТВА
+    //Получение устройства по id
+    case "get_Dev":
+      {
+        var d = new Devs(body.args, body.sess_code);
+        data = await d.selectDevById();
+
+        if (data.length === 0 || data[0] === undefined) {
+          res.cmd = body.cmd;
+          res.error = "Ошибка в получении данных устройства";
+          res.data = null;
+          res.user_sess_code = body.sess_code;
+        } else {
+          res.cmd = body.cmd;
+          res.error = null;
+          res.data = data;
+          res.user_sess_code = body.sess_code;
+        }
+      }
+      break;
     //Получение устройств
     case "get_Devs":
       {
@@ -674,6 +693,26 @@ export async function Router(body: any) {
           res.cmd = body.cmd;
           res.error = null;
           res.data = null;
+          res.user_sess_code = body.sess_code;
+        }
+      }
+      break;
+
+    // Получение всех скважин
+
+    case "get_AllThermalWells":
+      {
+        var tw = new ThermalWell(body.args, body.sess_code);
+        data = await tw.selectAllThermalWell();
+        if (data.length === 0 || data[0] === undefined) {
+          res.cmd = body.cmd;
+          res.error = "Ошибка при получении термометрических скважин группы";
+          res.data = null;
+          res.user_sess_code = body.sess_code;
+        } else {
+          res.cmd = body.cmd;
+          res.error = null;
+          res.data = data;
           res.user_sess_code = body.sess_code;
         }
       }

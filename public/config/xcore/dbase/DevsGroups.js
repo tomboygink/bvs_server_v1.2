@@ -64,7 +64,7 @@ var DevsGroups = (function () {
             var db_response, result, dg;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM devs_groups WHERE parent_id = " + this.args.parent_id)];
+                    case 0: return [4, this.db.query("SELECT * FROM devs_groups WHERE id = " + this.args.id)];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();
@@ -116,7 +116,9 @@ var DevsGroups = (function () {
                             "') RETURNING id")];
                     case 1:
                         db_response = _a.sent();
-                        return [4, this.db.query("INSERT INTO scheme_svg (id_devs_groups, svg) VALUES (" + db_response.rows[0].id + ", \'\')")];
+                        return [4, this.db.query("INSERT INTO scheme_svg (id_devs_groups, svg) VALUES (" +
+                                db_response.rows[0].id +
+                                ", '')")];
                     case 2:
                         _a.sent();
                         return [2, db_response.rows];
@@ -133,19 +135,19 @@ var DevsGroups = (function () {
                         _b.trys.push([0, 16, , 17]);
                         return [4, this.db.query("UPDATE devs_groups SET parent_id =" +
                                 this.args.parent_id +
-                                ", g_name = \'" +
+                                ", g_name = '" +
                                 this.args.g_name +
-                                "\', latitude = \'" +
+                                "', latitude = '" +
                                 this.args.latitude +
-                                "\', longitude = \'" +
+                                "', longitude = '" +
                                 this.args.longitude +
-                                "\', org_id = " +
+                                "', org_id = " +
                                 this.args.org_id +
                                 ", deleted = " +
                                 this.args.deleted +
-                                ", g_info = \'" +
+                                ", g_info = '" +
                                 this.args.g_info +
-                                "\' WHERE id = " +
+                                "' WHERE id = " +
                                 this.args.id)];
                     case 1:
                         _b.sent();

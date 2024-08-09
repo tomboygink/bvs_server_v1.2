@@ -69,6 +69,19 @@ var Devs = (function () {
         this.args = _args;
         this.sess_code = _sess_code;
     }
+    Devs.prototype.selectDevById = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("SELECT * FROM devs WHERE id = " + this.args.id)];
+                    case 1:
+                        db_response = _a.sent();
+                        return [2, db_response.rows];
+                }
+            });
+        });
+    };
     Devs.prototype.selectDevs = function () {
         return __awaiter(this, void 0, void 0, function () {
             var db_response, result, d;
@@ -172,6 +185,8 @@ var Devs = (function () {
                             this.args.info +
                             "', period_sess = " +
                             this.args.period_sess +
+                            " WHERE id = " +
+                            this.args.id +
                             " RETURNING id")];
                     case 1:
                         db_response = _a.sent();

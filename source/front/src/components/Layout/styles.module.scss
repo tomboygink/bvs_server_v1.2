@@ -1,0 +1,15 @@
+@import "../../assets/styles/font-family.scss";
+@import "../../assets/styles/text-style.scss";
+@import "../../assets/styles/colors.scss";
+@import "../../assets/styles/reset.scss";
+.main {
+  display: grid;
+  align-items: start;
+  grid-template-columns: 1fr 4fr 1fr;
+  gap: 32px;
+  padding: 32px;
+
+  min-height: calc(100vh - 120px);
+  height: 100%;
+  box-sizing: border-box;
+}
