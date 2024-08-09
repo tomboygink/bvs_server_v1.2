@@ -33,9 +33,9 @@ export class DevVerif {
         ", '" +
         this.args.dev_number +
         "', '" +
-        dateTimeToSQL(this.args.start_povs) +
+        dateTimeToSQL(new Date(this.args.start_povs)) +
         "', '" +
-        dateTimeToSQL(this.args.end_povs) +
+        dateTimeToSQL(new Date(this.args.end_povs)) +
         "', " +
         this.args.old_dev_povs +
         ") " +

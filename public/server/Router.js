@@ -48,7 +48,7 @@ var DevVerif_1 = require("../config/xcore/dbase/DevVerif");
 var ThermalWell_1 = require("../config/xcore/dbase/ThermalWell");
 function Router(body) {
     return __awaiter(this, void 0, void 0, function () {
-        var res, data, _a, u, user_sess_code, u, o, o, o, j, j, j, u, u, u, dg, dg, dg, dg, svg, svg, d, d, d, d, d, ds, ds, ds, ds, ds, ds, dv, dv, tw, tw, tw, u, u, u, u, u;
+        var res, data, _a, u, user_sess_code, u, o, o, o, j, j, j, u, u, u, dg, dg, dg, dg, svg, svg, d, d, d, d, d, d, ds, ds, ds, ds, ds, ds, dv, dv, tw, tw, tw, tw, u, u, u, u, u;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -79,29 +79,31 @@ function Router(body) {
                         case "set_UpdateDevsGroups": return [3, 36];
                         case "get_SchemeSvg": return [3, 38];
                         case "set_SchemeSvg": return [3, 40];
-                        case "get_Devs": return [3, 42];
-                        case "get_AllDevs": return [3, 44];
-                        case "set_Devs": return [3, 46];
-                        case "set_manyDevs": return [3, 48];
-                        case "set_ChangeDevs": return [3, 50];
-                        case "get_LastDevSess": return [3, 52];
-                        case "get_AllLastDevSess": return [3, 54];
-                        case "set_ControlDevSess": return [3, 56];
-                        case "set_deleteControlDevSess": return [3, 58];
-                        case "get_ControlDevSess": return [3, 60];
-                        case "get_DevSess": return [3, 62];
-                        case "set_DevVerif": return [3, 64];
-                        case "get_DevVerif": return [3, 66];
-                        case "set_ThermalWell": return [3, 68];
-                        case "set_ChangeThermalWell": return [3, 70];
-                        case "get_ThermalWell": return [3, 72];
-                        case "set_ActMail": return [3, 74];
-                        case "set_MailCode": return [3, 76];
-                        case "set_ForgPass": return [3, 78];
-                        case "set_Pass": return [3, 80];
-                        case "deleteCookie": return [3, 82];
+                        case "get_Dev": return [3, 42];
+                        case "get_Devs": return [3, 44];
+                        case "get_AllDevs": return [3, 46];
+                        case "set_Devs": return [3, 48];
+                        case "set_manyDevs": return [3, 50];
+                        case "set_ChangeDevs": return [3, 52];
+                        case "get_LastDevSess": return [3, 54];
+                        case "get_AllLastDevSess": return [3, 56];
+                        case "set_ControlDevSess": return [3, 58];
+                        case "set_deleteControlDevSess": return [3, 60];
+                        case "get_ControlDevSess": return [3, 62];
+                        case "get_DevSess": return [3, 64];
+                        case "set_DevVerif": return [3, 66];
+                        case "get_DevVerif": return [3, 68];
+                        case "set_ThermalWell": return [3, 70];
+                        case "set_ChangeThermalWell": return [3, 72];
+                        case "get_AllThermalWells": return [3, 74];
+                        case "get_ThermalWell": return [3, 76];
+                        case "set_ActMail": return [3, 78];
+                        case "set_MailCode": return [3, 80];
+                        case "set_ForgPass": return [3, 82];
+                        case "set_Pass": return [3, 84];
+                        case "deleteCookie": return [3, 86];
                     }
-                    return [3, 83];
+                    return [3, 87];
                 case 1:
                     {
                         res.cmd = body.cmd;
@@ -109,7 +111,7 @@ function Router(body) {
                         res.data = "ok";
                         res.error = null;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 2:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.insertSessionCode()];
@@ -131,7 +133,7 @@ function Router(body) {
                     res.data = data;
                     res.user_sess_code = user_sess_code;
                     _b.label = 6;
-                case 6: return [3, 84];
+                case 6: return [3, 88];
                 case 7:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.selectUser()];
@@ -153,7 +155,7 @@ function Router(body) {
                     res.data = data;
                     res.user_sess_code = body.sess_code;
                     _b.label = 11;
-                case 11: return [3, 84];
+                case 11: return [3, 88];
                 case 12:
                     o = new Org_1.Org(body.args, body.sess_code);
                     return [4, o.selectOrg()];
@@ -171,7 +173,7 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 14:
                     o = new Org_1.Org(body.args, body.sess_code);
                     return [4, o.insertOrg()];
@@ -189,7 +191,7 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 16:
                     o = new Org_1.Org(body.args, body.sess_code);
                     return [4, o.updateOrg()];
@@ -207,7 +209,7 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 18:
                     j = new Jobs_1.Jobs(body.args, body.sess_code);
                     return [4, j.selectJob()];
@@ -225,7 +227,7 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 20:
                     j = new Jobs_1.Jobs(body.args, body.sess_code);
                     return [4, j.insertJob()];
@@ -243,7 +245,7 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 22:
                     j = new Jobs_1.Jobs(body.args, body.sess_code);
                     return [4, j.updateJob()];
@@ -261,7 +263,7 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 24:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.insertUser()];
@@ -280,7 +282,7 @@ function Router(body) {
                         res.data = null;
                         res.error = null;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 26:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.selectAllUser()];
@@ -298,7 +300,7 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 28:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.updateUser()];
@@ -316,7 +318,7 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 30:
                     dg = new DevsGroups_1.DevsGroups(body.args, body.sess_code);
                     return [4, dg.selectDevsGroups()];
@@ -334,7 +336,7 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 32:
                     dg = new DevsGroups_1.DevsGroups(body.args, body.sess_code);
                     return [4, dg.selectAllDevsGroups()];
@@ -352,7 +354,7 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 34:
                     dg = new DevsGroups_1.DevsGroups(body.args, body.sess_code);
                     return [4, dg.insertDevsGroup()];
@@ -370,7 +372,7 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 36:
                     dg = new DevsGroups_1.DevsGroups(body.args, body.sess_code);
                     return [4, dg.updateDevsGroup()];
@@ -389,7 +391,7 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 38:
                     svg = new SchemeSvg_1.SchemeSvg(body.args, body.sess_code);
                     return [4, svg.selectSchemeSVG()];
@@ -407,7 +409,7 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 40:
                     svg = new SchemeSvg_1.SchemeSvg(body.args, body.sess_code);
                     return [4, svg.newUpdateSchemeSVG()];
@@ -425,10 +427,10 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 42:
                     d = new Devs_1.Devs(body.args, body.sess_code);
-                    return [4, d.selectDevs()];
+                    return [4, d.selectDevById()];
                 case 43:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
@@ -443,10 +445,10 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 44:
                     d = new Devs_1.Devs(body.args, body.sess_code);
-                    return [4, d.selectAllDevs()];
+                    return [4, d.selectDevs()];
                 case 45:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
@@ -461,28 +463,28 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 46:
                     d = new Devs_1.Devs(body.args, body.sess_code);
-                    return [4, d.insertDevs()];
+                    return [4, d.selectAllDevs()];
                 case 47:
                     data = _b.sent();
-                    if (data === null || data === undefined) {
+                    if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
-                        res.error = "Ошибка в добавлении нового устройства";
+                        res.error = "Ошибка в получении данных устройства";
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
                     else {
                         res.cmd = body.cmd;
                         res.error = null;
-                        res.data = null;
+                        res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 48:
                     d = new Devs_1.Devs(body.args, body.sess_code);
-                    return [4, d.insertManyDevs()];
+                    return [4, d.insertDevs()];
                 case 49:
                     data = _b.sent();
                     if (data === null || data === undefined) {
@@ -497,11 +499,29 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 50:
                     d = new Devs_1.Devs(body.args, body.sess_code);
-                    return [4, d.updateDevs()];
+                    return [4, d.insertManyDevs()];
                 case 51:
+                    data = _b.sent();
+                    if (data === null || data === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = "Ошибка в добавлении нового устройства";
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 88];
+                case 52:
+                    d = new Devs_1.Devs(body.args, body.sess_code);
+                    return [4, d.updateDevs()];
+                case 53:
                     data = _b.sent();
                     if (data === null || data === undefined) {
                         res.cmd = body.cmd;
@@ -515,29 +535,10 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 52:
-                    ds = new DevSess_1.DevSess(body.args, body.sess_code);
-                    return [4, ds.selectLastDevSess()];
-                case 53:
-                    data = _b.sent();
-                    if (data.length === 0 || data[0] === undefined) {
-                        res.cmd = body.cmd;
-                        res.error =
-                            "Ошибка в получении последней переданной сессии или данные отсутствуют";
-                        res.data = null;
-                        res.user_sess_code = body.sess_code;
-                    }
-                    else {
-                        res.cmd = body.cmd;
-                        res.error = null;
-                        res.data = data;
-                        res.user_sess_code = body.sess_code;
-                    }
-                    return [3, 84];
+                    return [3, 88];
                 case 54:
                     ds = new DevSess_1.DevSess(body.args, body.sess_code);
-                    return [4, ds.selectAllLastDevSess()];
+                    return [4, ds.selectLastDevSess()];
                 case 55:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
@@ -553,11 +554,30 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
+                    return [3, 88];
                 case 56:
                     ds = new DevSess_1.DevSess(body.args, body.sess_code);
-                    return [4, ds.insertControlDevSess()];
+                    return [4, ds.selectAllLastDevSess()];
                 case 57:
+                    data = _b.sent();
+                    if (data.length === 0 || data[0] === undefined) {
+                        res.cmd = body.cmd;
+                        res.error =
+                            "Ошибка в получении последней переданной сессии или данные отсутствуют";
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = data;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 88];
+                case 58:
+                    ds = new DevSess_1.DevSess(body.args, body.sess_code);
+                    return [4, ds.insertControlDevSess()];
+                case 59:
                     data = _b.sent();
                     if (data === null || data === undefined) {
                         res.cmd = body.cmd;
@@ -571,11 +591,11 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 58:
+                    return [3, 88];
+                case 60:
                     ds = new DevSess_1.DevSess(body.args, body.sess_code);
                     return [4, ds.deleteControlDevSess()];
-                case 59:
+                case 61:
                     data = _b.sent();
                     if (data === false) {
                         res.cmd = body.cmd;
@@ -589,11 +609,11 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 60:
+                    return [3, 88];
+                case 62:
                     ds = new DevSess_1.DevSess(body.args, body.sess_code);
                     return [4, ds.selectControlDevSess()];
-                case 61:
+                case 63:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
@@ -608,11 +628,11 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 62:
+                    return [3, 88];
+                case 64:
                     ds = new DevSess_1.DevSess(body.args, body.sess_code);
                     return [4, ds.selectDevSess()];
-                case 63:
+                case 65:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
@@ -626,11 +646,11 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 64:
+                    return [3, 88];
+                case 66:
                     dv = new DevVerif_1.DevVerif(body.args, body.sess_code);
                     return [4, dv.insertDevVerif()];
-                case 65:
+                case 67:
                     data = _b.sent();
                     if (data.length === 0 || data === undefined) {
                         res.cmd = body.cmd;
@@ -644,11 +664,11 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 66:
+                    return [3, 88];
+                case 68:
                     dv = new DevVerif_1.DevVerif(body.args, body.sess_code);
                     return [4, dv.selectDevVerif()];
-                case 67:
+                case 69:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
@@ -663,11 +683,11 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 68:
+                    return [3, 88];
+                case 70:
                     tw = new ThermalWell_1.ThermalWell(body.args, body.sess_code);
                     return [4, tw.insertThermalWell()];
-                case 69:
+                case 71:
                     data = _b.sent();
                     if (data.length === 0 || data === undefined) {
                         res.cmd = body.cmd;
@@ -681,11 +701,11 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 70:
+                    return [3, 88];
+                case 72:
                     tw = new ThermalWell_1.ThermalWell(body.args, body.sess_code);
                     return [4, tw.updateThremalWell()];
-                case 71:
+                case 73:
                     data = _b.sent();
                     if (data === null || data === undefined) {
                         res.cmd = body.cmd;
@@ -699,11 +719,11 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 72:
+                    return [3, 88];
+                case 74:
                     tw = new ThermalWell_1.ThermalWell(body.args, body.sess_code);
-                    return [4, tw.selectThermalWell()];
-                case 73:
+                    return [4, tw.selectAllThermalWell()];
+                case 75:
                     data = _b.sent();
                     if (data.length === 0 || data[0] === undefined) {
                         res.cmd = body.cmd;
@@ -717,17 +737,35 @@ function Router(body) {
                         res.data = data;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 74:
+                    return [3, 88];
+                case 76:
+                    tw = new ThermalWell_1.ThermalWell(body.args, body.sess_code);
+                    return [4, tw.selectThermalWell()];
+                case 77:
+                    data = _b.sent();
+                    if (data.length === 0 || data[0] === undefined) {
+                        res.cmd = body.cmd;
+                        res.error = "Ошибка при получении термометрических скважин группы";
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = data;
+                        res.user_sess_code = body.sess_code;
+                    }
+                    return [3, 88];
+                case 78:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.sencConfirmMail()];
-                case 75:
+                case 79:
                     _b.sent();
-                    return [3, 84];
-                case 76:
+                    return [3, 88];
+                case 80:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.updateMail()];
-                case 77:
+                case 81:
                     data = _b.sent();
                     if (data === null || data === undefined) {
                         res.cmd = body.cmd;
@@ -741,11 +779,11 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    _b.label = 78;
-                case 78:
+                    _b.label = 82;
+                case 82:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.sendForgPassMail()];
-                case 79:
+                case 83:
                     data = _b.sent();
                     if (data === false) {
                         res.cmd = body.cmd;
@@ -760,11 +798,11 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 80:
+                    return [3, 88];
+                case 84:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.updatePassRePass()];
-                case 81:
+                case 85:
                     data = _b.sent();
                     if (data === false) {
                         res.cmd = body.cmd;
@@ -778,8 +816,8 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
-                    return [3, 84];
-                case 82:
+                    return [3, 88];
+                case 86:
                     {
                         u = new User_1.User(body.args, body.sess_code);
                         u.deleteSessionCode();
@@ -788,15 +826,15 @@ function Router(body) {
                         res.data = null;
                         res.error = null;
                     }
-                    return [3, 84];
-                case 83:
+                    return [3, 88];
+                case 87:
                     {
                         res.cmd = body.cmd;
                         res.error = "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \"".concat(body.cmd, "\" \u043D\u0435 \u0440\u0430\u0441\u043F\u043E\u0437\u043D\u0430\u043D\u0430");
                         (res.data = []), (res.user_sess_code = body.sess_code);
                     }
-                    _b.label = 84;
-                case 84: return [2, JSON.stringify(res)];
+                    _b.label = 88;
+                case 88: return [2, JSON.stringify(res)];
             }
         });
     });

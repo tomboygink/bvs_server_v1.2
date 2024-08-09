@@ -25,6 +25,14 @@ export class Devs {
     this.sess_code = _sess_code;
   }
 
+  // Получения устройства по id
+
+  async selectDevById(): Promise<DevsEntity[]> {
+    const db_response = await this.db.query(
+      "SELECT * FROM devs WHERE id = " + this.args.id
+    );
+    return db_response.rows;
+  }
   //Получение устройств при нажатии на группу
   async selectDevs(): Promise<DevsEntity[]> {
     var db_response = await this.db.query(
@@ -134,6 +142,8 @@ export class Devs {
         this.args.info +
         "', period_sess = " +
         this.args.period_sess +
+        " WHERE id = " +
+        this.args.id +
         " RETURNING id"
     );
 

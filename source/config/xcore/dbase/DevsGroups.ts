@@ -27,7 +27,7 @@ export class DevsGroups {
   // Получение групп
   async selectDevsGroups(): Promise<DevsGroupsEntity[]> {
     var db_response = await this.db.query(
-      "SELECT * FROM devs_groups WHERE parent_id = " + this.args.parent_id
+      "SELECT * FROM devs_groups WHERE id = " + this.args.id
     );
     var result: DevsGroupsEntity[] = new Array();
     for (var dg in db_response.rows) {
@@ -47,7 +47,6 @@ export class DevsGroups {
   }
   // Добавление новой группы
   async insertDevsGroup() {
-
     //добавление группы
     var db_response = await this.db.query(
       "INSERT INTO devs_groups(parent_id, g_name, latitude, longitude, org_id, ord_num, deleted, g_info)" +
@@ -69,8 +68,11 @@ export class DevsGroups {
     );
 
     //Добавление пустого SVG
-    await this.db.query("INSERT INTO scheme_svg (id_devs_groups, svg) VALUES ("+db_response.rows[0].id+", \'\')");
-
+    await this.db.query(
+      "INSERT INTO scheme_svg (id_devs_groups, svg) VALUES (" +
+        db_response.rows[0].id +
+        ", '')"
+    );
 
     return db_response.rows;
   }
@@ -82,19 +84,19 @@ export class DevsGroups {
       await this.db.query(
         "UPDATE devs_groups SET parent_id =" +
           this.args.parent_id +
-          ", g_name = \'" +
+          ", g_name = '" +
           this.args.g_name +
-          "\', latitude = \'" +
+          "', latitude = '" +
           this.args.latitude +
-          "\', longitude = \'" +
+          "', longitude = '" +
           this.args.longitude +
-          "\', org_id = " +
+          "', org_id = " +
           this.args.org_id +
           ", deleted = " +
           this.args.deleted +
-          ", g_info = \'" +
+          ", g_info = '" +
           this.args.g_info +
-          "\' WHERE id = " +
+          "' WHERE id = " +
           this.args.id
       );
 

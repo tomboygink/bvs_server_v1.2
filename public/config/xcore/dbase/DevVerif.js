@@ -68,9 +68,9 @@ var DevVerif = (function () {
                             ", '" +
                             this.args.dev_number +
                             "', '" +
-                            (0, DateStr_1.dateTimeToSQL)(this.args.start_povs) +
+                            (0, DateStr_1.dateTimeToSQL)(new Date(this.args.start_povs)) +
                             "', '" +
-                            (0, DateStr_1.dateTimeToSQL)(this.args.end_povs) +
+                            (0, DateStr_1.dateTimeToSQL)(new Date(this.args.end_povs)) +
                             "', " +
                             this.args.old_dev_povs +
                             ") " +
