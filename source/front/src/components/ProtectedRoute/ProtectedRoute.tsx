@@ -9,7 +9,7 @@ interface Props {
 export const ProtectedRoute: FC<Props> = ({ children }) => {
   const location = useLocation();
   const auth = useAuth();
-  console.log("auth", auth);
+
   if (!auth || !auth.user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

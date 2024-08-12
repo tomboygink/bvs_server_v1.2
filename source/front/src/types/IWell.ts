@@ -8,6 +8,7 @@ export interface IWell {
   org_id: string;
   group_id: string;
   dev_id: string;
+  dev_number?: string;
 }
 
 export interface ISelectedWell {

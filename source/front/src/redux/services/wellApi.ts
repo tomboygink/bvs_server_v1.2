@@ -19,6 +19,14 @@ export const wellApi = createApi({
       }),
       providesTags: ["well"],
     }),
+    getWellsByLocationId: build.query({
+      query: (args) => ({
+        url: "/api",
+        method: "POST",
+        body: createBodyQuery(ECOMMAND.GETWELLSBYLOCATIONID, args),
+      }),
+      providesTags: ["well"],
+    }),
     createWell: build.mutation<IResponse, FormValues>({
       query: (args) => ({
         url: "/api",
@@ -40,6 +48,7 @@ export const wellApi = createApi({
 
 export const {
   useGetAllWellsQuery,
+  useGetWellsByLocationIdQuery,
   useCreateWellMutation,
   useEditWellMutation,
 } = wellApi;

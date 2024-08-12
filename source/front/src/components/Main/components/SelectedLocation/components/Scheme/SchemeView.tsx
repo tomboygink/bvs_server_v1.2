@@ -3,11 +3,15 @@ import { CircularProgress, Box, Typography } from "@mui/material";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 
+interface MutableRefObject<T> {
+  current: T;
+}
 interface Props {
   isLoading: boolean;
   svg: string;
+  svgRef: MutableRefObject<SVGElement | undefined>;
 }
-export const SchemeView: FC<Props> = ({ isLoading, svg }) => {
+export const SchemeView: FC<Props> = ({ isLoading, svg, svgRef }) => {
   const cx = useStyles(styles);
   return (
     <>
@@ -20,7 +24,7 @@ export const SchemeView: FC<Props> = ({ isLoading, svg }) => {
             dangerouslySetInnerHTML={{
               __html: svg,
             }}
-            //ref={svgRef}
+            ref={svgRef}
             sx={{
               borderRadius: "4px",
 
@@ -31,7 +35,13 @@ export const SchemeView: FC<Props> = ({ isLoading, svg }) => {
               mb: "22px",
             }}
           ></Box>
-          <Box id="tooltip" sx={{ position: "absolute", display: "none" }}>
+          <Box
+            id="tooltip"
+            sx={{
+              position: "absolute",
+              display: "none",
+            }}
+          >
             <Typography
               sx={{ fontSize: "12px", fontWeight: "700" }}
               className="tooltip__well"

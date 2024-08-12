@@ -83,7 +83,7 @@ export enum ECOMMAND {
   //Получение всех скважин
   GETALLWELLS = "get_AllThermalWells",
   //Получение скважины по id группы
-  GETWELLSBYLOCATIONID = "get_ThermalWells",
+  GETWELLSBYLOCATIONID = "get_ThermalWell",
   //Добавление скважины
   SETWELL = "set_ThermalWell",
   //Редактирование скважины

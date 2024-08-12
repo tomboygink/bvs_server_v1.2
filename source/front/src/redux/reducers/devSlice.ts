@@ -26,6 +26,7 @@ export const devSlice = createSlice({
   reducers: {
     setDevs: (state: DevState, action: PayloadAction<IDev[]>) => {
       state.devs = action.payload;
+      // state.isVisibleDevice = true;
     },
     setSelectedDev: (state: DevState, action: PayloadAction<IDev>) => {
       state.selectedDev = action.payload;

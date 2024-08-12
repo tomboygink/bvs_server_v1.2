@@ -37,6 +37,7 @@ export const SelectedLocationView: FC<Props> = (props) => {
   } = props;
   const cx = useStyles(styles);
   const cxShared = useStyles(sharedStyles);
+
   return (
     <div className={cx("container")}>
       <div className={cx("fields-container")}>
@@ -111,7 +112,7 @@ export const SelectedLocationView: FC<Props> = (props) => {
       {isScheme && (
         <>
           <h2 className={cxShared("title")}>
-            Схема расположения устройств на полигоне
+            Схема расположения устройств на {location?.g_name}
           </h2>
           <Scheme {...other} />
         </>
