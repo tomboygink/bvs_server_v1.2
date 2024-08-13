@@ -23,6 +23,7 @@ export const useFormValidation = () => {
     const target = event.target;
     const name = target.name;
     const value = target.value;
+    const type = target.type;
 
     const form = target.closest("form");
 
@@ -36,7 +37,7 @@ export const useFormValidation = () => {
     target.validationMessage
       ? setIsInValidInput({ ...isInValidInput, [name]: true })
       : setIsInValidInput({ ...isInValidInput, [name]: false });
-    if (regexp) {
+    if (regexp && type !== "radio") {
       if (!regexp.test(value)) {
         setErrors({
           ...errors,

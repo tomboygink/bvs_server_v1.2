@@ -128,7 +128,7 @@ export const EditUser: FC<Props> = ({ handleClose }) => {
         //jobs={jobs?.data}
         message={message}
         handleChange={handleChange}
-        handleChecked={handleCheckboxChange}
+        // handleChecked={handleCheckboxChange}
         //handleSelectChange={handleSelectChange}
         errors={errors}
         isValidForm={isValid}

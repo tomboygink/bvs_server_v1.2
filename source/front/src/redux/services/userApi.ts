@@ -4,6 +4,7 @@ import { createBodyQuery } from "@src/utils/functions";
 import { IUser } from "@src/types/IUser";
 
 import { FormValues } from "@hooks/useFormWithValidation";
+import { IResponse } from "@src/types/IResponse";
 
 export const userAPI = createApi({
   reducerPath: "user",
@@ -29,7 +30,7 @@ export const userAPI = createApi({
       invalidatesTags: () => ["User"],
     }),
 
-    editUser: build.mutation<IUser, FormValues>({
+    editUser: build.mutation<IResponse, FormValues>({
       query: (args) => ({
         url: "/api",
         method: "POST",

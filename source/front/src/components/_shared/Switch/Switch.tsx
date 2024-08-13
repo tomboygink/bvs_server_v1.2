@@ -9,9 +9,11 @@ import styles from "./styles.module.scss";
 interface Props {
   name: string;
   label: string;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   defaultChecked?: boolean;
   checked?: boolean;
+  inputProps?: object;
+  disabled?: boolean;
 }
 
 export const Switch: FC<Props> = ({
@@ -20,6 +22,8 @@ export const Switch: FC<Props> = ({
   label,
   defaultChecked,
   checked,
+  inputProps,
+  disabled = false,
 }) => {
   const cx = useStyles(styles);
   return (
@@ -34,6 +38,8 @@ export const Switch: FC<Props> = ({
             onChange={handleChange}
             defaultChecked={defaultChecked}
             checked={checked}
+            inputProps={inputProps}
+            disabled={disabled}
           />
         }
       ></FormControlLabel>

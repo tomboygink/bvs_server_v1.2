@@ -19,4 +19,5 @@ export enum eVariantModal {
   addSensors = "addSensors",
   newVerivRange = "newVersionRange",
   deleteControlSession = "deleteControlessSession",
+  editProfile = "editProfile",
 }

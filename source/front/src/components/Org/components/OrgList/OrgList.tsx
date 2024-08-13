@@ -24,10 +24,12 @@ export const OrgList = () => {
     setSearchValue(value);
   };
 
+  //Список организаций при первом рендере
   useEffect(() => {
     if (orgs?.data) setCurrentOrgs(orgs?.data);
   }, [orgs]);
 
+  //Отфильтрованный список организаций
   useEffect(() => {
     if (searchValue) {
       const filteredOrgs = orgs?.data?.filter((org: IOrg) =>

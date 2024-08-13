@@ -3,11 +3,12 @@ import { TextareaAutosize, Alert } from "@mui/material";
 import { InputText } from "@components/_shared/Inputs/InputText";
 import { Button } from "@components/_shared/Button";
 import { RadioButton } from "@components/_shared/RadioButton";
-import { useStyles } from "@hooks/useStyles";
-import styles from "./styles.module.scss";
 import { IUser } from "@src/types/IUser";
 import { FormErrors } from "@hooks/useFormWithValidation";
 import { SAVE_ERROR, SAVE_SUCCESS } from "@src/utils/messages";
+
+import { useStyles } from "@hooks/useStyles";
+import styles from "./styles.module.scss";
 
 interface Props {
   user: IUser | null;
@@ -20,7 +21,7 @@ interface Props {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => void;
-  handleChecked: (event: ChangeEvent<HTMLInputElement>) => void;
+  // handleChecked: (event: ChangeEvent<HTMLInputElement>) => void;
   errors: FormErrors;
   //handleSelectChange: (event: SelectChangeEvent) => void;
   isValidForm: boolean;

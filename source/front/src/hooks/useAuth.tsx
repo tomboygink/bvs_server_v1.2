@@ -46,6 +46,8 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    setCode(null);
+    localStorage.clear();
     navigate("/login", { replace: true });
   };
 

@@ -215,7 +215,7 @@ export const NewUserView: FC<Props> = ({
         />
         <Switch
           name="user_w"
-          label="Разрешить редактировние"
+          label="Разрешить редактирование"
           handleChange={handleChecked}
         />
 
