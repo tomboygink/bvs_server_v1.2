@@ -20,4 +20,5 @@ export enum eVariantModal {
   newVerivRange = "newVersionRange",
   deleteControlSession = "deleteControlessSession",
   editProfile = "editProfile",
+  confirmEmail = "confirmEmail",
 }

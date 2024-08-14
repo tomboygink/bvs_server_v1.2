@@ -26,6 +26,7 @@ import { EditProfile } from "@components/Modals/EditProfile";
 import { CloseButton } from "../CloseButton";
 import { Typography } from "../Typography";
 import styles from "./styles.module.scss";
+
 interface Props {
   open: boolean;
   handleClose: () => void;

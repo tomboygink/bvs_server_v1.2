@@ -38,6 +38,13 @@ export const userAPI = createApi({
       }),
       invalidatesTags: () => ["User"],
     }),
+    confirmEmail: build.mutation<IResponse, FormValues>({
+      query: (args) => ({
+        url: "/api",
+        method: "POST",
+        body: createBodyQuery(ECOMMAND.SENDCODEEMAIL, args),
+      }),
+    }),
   }),
 });
 
@@ -45,4 +52,5 @@ export const {
   useGetAllUsersQuery,
   useCreateUserMutation,
   useEditUserMutation,
+  useConfirmEmailMutation,
 } = userAPI;

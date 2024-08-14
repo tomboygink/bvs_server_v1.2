@@ -1,0 +1,47 @@
+@import "../../../../../assets/styles/font-family.scss";
+@import "../../../../../assets/styles/text-style.scss";
+@import "../../../../../assets/styles/colors.scss";
+@import "../../../../../assets/styles/reset.scss";
+
+.modal {
+  width: 100%;
+
+  border: 1px red solid;
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+  }
+  .content {
+    padding: 0 16px;
+    min-height: 350px;
+  }
+  .buttons {
+    padding: 0 16px 20px;
+  }
+}
+.svg-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0 40px 0;
+}
+.large-text {
+  font-family: $Roboto;
+  font-size: 22px;
+  margin-bottom: 36px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+.small-text {
+  font-family: $Roboto;
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.email {
+  color: $blue;
+}
