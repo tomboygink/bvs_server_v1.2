@@ -3,6 +3,7 @@ import { ECOMMAND } from "@src/types/ECommand";
 import { createBodyQuery } from "@src/utils/functions";
 import { FormValues } from "@hooks/useFormWithValidation";
 import { IResponse } from "@src/types/IResponse";
+import CONFIG from "./../../../../config/config.json";
 
 type Arguments = {
   group_svg: string;
@@ -11,7 +12,8 @@ type Arguments = {
 export const schemeAPI = createApi({
   reducerPath: "scheme",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    //baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    baseUrl: `http://${CONFIG.server_config.host}:${CONFIG.server_config.port}`,
   }),
   tagTypes: ["Scheme"],
   endpoints: (build) => ({

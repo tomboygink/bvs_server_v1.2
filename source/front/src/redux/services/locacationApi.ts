@@ -5,6 +5,7 @@ import { ECOMMAND } from "@src/types/ECommand";
 import { ILocation } from "@src/types/ILocation";
 import { IResponse } from "@src/types/IResponse";
 import { createBodyQuery } from "@src/utils/functions";
+import CONFIG from "./../../../../config/config.json";
 
 type Response = {
   data: IResponse;
@@ -12,7 +13,8 @@ type Response = {
 export const locationAPI = createApi({
   reducerPath: "location",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    // baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    baseUrl: `http://${CONFIG.server_config.host}:${CONFIG.server_config.port}`,
   }),
   tagTypes: ["location"],
   endpoints: (build) => ({

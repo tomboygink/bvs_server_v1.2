@@ -1,14 +1,14 @@
 import { FormValues } from "@hooks/useFormWithValidation";
-
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ECOMMAND } from "@src/types/ECommand";
 import { IResponse } from "@src/types/IResponse";
 import { createBodyQuery } from "@src/utils/functions";
-
+import CONFIG from "./../../../../config/config.json";
 export const devAPI = createApi({
   reducerPath: "dev",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    // baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    baseUrl: `http://${CONFIG.server_config.host}:${CONFIG.server_config.port}`,
   }),
   tagTypes: [
     "dev",
@@ -120,6 +120,7 @@ export const devAPI = createApi({
         method: "POST",
         body: createBodyQuery(ECOMMAND.GETEXPIREVERIFRANGE, args),
       }),
+      providesTags: () => ["verifRange"],
     }),
     createVerifRange: build.mutation<IResponse, FormValues>({
       query: (args) => ({

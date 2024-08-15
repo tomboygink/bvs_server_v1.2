@@ -5,11 +5,12 @@ import { IUser } from "@src/types/IUser";
 
 import { FormValues } from "@hooks/useFormWithValidation";
 import { IResponse } from "@src/types/IResponse";
-
+import CONFIG from "./../../../../config/config.json";
 export const userAPI = createApi({
   reducerPath: "user",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    //baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    baseUrl: `http://${CONFIG.server_config.host}:${CONFIG.server_config.port}`,
   }),
   tagTypes: ["User"],
   endpoints: (build) => ({

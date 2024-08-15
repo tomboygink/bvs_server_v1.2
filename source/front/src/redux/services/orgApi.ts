@@ -4,11 +4,13 @@ import { createBodyQuery } from "@src/utils/functions";
 import { IOrg } from "@src/types/IOrg";
 import { FormValues } from "@hooks/useFormWithValidation";
 import { IResponse } from "@src/types/IResponse";
+import CONFIG from "./../../../../config/config.json";
 
 export const orgAPI = createApi({
   reducerPath: "org",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    // baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    baseUrl: `http://${CONFIG.server_config.host}:${CONFIG.server_config.port}`,
   }),
   tagTypes: ["Org"],
   endpoints: (build) => ({

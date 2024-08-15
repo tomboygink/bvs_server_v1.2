@@ -41,6 +41,7 @@ export const NewVerifRangeView: FC<Props> = (props) => {
             name="start_povs"
             size="small"
             type="datetime-local"
+            required
             sx={{ mr: "16px", fontSize: "14px", mb: "8px" }}
             InputLabelProps={{
               shrink: true,
@@ -53,6 +54,7 @@ export const NewVerifRangeView: FC<Props> = (props) => {
             name="end_povs"
             size="small"
             type="datetime-local"
+            required
             sx={{ mr: "16px", fontSize: "14px", mb: "8px" }}
             InputLabelProps={{
               shrink: true,

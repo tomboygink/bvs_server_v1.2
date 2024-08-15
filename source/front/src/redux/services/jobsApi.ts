@@ -3,11 +3,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ECOMMAND } from "@src/types/ECommand";
 import { IResponse } from "@src/types/IResponse";
 import { createBodyQuery } from "@src/utils/functions";
+import CONFIG from "./../../../../config/config.json";
 
 export const jobAPI = createApi({
   reducerPath: "job",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    // baseUrl: `${import.meta.env.VITE_BASE_API_URL}`,
+    baseUrl: `http://${CONFIG.server_config.host}:${CONFIG.server_config.port}`,
   }),
   tagTypes: ["Job"],
   endpoints: (build) => ({
