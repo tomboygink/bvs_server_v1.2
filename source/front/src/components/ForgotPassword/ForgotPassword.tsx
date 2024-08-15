@@ -1,11 +1,9 @@
 import { useState, useEffect, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
 import { ForgotPasswordView } from "./ForgotPasswordView";
 import { useFormValidation } from "@hooks/useFormWithValidation";
 import { useSendResetPasswordCodeMutation } from "@src/redux/services/userApi";
 
 export const ForgotPassword = () => {
-  const navigate = useNavigate();
   const { values, errors, isValid, handleChange, resetForm } =
     useFormValidation();
   const [message, setMessage] = useState("");

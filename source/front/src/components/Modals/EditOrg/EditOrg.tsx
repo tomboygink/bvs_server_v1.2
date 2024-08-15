@@ -13,7 +13,6 @@ import { DOUBLE_INN_ERROR, DOUBLE_NAME_ORG_ERROR } from "@src/utils/messages";
 import { isInnInArray } from "@src/utils/functions";
 import { setSelectedOrg } from "@src/redux/reducers/orgSlise";
 import { IOrg } from "@src/types/IOrg";
-import { dark } from "@mui/material/styles/createPalette";
 
 interface Props {
   handleClose: () => void;

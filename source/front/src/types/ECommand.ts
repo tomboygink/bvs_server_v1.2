@@ -63,6 +63,8 @@ export enum ECOMMAND {
   GETALLDEVS = "get_AllDevs",
   //Получение поверочного интервала устройства
   GETVERIFRANGE = "get_DevVerif",
+  ////Получение поверочных интервалов, у которых истекает срок поверки
+  GETEXPIREVERIFRANGE = "get_ExpireDevVerif",
   //Установка поверочного интервала устройства
   SETVERIFRANGE = "set_DevVerif",
 

@@ -9,7 +9,7 @@ import { IDev } from "@src/types/IDev";
 import { INVALID_FORM } from "@src/utils/messages";
 
 import { ILocation } from "@src/types/ILocation";
-import { ISelectedWell, IWell } from "@src/types/IWell";
+import { ISelectedWell } from "@src/types/IWell";
 
 interface Props {
   handleClose: () => void;

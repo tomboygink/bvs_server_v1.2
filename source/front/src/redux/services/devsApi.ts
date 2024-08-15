@@ -114,6 +114,13 @@ export const devAPI = createApi({
       }),
       providesTags: () => ["verifRange"],
     }),
+    getExpireVerifRange: build.query({
+      query: (args) => ({
+        url: "/api",
+        method: "POST",
+        body: createBodyQuery(ECOMMAND.GETEXPIREVERIFRANGE, args),
+      }),
+    }),
     createVerifRange: build.mutation<IResponse, FormValues>({
       query: (args) => ({
         url: "/api",
@@ -145,6 +152,7 @@ export const {
   useCreateControlSessMutation,
   useRemoveControlSessMutation,
   useGetVerifRangeQuery,
+  useGetExpireVerifRangeQuery,
   useCreateVerifRangeMutation,
   useGetSelectedDevSessionByPeriodQuery,
 } = devAPI;

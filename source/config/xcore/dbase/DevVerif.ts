@@ -60,4 +60,19 @@ export class DevVerif {
     }
     return result;
   }
+
+  //Получение поверочных интервалов, у которых истекает срок поверки
+  async selectExpireDevVerif(): Promise<DevVerifEntity[]> {
+    let d = new Date();
+    d.setMonth(d.getMonth() + 1);
+    const data = dateTimeToSQL(d);
+    var db_response = await this.db.query(
+      `SELECT * FROM dev_povs WHERE end_povs <= '${data}'`
+    );
+    var result: DevVerifEntity[] = new Array();
+    for (var dv in db_response.rows) {
+      result.push(db_response.rows[dv]);
+    }
+    return result;
+  }
 }

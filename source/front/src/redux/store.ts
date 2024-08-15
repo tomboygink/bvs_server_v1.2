@@ -1,7 +1,7 @@
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 import { configureStore } from "@reduxjs/toolkit";
-
+import { authApi } from "./services/authApi";
 import { mainApi } from "./api/api";
 import { userAPI } from "./services/userApi";
 import { orgAPI } from "./services/orgApi";
@@ -27,6 +27,7 @@ const store = configureStore({
     wellSlice,
     orgSlise,
     jobSlice,
+    [authApi.reducerPath]: authApi.reducer,
     [mainApi.reducerPath]: mainApi.reducer,
     [userAPI.reducerPath]: userAPI.reducer,
     [orgAPI.reducerPath]: orgAPI.reducer,
@@ -41,6 +42,7 @@ const store = configureStore({
       immutableCheck: false,
       serializableCheck: false,
     }).concat([
+      authApi.middleware,
       mainApi.middleware,
       userAPI.middleware,
       orgAPI.middleware,

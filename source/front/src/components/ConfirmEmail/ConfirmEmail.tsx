@@ -1,5 +1,4 @@
-import React, { FormEvent, useState, useEffect, act } from "react";
-import { useParams } from "react-router-dom";
+import { FormEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import { useConfirmEmailMutation } from "@src/redux/services/userApi";
@@ -20,7 +19,7 @@ export const ConfirmEmail = () => {
     useConfirmEmailMutation();
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
- 
+
   const generateArgs = () => {
     const args = {
       code: code ?? "",

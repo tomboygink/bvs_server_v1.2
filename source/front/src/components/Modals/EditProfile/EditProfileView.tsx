@@ -2,7 +2,6 @@ import { FC, ChangeEvent } from "react";
 import { Alert } from "@mui/material";
 import { InputText } from "@components/_shared/Inputs/InputText";
 import { Button } from "@components/_shared/Button";
-import { Switch } from "@components/_shared/Switch";
 import { IUser } from "@src/types/IUser";
 import { FormErrors } from "@hooks/useFormWithValidation";
 import { SAVE_ERROR, SAVE_SUCCESS } from "@src/utils/messages";

@@ -12,7 +12,7 @@ import { INVALID_FORM } from "@src/utils/messages";
 import { useModal } from "@hooks/useModal";
 import { SendEmail } from "./components/ConfirmEmail";
 import { IUser } from "@src/types/IUser";
-import { useAppSelector, useAppDispatch } from "@hooks/redux";
+import { useAppDispatch } from "@hooks/redux";
 import { setUser } from "@src/redux/reducers/UserSlice";
 
 interface Props {
@@ -22,7 +22,6 @@ interface Props {
 export const EditProfile: FC<Props> = ({ handleClose }) => {
   const auth = useAuth();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.userSlice);
   const [_, setUserLS] = useLocalStorage("user", null);
   const [countCallSendEmail, setCountSendEmail] = useState(0);
   const [open, openModal, closeModal] = useModal();

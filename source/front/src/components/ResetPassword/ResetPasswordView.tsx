@@ -1,11 +1,9 @@
 import { FC, ChangeEvent, FormEvent } from "react";
-import { Link } from "react-router-dom";
 import { Alert } from "@mui/material";
 import { Typography } from "@components/_shared/Typography";
 import { InputText } from "@components/_shared/Inputs/InputText";
 import { InputWithIcon } from "@components/_shared/Inputs/InputWithIcon";
 import { Button } from "@components/_shared/Button";
-import { ScreenRoute } from "@src/types/Screen.routes.enum";
 import { SAVE_ERROR, SAVE_SUCCESS_PASSWORD } from "@src/utils/messages";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";

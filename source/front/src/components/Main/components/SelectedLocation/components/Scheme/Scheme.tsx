@@ -21,9 +21,7 @@ export const Scheme: FC<Props> = (props) => {
   const dispatch = useAppDispatch();
   const svgRef: MutableRefObject<SVGElement | undefined> = useRef();
   const [devId, setDevId] = useState("");
-  const { selectedLocation, locations, locationsTree } = useAppSelector(
-    (state) => state.locationSlice
-  );
+  const { selectedLocation } = useAppSelector((state) => state.locationSlice);
   const { data: wells } = useGetWellsByLocationIdQuery(
     { group_dev_id: selectedLocation?.id },
     { skip: !Boolean(selectedLocation?.id) }
@@ -67,7 +65,7 @@ export const Scheme: FC<Props> = (props) => {
         });
 
         item.addEventListener("click", () => {
-          transformedWells?.forEach((well, j) => {
+          transformedWells?.forEach((well) => {
             if (item.id.slice(5) === well.id) {
               setDevId(well.dev_id);
             }

@@ -659,6 +659,26 @@ export async function Router(body: any) {
       }
       break;
 
+    //Получение поверочных интервалов, у которых истекает срок поверки
+    case "get_ExpireDevVerif":
+      {
+        var dv = new DevVerif(body.args, body.sess_code);
+        data = await dv.selectExpireDevVerif();
+        if (data.length === 0 || data[0] === undefined) {
+          res.cmd = body.cmd;
+          res.error =
+            "Ошибка при получении поверочного интервала устройства или оно отсутствует";
+          res.data = null;
+          res.user_sess_code = body.sess_code;
+        } else {
+          res.cmd = body.cmd;
+          res.error = null;
+          res.data = data;
+          res.user_sess_code = body.sess_code;
+        }
+      }
+      break;
+
     //-----------------------------------------СКВАЖИНЫ
     //Добавление скважины
     case "set_ThermalWell":

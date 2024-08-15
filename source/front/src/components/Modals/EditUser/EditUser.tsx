@@ -24,14 +24,8 @@ export const EditUser: FC<Props> = ({ handleClose }) => {
   // const [jobOptions, setJobOptions] = useState([]);
   const [editUser, { isError, isSuccess, isLoading }] = useEditUserMutation();
   const [message, setMessage] = useState("");
-  const {
-    values,
-    errors,
-    isValid,
-    handleChange,
-    handleCheckboxChange,
-    resetForm,
-  } = useFormValidation();
+  const { values, errors, isValid, handleChange, resetForm } =
+    useFormValidation();
   const isWrite = selectedUser?.roles_ids.roles[1] === 2;
   const generateArgs = (values: FormValues) => {
     //TODO: поле deleted в каких случаях true?

@@ -5,7 +5,7 @@ import { Typography } from "@components/_shared/Typography";
 import { InputText } from "@components/_shared/Inputs/InputText";
 import { Button } from "@components/_shared/Button";
 import { ScreenRoute } from "@src/types/Screen.routes.enum";
-import { SAVE_ERROR, SAVE_SUCCESS } from "@src/utils/messages";
+import { SAVE_ERROR } from "@src/utils/messages";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 import { FormErrors } from "@hooks/useFormWithValidation";

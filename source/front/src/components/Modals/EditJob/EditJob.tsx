@@ -7,7 +7,7 @@ import { useGetAllOrgsQuery } from "@src/redux/services/orgApi";
 import { FormValues } from "@hooks/useFormWithValidation";
 import { INVALID_FORM } from "@src/utils/messages";
 import { setSelectedJob } from "@src/redux/reducers/jobSlice";
-import { IJob, ISelectedJob } from "@src/types/IJob";
+import { ISelectedJob } from "@src/types/IJob";
 
 interface Props {
   handleClose: () => void;

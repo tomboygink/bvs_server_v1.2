@@ -1,5 +1,5 @@
 import { FC, FormEvent } from "react";
-import { Alert, SelectChangeEvent } from "@mui/material";
+import { Alert } from "@mui/material";
 import { Button } from "@components/_shared/Button";
 import { SAVE_ERROR, SAVE_SUCCESS } from "@src/utils/messages";
 import { useStyles } from "@hooks/useStyles";
