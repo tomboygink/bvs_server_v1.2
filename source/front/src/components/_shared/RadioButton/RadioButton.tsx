@@ -1,8 +1,11 @@
 import { FC, ChangeEvent } from "react";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 
 interface Props {
   value?: boolean;
@@ -22,6 +25,7 @@ export const RadioButton: FC<Props> = ({
 
   return (
     <FormControl>
+      <FormLabel>Статус пользователя</FormLabel>
       <RadioGroup
         value={value}
         defaultValue={defaultValue}
@@ -43,7 +47,7 @@ export const RadioButton: FC<Props> = ({
               }}
             />
           }
-          label="Действующая"
+          label="Действующий"
         />
         <FormControlLabel
           sx={{
@@ -60,7 +64,7 @@ export const RadioButton: FC<Props> = ({
               }}
             />
           }
-          label="Закрытая"
+          label="Закрытый"
         />
       </RadioGroup>
     </FormControl>

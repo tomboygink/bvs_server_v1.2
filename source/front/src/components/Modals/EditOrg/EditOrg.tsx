@@ -1,7 +1,7 @@
 import { useState, FormEvent, useEffect, FC } from "react";
 import { EditOrgView } from "./EditOrgView";
 import { useFormValidation } from "@hooks/useFormWithValidation";
-import { useAppSelector } from "@hooks/redux";
+import { useAppSelector, useAppDispatch } from "@hooks/redux";
 import {
   useEditOrgMutation,
   useGetAllOrgsQuery,
@@ -11,11 +11,15 @@ import { FormValues } from "@hooks/useFormWithValidation";
 import { INVALID_FORM } from "@src/utils/messages";
 import { DOUBLE_INN_ERROR, DOUBLE_NAME_ORG_ERROR } from "@src/utils/messages";
 import { isInnInArray } from "@src/utils/functions";
+import { setSelectedOrg } from "@src/redux/reducers/orgSlise";
+import { IOrg } from "@src/types/IOrg";
+import { dark } from "@mui/material/styles/createPalette";
 
 interface Props {
   handleClose: () => void;
 }
 export const EditOrg: FC<Props> = ({ handleClose }) => {
+  const dispatch = useAppDispatch();
   const [message, setMessage] = useState("");
   const { resetForm, errors, handleChange } = useFormValidation();
   const { selectedOrg } = useAppSelector((state) => state.orgSlise);
@@ -86,7 +90,12 @@ export const EditOrg: FC<Props> = ({ handleClose }) => {
   };
 
   const changeOrg = (args: FormValues) => {
-    editOrg(args);
+    editOrg(args).then((res) => {
+      console.log({ isSuccess, res, response });
+      if (res && "data" in res && !res.data.error) {
+        dispatch(setSelectedOrg({ ...(selectedOrg as IOrg), ...args }));
+      }
+    });
   };
 
   const isSuccessSave = () => {

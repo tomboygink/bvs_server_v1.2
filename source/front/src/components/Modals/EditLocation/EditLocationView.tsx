@@ -66,24 +66,27 @@ export const EditLocationView: FC<Props> = (props) => {
             error={Boolean(errors.g_name)}
             helperText={errors.g_name}
           />
-          <Select
-            inputProps={{
-              name: "org_id",
-            }}
-            label="Организация"
-            defaultValue={location?.org?.id || ""}
-            onChange={handleSelectChange}
-            onClose={(e) => handleCloseSelect(e, "org_id")}
-            //value={values.id_org || ""}
-            error={Boolean(errors.org_id)}
-            helperText={errors.org_id}
-          >
-            {orgs?.map((org) => (
-              <MenuItem key={org?.id} value={org?.id}>
-                {org?.full_name}
-              </MenuItem>
-            ))}
-          </Select>
+          {location?.parent_id === "0" && (
+            <Select
+              inputProps={{
+                name: "org_id",
+              }}
+              label="Организация"
+              defaultValue={location?.org?.id || ""}
+              onChange={handleSelectChange}
+              onClose={(e) => handleCloseSelect(e, "org_id")}
+              //value={values.id_org || ""}
+              error={Boolean(errors.org_id)}
+              helperText={errors.org_id}
+            >
+              {orgs?.map((org) => (
+                <MenuItem key={org?.id} value={org?.id}>
+                  {org?.full_name}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+
           <InputText
             InputProps={{
               inputComponent: LatInput,

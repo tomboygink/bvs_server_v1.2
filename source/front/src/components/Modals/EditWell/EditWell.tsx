@@ -3,13 +3,13 @@ import { useFormValidation } from "@hooks/useFormWithValidation";
 import { EditWellView } from "./EditWellView";
 import { useGetAllDevsQuery } from "@src/redux/services/devsApi";
 import { useEditWellMutation } from "@src/redux/services/wellApi";
-
-import { useAppSelector } from "@hooks/redux";
-
+import { useAppSelector, useAppDispatch } from "@hooks/redux";
+import { setSelectedWell } from "@src/redux/reducers/wellSlice";
 import { IDev } from "@src/types/IDev";
 import { INVALID_FORM } from "@src/utils/messages";
 
 import { ILocation } from "@src/types/ILocation";
+import { ISelectedWell, IWell } from "@src/types/IWell";
 
 interface Props {
   handleClose: () => void;
@@ -24,7 +24,7 @@ export const EditWell: FC<Props> = ({ handleClose }) => {
     resetForm,
     setValues,
   } = useFormValidation();
-
+  const dispatch = useAppDispatch();
   const [currentDevs, setCurrentDevs] = useState([]);
   const [message, setMessage] = useState("");
   const [locationName, setLocationName] = useState<string | undefined>("");
@@ -68,11 +68,12 @@ export const EditWell: FC<Props> = ({ handleClose }) => {
     } else org_id = selectedWell?.org.id;
 
     const args = {
-      id: selectedWell?.id ?? "",
-      number: values.number ?? selectedWell?.number ?? "",
-      group_dev_id: selectedLocation?.id ?? selectedWell?.location.id ?? "",
-      dev_id: values.dev_id ?? selectedWell?.device.id,
-      org_id: org_id ?? "",
+      id: (selectedWell?.id as string) ?? "",
+      number: (values.number as string) ?? selectedWell?.number ?? "",
+      group_dev_id:
+        (selectedLocation?.id as string) ?? selectedWell?.location.id ?? "",
+      dev_id: (values.dev_id as string) ?? selectedWell?.device.id,
+      org_id: (org_id as string) ?? "",
     };
     return args;
   };
@@ -111,7 +112,11 @@ export const EditWell: FC<Props> = ({ handleClose }) => {
   }, [selectedWell, devices]);
 
   useEffect(() => {
+    const args = generateArgs();
     if (isSuccess && !response.error) {
+      dispatch(
+        setSelectedWell({ ...(selectedWell as ISelectedWell), ...args })
+      );
       setTimeout(() => {
         handleClose();
         resetForm();

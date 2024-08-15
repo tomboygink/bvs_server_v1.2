@@ -93,15 +93,26 @@ export const EditDev: FC<Props> = ({ handleClose }) => {
   //Добавление сенсоров устройству
   const setSensors = (depth: number) => {
     if (Array.isArray(selectedDev?.sensors?.s)) {
+      const sensors = [...selectedDev?.sensors?.s, { depth, value: 1 }];
+      const sortedSensors = sensors.sort((a, b) => a.depth - b.depth);
       dispatch(
         setSelectedDev({
           ...(selectedDev as IDev),
-          sensors: {
-            s: [...selectedDev?.sensors?.s, { depth, value: 1 }],
-          },
+          sensors: { s: sortedSensors },
         })
       );
     }
+
+    // if (Array.isArray(selectedDev?.sensors?.s)) {
+    //   dispatch(
+    //     setSelectedDev({
+    //       ...(selectedDev as IDev),
+    //       sensors: {
+    //         s: [...selectedDev?.sensors?.s, { depth, value: 1 }],
+    //       },
+    //     })
+    //   );
+    // }
   };
   const generateArgs = () => {
     const args = {
@@ -163,29 +174,31 @@ export const EditDev: FC<Props> = ({ handleClose }) => {
   }, [response]);
 
   return (
-    <form onSubmit={validationForm} noValidate>
-      <EditDevView
-        device={selectedDev}
-        handleChange={handleChange}
-        handleSelectChange={handleSelectChange}
-        handleCloseSelect={handleCloseSelect}
-        handleChecked={handleCheckboxChange}
-        handleAddSensors={handleOpenModalAddSensor}
-        handleDelete={handleDeleteSensors}
-        errors={errors}
-        message={message}
-        sensors={selectedDev?.sensors?.s}
-        isSuccessSave={isSuccessSave()}
-        isErrorSave={isError}
-        isLoading={isLoading}
-        isValid={validForm}
-      />
+    <>
+      <form onSubmit={validationForm} noValidate>
+        <EditDevView
+          device={selectedDev}
+          handleChange={handleChange}
+          handleSelectChange={handleSelectChange}
+          handleCloseSelect={handleCloseSelect}
+          handleChecked={handleCheckboxChange}
+          handleAddSensors={handleOpenModalAddSensor}
+          handleDelete={handleDeleteSensors}
+          errors={errors}
+          message={message}
+          sensors={selectedDev?.sensors?.s}
+          isSuccessSave={isSuccessSave()}
+          isErrorSave={isError}
+          isLoading={isLoading}
+          isValid={validForm}
+        />
+      </form>
       <AddSensor
         open={open}
         handleClose={closeModal}
         sensors={selectedDev?.sensors?.s || []}
         setSensors={setSensors}
       />
-    </form>
+    </>
   );
 };
