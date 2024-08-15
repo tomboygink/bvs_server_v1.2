@@ -10,6 +10,7 @@ export const MATCHING_OLD_PASSWORD_ERROR =
   "Новый пароль не должен совпадать со старым";
 export const INVALID_PASSWORD_ERROR =
   "Подберите пароль, используя 6 или более знаков, сочетая буквы, цифры и символы";
+export const SAVE_SUCCESS_PASSWORD = "Пароль успешно сохранен";
 export const DOUBLE_NAME_ORG_ERROR =
   "Организация с таким названием уже существует";
 export const DOUBLE_INN_ERROR = "Организация с таким ИНН уже существует";

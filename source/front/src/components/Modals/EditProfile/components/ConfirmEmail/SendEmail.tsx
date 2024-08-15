@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { ConfirmEmailView } from "./ConfirmEmailView";
+import { SendEmailView } from "./SendEmailView";
 
 interface Props {
   open: boolean;
@@ -11,6 +11,6 @@ interface Props {
   textButton: string;
   count: number;
 }
-export const ConfirmEmail: FC<Props> = ({ ...other }) => {
-  return <ConfirmEmailView {...other} />;
+export const SendEmail: FC<Props> = ({ ...other }) => {
+  return <SendEmailView {...other} />;
 };

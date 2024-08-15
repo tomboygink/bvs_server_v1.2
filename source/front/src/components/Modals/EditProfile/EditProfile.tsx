@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent, FC } from "react";
 import {
   useEditUserMutation,
-  useConfirmEmailMutation,
+  useSendEmailMutation,
 } from "@src/redux/services/userApi";
 import { useFormValidation } from "@hooks/useFormWithValidation";
 import { useAuth } from "@hooks/useAuth";
@@ -10,8 +10,10 @@ import { EditProfileView } from "./EditProfileView";
 import { FormValues } from "@hooks/useFormWithValidation";
 import { INVALID_FORM } from "@src/utils/messages";
 import { useModal } from "@hooks/useModal";
-import { ConfirmEmail } from "./components/ConfirmEmail";
+import { SendEmail } from "./components/ConfirmEmail";
 import { IUser } from "@src/types/IUser";
+import { useAppSelector, useAppDispatch } from "@hooks/redux";
+import { setUser } from "@src/redux/reducers/UserSlice";
 
 interface Props {
   handleClose: () => void;
@@ -19,7 +21,9 @@ interface Props {
 
 export const EditProfile: FC<Props> = ({ handleClose }) => {
   const auth = useAuth();
-  const [_, setUser] = useLocalStorage("user", null);
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.userSlice);
+  const [_, setUserLS] = useLocalStorage("user", null);
   const [countCallSendEmail, setCountSendEmail] = useState(0);
   const [open, openModal, closeModal] = useModal();
   const [updatedUser, setUpdatedUser] = useState<IUser | null>(
@@ -30,9 +34,9 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
   const [editUser, { data: response, isError, isSuccess, isLoading }] =
     useEditUserMutation();
   const [
-    confirmEmail,
+    sendEmail,
     { isLoading: isLoadingSendEmail, isSuccess: isSuccessSendEmail },
-  ] = useConfirmEmailMutation();
+  ] = useSendEmailMutation();
   const [message, setMessage] = useState("");
 
   const generateArgs = (values: FormValues) => {
@@ -57,7 +61,7 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
     }
     //Если почта не подтверждена - отправляем запрос на получение кода активации по почте
     else if (!auth?.user?.act_mail) {
-      sendEmail();
+      sendEmailFc();
       openModal();
       //Если форма валидна и почта подтверждена - отправляем запрос на изменение данных пользователя
     } else {
@@ -68,14 +72,14 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
 
   const changeUser = (formValues: FormValues) => {
     const args = generateArgs(formValues);
-    //dispatch(setUser({ ...updatedUser, ...args }));
+    dispatch(setUser({ ...(updatedUser as IUser), ...args }));
     //Сохраняем текущие данные в переменную состояния
     setUpdatedUser({ ...(updatedUser as IUser), ...args });
     editUser(args);
   };
 
-  const sendEmail = () => {
-    confirmEmail({
+  const sendEmailFc = () => {
+    sendEmail({
       login: auth?.user?.login ?? "",
       email: auth?.user?.email ?? "",
     });
@@ -86,10 +90,17 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
     return Boolean(isSuccess && response && !response.error);
   };
 
+  useEffect(() => {
+    if (auth && "user" in auth) {
+      dispatch(setUser(auth?.user as IUser));
+    }
+  }, [auth]);
+
   //Если изменение прошло успешно, то сохраняем текущие данные в локальное хранилище, закрываем форму
   useEffect(() => {
     if (isSuccess && !response.error) {
-      setUser(updatedUser);
+      setUserLS(updatedUser);
+      dispatch(setUser(updatedUser as IUser));
       setTimeout(() => {
         handleClose();
         resetForm();
@@ -113,12 +124,12 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
           isSuccessSave={isSuccessSave()}
         />
       </form>
-      <ConfirmEmail
+      <SendEmail
         open={open}
         isLoading={isLoadingSendEmail}
         isDisabled={isSuccessSendEmail && countCallSendEmail > 1}
         handleClose={closeModal}
-        repeatSendEmail={sendEmail}
+        repeatSendEmail={sendEmailFc}
         email={auth?.user?.email ?? ""}
         textButton={
           isSuccessSendEmail && countCallSendEmail > 1

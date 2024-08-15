@@ -26,8 +26,14 @@ export enum ECOMMAND {
   SETUSER = "set_User",
   // Изменение данных пользователя
   CHANGEUSER = "set_UpdateUserData",
-  //Отрпавка письма на email с кодом подтверждения
+  //Отрпавка письма на email с кодом подтверждения email
   SENDCODEEMAIL = "set_ActMail",
+  //Обновление email при переходе по ссылке с кодом подтверждения
+  CONFIRMEMAIL = "set_MailCode",
+  //Отправка письма на email с кодом для восстановления пароля
+  SENDRESETPASSCODE = "set_ForgPass",
+  //Обновление пароля при переходе по ссылке с кодом для сброса пароля
+  RESETPASSWORD = "set_Pass",
 
   //--------------------------------Пользователи
   GETUSERS = "get_AllUsers",

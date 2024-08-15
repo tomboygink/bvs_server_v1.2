@@ -403,9 +403,9 @@ var User = (function () {
                                 to: this.args.email,
                                 subject: "Activate mail",
                                 html: 'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
-                                    config_json_1.default.server_config.host +
+                                    config_json_1.default.front_config.host +
                                     ":" +
-                                    config_json_1.default.server_config.port +
+                                    config_json_1.default.front_config.port +
                                     "/confirm_mail?code= " +
                                     a +
                                     '">Click this link</a></h1>',
@@ -423,7 +423,7 @@ var User = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, this.db.query("SELECT login, email FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
-                            this.args.sess_code +
+                            this.sess_code +
                             "'")];
                     case 1:
                         db_response = _a.sent();
@@ -434,9 +434,9 @@ var User = (function () {
                         return [4, this.db.query("UPDATE users SET mail_code = '" +
                                 code +
                                 "', act_mail = true WHERE " +
-                                "login = (SELECT login from USERS inner join sesssions on sessions.uid = users.id WHERE sess_code = '" +
-                                this.args.sess_code +
-                                "') RETERNING id")];
+                                "login = (SELECT login from USERS inner join sessions on sessions.uid = users.id WHERE sess_code = '" +
+                                this.sess_code +
+                                "') RETURNING id")];
                     case 2:
                         db_response = _a.sent();
                         return [2, db_response.rows];
@@ -460,10 +460,10 @@ var User = (function () {
                                 to: this.args.email,
                                 subject: "Forgot password",
                                 html: 'This message was sent from bvs_server to reset your password. <h1><a href="http://' +
-                                    config_json_1.default.server_config.host +
+                                    config_json_1.default.front_config.host +
                                     ":" +
-                                    config_json_1.default.server_config.port +
-                                    "/forgot_pass?code= " +
+                                    config_json_1.default.front_config.port +
+                                    "/reset_pass?code= " +
                                     db_response.rows[0].re_password_code +
                                     '">Click this link</a></h1>',
                             })];

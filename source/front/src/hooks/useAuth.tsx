@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
 import { IUser } from "@src/types/IUser";
 import { IResponse } from "@src/types/IResponse";
+import { ScreenRoute } from "@src/types/Screen.routes.enum";
 
 type Response = {
   data: IResponse;
@@ -38,7 +39,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       setError("");
       setUser(dt.data?.data?.[0]);
       setCode(dt.data.user_sess_code);
-      navigate("/");
+      navigate(ScreenRoute.MAIN);
     } else {
       setError(dt.data.error);
     }

@@ -10,12 +10,16 @@ interface Props {
   placeholder: string;
   name: string;
   variant?: "outlined" | "filled" | "standard";
+  error?: boolean;
+  helperText?: string;
 }
 export const InputWithIcon: FC<Props> = ({
   onChange,
   placeholder,
   name,
   variant = "standard",
+  error,
+  helperText,
 }) => {
   const cx = useStyles(styles);
   const [isShow, setIsShow] = useState(false);
@@ -34,7 +38,10 @@ export const InputWithIcon: FC<Props> = ({
       onChange={onChange}
       placeholder={placeholder}
       fullWidth
+      required={true}
       variant={variant}
+      error={error}
+      helperText={helperText}
       type={isShow ? "text" : "password"}
       InputProps={{
         endAdornment: (

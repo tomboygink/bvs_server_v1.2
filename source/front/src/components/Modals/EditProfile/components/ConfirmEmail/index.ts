@@ -1,1 +1,1 @@
-export { ConfirmEmail } from "./ConfirmEmail";
+export { SendEmail } from "./SendEmail";

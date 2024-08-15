@@ -22,7 +22,7 @@ interface Props {
   textButton: string;
   count: number;
 }
-export const ConfirmEmailView: FC<Props> = ({
+export const SendEmailView: FC<Props> = ({
   open,
   isDisabled,
   isLoading,

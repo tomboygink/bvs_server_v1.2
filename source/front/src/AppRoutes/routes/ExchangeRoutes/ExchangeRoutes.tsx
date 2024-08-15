@@ -12,6 +12,9 @@ import { Layout } from "@components/Layout";
 import { MapPage } from "@src/pages/MapPage";
 import { OrgsPage } from "@src/pages/OrgsPage";
 import { JobsPage } from "@src/pages/JobsPage";
+import { ConfirmEmailPage } from "@src/pages/ConfirmEmailPage";
+import { ResetPasswordPage } from "@src/pages/ResetPasswordPage";
+import { ForgotPassword } from "@components/ForgotPassword";
 
 interface Props {}
 // type Children = {
@@ -35,10 +38,19 @@ export const ExchangeRoutes: React.FC<Props> = () => {
         link: `${ScreenRoute.LOGIN}`,
         element: <LoginPage />,
       },
-      // {
-      //   link: `${ScreenRoute.MAP}`,
-      //   element: <MapPage />,
-      // },
+      {
+        link: `${ScreenRoute.FORGOTPASSWORD}`,
+        element: <ForgotPassword />,
+      },
+      {
+        link: `${ScreenRoute.RESETPASSWORD}`,
+        element: <ResetPasswordPage />,
+      },
+      //TODO: защитить авторизацией?
+      {
+        link: `${ScreenRoute.CONFIRMEMAIL}`,
+        element: <ConfirmEmailPage />,
+      },
       {
         link: `${ScreenRoute.MAIN}`,
         element: <Layout />,

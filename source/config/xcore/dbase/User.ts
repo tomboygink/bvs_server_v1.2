@@ -353,6 +353,21 @@ export class User {
       .update(this.args.login + "_" + this.args.email)
       .digest("hex");
 
+    // await this.transporter.sendMail({
+    //   from: "noreplay@bvs45.ru",
+    //   //Получение email от пользователя
+    //   to: this.args.email,
+    //   subject: "Activate mail",
+    //   //Отправка ссылки с кодом для подтверждения
+    //   html:
+    //     'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
+    //     CONFIG.server_config.host +
+    //     ":" +
+    //     CONFIG.server_config.port +
+    //     "/confirm_mail?code= " +
+    //     a +
+    //     '">Click this link</a></h1>',
+    // });
     await this.transporter.sendMail({
       from: "noreplay@bvs45.ru",
       //Получение email от пользователя
@@ -361,9 +376,9 @@ export class User {
       //Отправка ссылки с кодом для подтверждения
       html:
         'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
-        CONFIG.server_config.host +
+        CONFIG.front_config.host +
         ":" +
-        CONFIG.server_config.port +
+        CONFIG.front_config.port +
         "/confirm_mail?code= " +
         a +
         '">Click this link</a></h1>',
@@ -375,7 +390,7 @@ export class User {
     //Получаем актуальные данные
     var db_response = await this.db.query(
       "SELECT login, email FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
-        this.args.sess_code +
+        this.sess_code +
         "'"
     );
     //генерируем код из бд
@@ -384,17 +399,41 @@ export class User {
       .update(db_response.rows[0].login + "_" + db_response.rows[0].email)
       .digest("hex");
     //обновление email
+
     db_response = await this.db.query(
       "UPDATE users SET mail_code = '" +
         code +
         "', act_mail = true WHERE " +
-        "login = (SELECT login from USERS inner join sesssions on sessions.uid = users.id WHERE sess_code = '" +
-        this.args.sess_code +
-        "') RETERNING id"
+        "login = (SELECT login from USERS inner join sessions on sessions.uid = users.id WHERE sess_code = '" +
+        this.sess_code +
+        "') RETURNING id"
     );
+
     return db_response.rows;
   }
-
+  // async updateMail() {
+  //   //Получаем актуальные данные
+  //   var db_response = await this.db.query(
+  //     "SELECT login, email FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
+  //       this.args.sess_code +
+  //       "'"
+  //   );
+  //   //генерируем код из бд
+  //   var code = crypto
+  //     .createHmac("sha256", CONFIG.crypto_code)
+  //     .update(db_response.rows[0].login + "_" + db_response.rows[0].email)
+  //     .digest("hex");
+  //   //обновление email
+  //   db_response = await this.db.query(
+  //     "UPDATE users SET mail_code = '" +
+  //       code +
+  //       "', act_mail = true WHERE " +
+  //       "login = (SELECT login from USERS inner join sesssions on sessions.uid = users.id WHERE sess_code = '" +
+  //       this.args.sess_code +
+  //       "') RETERNING id"
+  //   );
+  //   return db_response.rows;
+  // }
   //Отправка письма для смены пароля
   async sendForgPassMail() {
     //Проверка на подтверждение почты
@@ -412,10 +451,10 @@ export class User {
         //Отправка ссылки с кодом для подтверждения
         html:
           'This message was sent from bvs_server to reset your password. <h1><a href="http://' +
-          CONFIG.server_config.host +
+          CONFIG.front_config.host +
           ":" +
-          CONFIG.server_config.port +
-          "/forgot_pass?code= " +
+          CONFIG.front_config.port +
+          "/reset_pass?code= " +
           db_response.rows[0].re_password_code +
           '">Click this link</a></h1>',
       });
