@@ -1,17 +1,20 @@
 import { useState, FormEvent, useEffect, FC } from "react";
 import { EditJobView } from "./EditJobView";
 import { useFormValidation } from "@hooks/useFormWithValidation";
-import { useAppSelector } from "@hooks/redux";
+import { useAppSelector, useAppDispatch } from "@hooks/redux";
 import { useEditJobMutation } from "@src/redux/services/jobsApi";
 import { useGetAllOrgsQuery } from "@src/redux/services/orgApi";
 import { FormValues } from "@hooks/useFormWithValidation";
 import { INVALID_FORM } from "@src/utils/messages";
+import { setSelectedJob } from "@src/redux/reducers/jobSlice";
+import { ISelectedJob } from "@src/types/IJob";
 
 interface Props {
   handleClose: () => void;
 }
 
 export const EditJob: FC<Props> = ({ handleClose }) => {
+  const dispatch = useAppDispatch();
   const [message, setMessage] = useState("");
   const { resetForm, errors, handleChange, handleSelectChange } =
     useFormValidation();
@@ -60,7 +63,13 @@ export const EditJob: FC<Props> = ({ handleClose }) => {
       setMessage(INVALID_FORM);
     } else {
       setMessage("");
-      editJob(args);
+      editJob(args).then((res) => {
+        if (res && "data" in res && !res.data.error) {
+          dispatch(
+            setSelectedJob({ ...(selectedJob as ISelectedJob), ...args })
+          );
+        }
+      });
     }
   };
   const isSuccessSave = () => {

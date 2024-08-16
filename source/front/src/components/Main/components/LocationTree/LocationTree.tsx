@@ -17,6 +17,7 @@ import {
   useGetAllDevsQuery,
   useGetControlSessQuery,
   useGetLastSessQuery,
+  useGetExpireVerifRangeQuery,
 } from "@src/redux/services/devsApi";
 import { useAuth } from "@hooks/useAuth";
 import { ILocation } from "@src/types/ILocation";
@@ -28,6 +29,7 @@ import { ECOMMAND } from "@src/types/ECommand";
 export const LocationTree = () => {
   const auth = useAuth();
   const dispatch = useAppDispatch();
+  const [isAdmin, setIsAdmin] = useState(false);
   const {
     locations: locationArr,
     selectedLocation: currentLocation,
@@ -47,7 +49,7 @@ export const LocationTree = () => {
     { dev_number: selectedDev?.number },
     { skip: !isVisibleDevice }
   );
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { data: verifRanges } = useGetExpireVerifRangeQuery({});
 
   const handleSelectLocation = (id: string) => {
     // Проверяем: если выбрана та же локация, то ничего не делаем, чтобы не было повторного рендеринга компонента SelectedLocation
@@ -139,6 +141,8 @@ export const LocationTree = () => {
           locations={isAdmin ? locationsTree : filteredLocations}
           handleClick={handleSelectLocation}
           isLoading={isLoading}
+          verifRanges={verifRanges?.data}
+          // devs={devsByLocation?.data}
         />
       )}
     </>

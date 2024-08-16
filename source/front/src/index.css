@@ -106,3 +106,17 @@ p {
 TH {
   text-align: center;
 } */
+
+.well {
+  cursor: pointer;
+}
+
+#tooltip {
+  background: #fff;
+  border-radius: 5px;
+  padding: 8px;
+  color: #3761ee;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: -1px 2px 8px 0px rgba(59, 59, 59, 0.2);
+}

@@ -4,6 +4,7 @@ import { Typography } from "@components/_shared/Typography";
 import { InputWithIcon } from "@components/_shared/Inputs/InputWithIcon";
 import { InputText } from "@components/_shared/Inputs/InputText";
 import { Button } from "@components/_shared/Button";
+import { ScreenRoute } from "@src/types/Screen.routes.enum";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 
@@ -44,7 +45,7 @@ export const LoginView: FC<Props> = ({ onChange }) => {
         />
       </fieldset>
       <fieldset className={cx("btn-container")}>
-        <Link className={cx("link")} to="/forgot-password">
+        <Link className={cx("link")} to={ScreenRoute.FORGOTPASSWORD}>
           ← Забыли пароль?
         </Link>
         <Button>Войти</Button>

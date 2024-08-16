@@ -14,4 +14,7 @@ export enum ScreenRoute {
   POSTS = "/posts",
   WELLS = "/wells",
   MAP = "/map",
+  CONFIRMEMAIL = "/confirm_mail",
+  FORGOTPASSWORD = "/forgot_pass",
+  RESETPASSWORD = "/reset_pass",
 }

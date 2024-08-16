@@ -61,7 +61,7 @@ export const NewJobView: FC<Props> = ({
           inputProps={{
             name: "id_org",
           }}
-          value={String(values.id_org) || ""}
+          value={(values.id_org as string) || ""}
           error={Boolean(errors.id_org)}
           helperText={errors.id_org}
         >

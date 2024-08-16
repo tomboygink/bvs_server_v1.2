@@ -51,8 +51,8 @@ export const EditJobView: FC<Props> = (props) => {
             label="Наименование должности"
             defaultValue={job?.name}
             onChange={handleChange}
-            error={Boolean(errors.full_name)}
-            helperText={errors.full_name}
+            error={Boolean(errors.name)}
+            helperText={errors.name}
           />
           <Select
             onChange={handleSelectChange}

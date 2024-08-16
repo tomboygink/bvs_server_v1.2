@@ -140,7 +140,7 @@ var User = (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("DELETE FROM sessions WHERE sess_code = '" + this.args.code + "'")];
+                    case 0: return [4, this.db.query("DELETE FROM sessions WHERE sess_code = '" + this.sess_code + "'")];
                     case 1:
                         _a.sent();
                         return [2];
@@ -403,9 +403,9 @@ var User = (function () {
                                 to: this.args.email,
                                 subject: "Activate mail",
                                 html: 'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
-                                    config_json_1.default.server_config.host +
+                                    config_json_1.default.front_config.host +
                                     ":" +
-                                    config_json_1.default.server_config.port +
+                                    config_json_1.default.front_config.port +
                                     "/confirm_mail?code= " +
                                     a +
                                     '">Click this link</a></h1>',
@@ -422,12 +422,21 @@ var User = (function () {
             var db_response, code;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT login, email FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = \'" + this.args.sess_code + "\'")];
+                    case 0: return [4, this.db.query("SELECT login, email FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
+                            this.sess_code +
+                            "'")];
                     case 1:
                         db_response = _a.sent();
-                        code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(db_response.rows[0].login + "_" + db_response.rows[0].email).digest('hex');
-                        return [4, this.db.query("UPDATE users SET mail_code = \'" + code + "\', act_mail = true WHERE " +
-                                "login = (SELECT login from USERS inner join sesssions on sessions.uid = users.id WHERE sess_code = \'" + this.args.sess_code + "\') RETERNING id")];
+                        code = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(db_response.rows[0].login + "_" + db_response.rows[0].email)
+                            .digest("hex");
+                        return [4, this.db.query("UPDATE users SET mail_code = '" +
+                                code +
+                                "', act_mail = true WHERE " +
+                                "login = (SELECT login from USERS inner join sessions on sessions.uid = users.id WHERE sess_code = '" +
+                                this.sess_code +
+                                "') RETURNING id")];
                     case 2:
                         db_response = _a.sent();
                         return [2, db_response.rows];
@@ -440,7 +449,9 @@ var User = (function () {
             var db_response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT re_password_code, act_mail FROM users WHERE email= \'" + this.args.email + "\'")];
+                    case 0: return [4, this.db.query("SELECT re_password_code, act_mail FROM users WHERE email= '" +
+                            this.args.email +
+                            "'")];
                     case 1:
                         db_response = _a.sent();
                         if (!(db_response.rows[0].act_mail === true)) return [3, 3];
@@ -449,10 +460,10 @@ var User = (function () {
                                 to: this.args.email,
                                 subject: "Forgot password",
                                 html: 'This message was sent from bvs_server to reset your password. <h1><a href="http://' +
-                                    config_json_1.default.server_config.host +
+                                    config_json_1.default.front_config.host +
                                     ":" +
-                                    config_json_1.default.server_config.port +
-                                    "/forgot_pass?code= " +
+                                    config_json_1.default.front_config.port +
+                                    "/reset_pass?code= " +
                                     db_response.rows[0].re_password_code +
                                     '">Click this link</a></h1>',
                             })];
@@ -465,11 +476,25 @@ var User = (function () {
         });
     };
     User.prototype.updatePassRePass = function () {
-        var pass = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.new_password).digest('hex');
-        var re_pass_code = crypto_1.default.createHmac('sha256', config_json_1.default.crypto_code).update(this.args.login + "_" + pass).digest('hex');
-        var db_response = this.args.query("SELECT re_password_code FROM users WHERE login =\'" + this.args.login + "\'");
+        var pass = crypto_1.default
+            .createHmac("sha256", config_json_1.default.crypto_code)
+            .update(this.args.new_password)
+            .digest("hex");
+        var re_pass_code = crypto_1.default
+            .createHmac("sha256", config_json_1.default.crypto_code)
+            .update(this.args.login + "_" + pass)
+            .digest("hex");
+        var db_response = this.args.query("SELECT re_password_code FROM users WHERE login ='" +
+            this.args.login +
+            "'");
         if (db_response.rows[0].re_password_code === this.args.code) {
-            db_response = this.db.query("UPDATE users SET re_password_code = \'" + re_pass_code + "\', password = \'" + pass + "\' WHERE login = \'" + this.args.login + "\'");
+            db_response = this.db.query("UPDATE users SET re_password_code = '" +
+                re_pass_code +
+                "', password = '" +
+                pass +
+                "' WHERE login = '" +
+                this.args.login +
+                "'");
             return true;
         }
         else {

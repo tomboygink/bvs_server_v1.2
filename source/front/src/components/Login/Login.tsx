@@ -28,22 +28,6 @@ export const Login = () => {
 
     fetch(query).then((response): void => {
       if ("data" in response) {
-        // Для старого сервера:
-        // window.localStorage.setItem("session_code", response.data.code);
-
-        // Для нового сервера:
-
-        // window.localStorage.setItem(
-        //   "session_code",
-        //   response.data.user_sess_code
-        // );
-        // window.localStorage.setItem(
-        //   "user",
-        //   JSON.stringify(response.data.data?.[0])
-        // );
-        // dispatch(setUser(response.data.data?.[0]));
-        // dispatch(authChecked(true));
-        // navigate("/");
         auth?.login(response);
         dispatch(setUser(response.data.data?.[0]));
         dispatch(setCode(response.data.user_sess_code));
@@ -56,7 +40,6 @@ export const Login = () => {
     <form className={cx("form")} onSubmit={handleSubmit}>
       <LoginView onChange={handleChange} />
       <span className={cx("error")}>{auth?.error}</span>
-      {/* <button>Отправить</button> */}
     </form>
   );
 };

@@ -22,7 +22,7 @@ export const LatInput = React.forwardRef<HTMLInputElement, IProps>(
         // onAccept={(value: any) =>
         //   onChange({ target: { name: props.name, value } })
         // }
-        onChange={(e) => onChange(e)}
+        onChange={(event: FormEvent<HTMLInputElement>) => onChange(event)}
         overwrite
       />
     );

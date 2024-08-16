@@ -1,6 +1,7 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@hooks/useAuth";
+import { useAuthBySessionCodeQuery } from "@src/redux/services/authApi";
 
 interface Props {
   children?: ReactNode;
@@ -9,7 +10,15 @@ interface Props {
 export const ProtectedRoute: FC<Props> = ({ children }) => {
   const location = useLocation();
   const auth = useAuth();
-  console.log("auth", auth);
+  const { data: userBySessionCode, isSuccess } = useAuthBySessionCodeQuery({
+    code: auth?.code,
+  });
+  useEffect(() => {
+    if (isSuccess && userBySessionCode.error) {
+      auth?.logout();
+      return;
+    }
+  }, [userBySessionCode, isSuccess]);
   if (!auth || !auth.user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

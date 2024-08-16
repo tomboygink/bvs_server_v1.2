@@ -2,7 +2,7 @@ import { DBase, getDB } from "./DBase";
 import crypto from "crypto";
 import CONFIG from "../../config.json";
 import { dateTimeToSQL, dateTimeToStr } from "./DateStr";
-import nodemailer from 'nodemailer'
+import nodemailer from "nodemailer";
 
 export class UsersEntity {
   id: number = 0;
@@ -18,7 +18,7 @@ export class UsersEntity {
   deleted: boolean = false;
   info: string = "";
 
-  constructor() { }
+  constructor() {}
 }
 
 export class User {
@@ -39,10 +39,10 @@ export class User {
       .digest("hex");
     var db_response = await this.db.query(
       "SELECT id FROM users WHERE login = '" +
-      this.args.login +
-      "' and password = '" +
-      pass +
-      "'"
+        this.args.login +
+        "' and password = '" +
+        pass +
+        "'"
     );
 
     if (db_response.rows.length !== 0) {
@@ -64,27 +64,27 @@ export class User {
         .createHmac("sha256", CONFIG.crypto_code)
         .update(
           id +
-          "_" +
-          dateTimeToSQL(date) +
-          "_" +
-          db_response.rows[0].selectiduser
+            "_" +
+            dateTimeToSQL(date) +
+            "_" +
+            db_response.rows[0].selectiduser
         )
         .digest("hex");
 
       //записываем в Sessions
       await this.db.query(
         "INSERT INTO sessions (id, uid, expires, created_at, sess_code, sess_data) " +
-        "VALUES (" +
-        id +
-        ", " +
-        db_response.rows[0].id +
-        ", '" +
-        dateTimeToSQL(date) +
-        "', '" +
-        dateTimeToSQL(new Date(Date.now())) +
-        "', '" +
-        sess +
-        "', '{\"data\":[]}')"
+          "VALUES (" +
+          id +
+          ", " +
+          db_response.rows[0].id +
+          ", '" +
+          dateTimeToSQL(date) +
+          "', '" +
+          dateTimeToSQL(new Date(Date.now())) +
+          "', '" +
+          sess +
+          "', '{\"data\":[]}')"
       );
       return sess;
     }
@@ -93,7 +93,7 @@ export class User {
   //Удаление кода сессии пользователя
   async deleteSessionCode() {
     await this.db.query(
-      "DELETE FROM sessions WHERE sess_code = '" + this.args.code + "'"
+      "DELETE FROM sessions WHERE sess_code = '" + this.sess_code + "'"
     );
   }
 
@@ -110,12 +110,12 @@ export class User {
 
       db_response = await this.db.query(
         "SELECT " +
-        "id, login, family, name, father, email, org_id as id_org," +
-        "job_title_id as id_job, roles_ids, act_mail, deleted, info FROM users WHERE login ='" +
-        this.args.login +
-        "' and password = '" +
-        pass +
-        "'"
+          "id, login, family, name, father, email, org_id as id_org," +
+          "job_title_id as id_job, roles_ids, act_mail, deleted, info FROM users WHERE login ='" +
+          this.args.login +
+          "' and password = '" +
+          pass +
+          "'"
       );
     }
 
@@ -123,8 +123,8 @@ export class User {
     else {
       var time_for_exit = await this.db.query(
         "SELECT expires FROM sessions WHERE sess_code = '" +
-        this.args.code +
-        "'"
+          this.args.code +
+          "'"
       );
 
       if (
@@ -133,13 +133,13 @@ export class User {
       ) {
         db_response = await this.db.query(
           "SELECT " +
-          "users.id, users.login, users.family, users.name, " +
-          "users.father, users.email, users.org_id as id_org," +
-          "users.job_title_id as id_job, users.roles_ids, " +
-          "users.act_mail, users.deleted, users.info FROM users INNER JOIN sessions ON " +
-          "users.id=sessions.uid WHERE sessions.sess_code = '" +
-          this.args.code +
-          "'"
+            "users.id, users.login, users.family, users.name, " +
+            "users.father, users.email, users.org_id as id_org," +
+            "users.job_title_id as id_job, users.roles_ids, " +
+            "users.act_mail, users.deleted, users.info FROM users INNER JOIN sessions ON " +
+            "users.id=sessions.uid WHERE sessions.sess_code = '" +
+            this.args.code +
+            "'"
         );
       } else {
         console.log("Время авторизации вышло");
@@ -193,34 +193,34 @@ export class User {
       // Запрос на добавление пользователя
       var db_response = await this.db.query(
         "INSERT INTO users (login, password, family, name, father, telephone, " +
-        "email, org_id, job_title_id, roles_ids, user_data, mail_code, act_mail, re_password_code, " +
-        "deleted, deleted_date, created_at, info) VALUES ('" +
-        this.args.login +
-        "', '" +
-        pass +
-        "', '" +
-        this.args.family +
-        "', '" +
-        this.args.name +
-        "', '" +
-        this.args.father +
-        "', '---', '" +
-        this.args.email +
-        "', " +
-        this.args.id_org +
-        ", " +
-        this.args.id_jobs +
-        ", '" +
-        access +
-        "', '{\"user_data\":[]}', '" +
-        mail_code +
-        "', false , '" +
-        re_pass_code +
-        "', false, null, '" +
-        dateTimeToSQL(new Date(Date.now())) +
-        "','" +
-        this.args.info +
-        "') RETURNING id"
+          "email, org_id, job_title_id, roles_ids, user_data, mail_code, act_mail, re_password_code, " +
+          "deleted, deleted_date, created_at, info) VALUES ('" +
+          this.args.login +
+          "', '" +
+          pass +
+          "', '" +
+          this.args.family +
+          "', '" +
+          this.args.name +
+          "', '" +
+          this.args.father +
+          "', '---', '" +
+          this.args.email +
+          "', " +
+          this.args.id_org +
+          ", " +
+          this.args.id_jobs +
+          ", '" +
+          access +
+          "', '{\"user_data\":[]}', '" +
+          mail_code +
+          "', false , '" +
+          re_pass_code +
+          "', false, null, '" +
+          dateTimeToSQL(new Date(Date.now())) +
+          "','" +
+          this.args.info +
+          "') RETURNING id"
       );
 
       return db_response.rows;
@@ -248,17 +248,17 @@ export class User {
       );
       db_response = await this.db.query(
         "UPDATE users SET family = '" +
-        this.args.family +
-        "', name ='" +
-        this.args.name +
-        "', father = '" +
-        this.args.father +
-        "'," +
-        " info = '" +
-        this.args.info +
-        "' WHERE id = " +
-        this.args.id +
-        "RETURNING id"
+          this.args.family +
+          "', name ='" +
+          this.args.name +
+          "', father = '" +
+          this.args.father +
+          "'," +
+          " info = '" +
+          this.args.info +
+          "' WHERE id = " +
+          this.args.id +
+          "RETURNING id"
       );
       //Редактирование данных почты
       if (checkMail.rows[0].email !== this.args.email) {
@@ -268,11 +268,11 @@ export class User {
           .digest("hex");
         await this.db.query(
           "UPDATE users SET email = '" +
-          this.args.email +
-          "', mail_code = '" +
-          mail_code +
-          "' , act_mail = false WHERE id = " +
-          this.args.id
+            this.args.email +
+            "', mail_code = '" +
+            mail_code +
+            "' , act_mail = false WHERE id = " +
+            this.args.id
         );
       }
     }
@@ -284,19 +284,19 @@ export class User {
 
       db_response = await this.db.query(
         "UPDATE users SET family = '" +
-        this.args.family +
-        "', name ='" +
-        this.args.name +
-        "', father = '" +
-        this.args.father +
-        "'," +
-        " info = '" +
-        this.args.info +
-        "', deleted = " +
-        this.args.deleted +
-        " WHERE id = " +
-        this.args.id +
-        "RETURNING id"
+          this.args.family +
+          "', name ='" +
+          this.args.name +
+          "', father = '" +
+          this.args.father +
+          "'," +
+          " info = '" +
+          this.args.info +
+          "', deleted = " +
+          this.args.deleted +
+          " WHERE id = " +
+          this.args.id +
+          "RETURNING id"
       );
 
       //Редактирование данных с паролем
@@ -317,11 +317,11 @@ export class User {
 
         await this.db.query(
           "UPDATE users SET password = '" +
-          pass +
-          "', re_password_code = '" +
-          re_pass_code +
-          "' WHERE id = " +
-          this.args.id
+            pass +
+            "', re_password_code = '" +
+            re_pass_code +
+            "' WHERE id = " +
+            this.args.id
         );
       }
 
@@ -333,14 +333,15 @@ export class User {
           .digest("hex");
         await this.db.query(
           "UPDATE users SET email = '" +
-          this.args.email +
-          "', mail_code = '" +
-          mail_code +
-          "' , act_mail = false WHERE id = " +
-          this.args.id
+            this.args.email +
+            "', mail_code = '" +
+            mail_code +
+            "' , act_mail = false WHERE id = " +
+            this.args.id
         );
       }
     }
+
     return db_response.rows;
   }
 
@@ -352,6 +353,21 @@ export class User {
       .update(this.args.login + "_" + this.args.email)
       .digest("hex");
 
+    // await this.transporter.sendMail({
+    //   from: "noreplay@bvs45.ru",
+    //   //Получение email от пользователя
+    //   to: this.args.email,
+    //   subject: "Activate mail",
+    //   //Отправка ссылки с кодом для подтверждения
+    //   html:
+    //     'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
+    //     CONFIG.server_config.host +
+    //     ":" +
+    //     CONFIG.server_config.port +
+    //     "/confirm_mail?code= " +
+    //     a +
+    //     '">Click this link</a></h1>',
+    // });
     await this.transporter.sendMail({
       from: "noreplay@bvs45.ru",
       //Получение email от пользователя
@@ -360,9 +376,9 @@ export class User {
       //Отправка ссылки с кодом для подтверждения
       html:
         'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
-        CONFIG.server_config.host +
+        CONFIG.front_config.host +
         ":" +
-        CONFIG.server_config.port +
+        CONFIG.front_config.port +
         "/confirm_mail?code= " +
         a +
         '">Click this link</a></h1>',
@@ -372,19 +388,60 @@ export class User {
   //Обновление данных по email после перехода по письму
   async updateMail() {
     //Получаем актуальные данные
-    var db_response = await this.db.query("SELECT login, email FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = \'" + this.args.sess_code + "\'");
+    var db_response = await this.db.query(
+      "SELECT login, email FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
+        this.sess_code +
+        "'"
+    );
     //генерируем код из бд
-    var code = crypto.createHmac('sha256', CONFIG.crypto_code).update(db_response.rows[0].login + "_" + db_response.rows[0].email).digest('hex');
+    var code = crypto
+      .createHmac("sha256", CONFIG.crypto_code)
+      .update(db_response.rows[0].login + "_" + db_response.rows[0].email)
+      .digest("hex");
     //обновление email
-    db_response = await this.db.query("UPDATE users SET mail_code = \'" + code + "\', act_mail = true WHERE " +
-      "login = (SELECT login from USERS inner join sesssions on sessions.uid = users.id WHERE sess_code = \'" + this.args.sess_code + "\') RETERNING id");
+
+    db_response = await this.db.query(
+      "UPDATE users SET mail_code = '" +
+        code +
+        "', act_mail = true WHERE " +
+        "login = (SELECT login from USERS inner join sessions on sessions.uid = users.id WHERE sess_code = '" +
+        this.sess_code +
+        "') RETURNING id"
+    );
+
     return db_response.rows;
   }
-
+  // async updateMail() {
+  //   //Получаем актуальные данные
+  //   var db_response = await this.db.query(
+  //     "SELECT login, email FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
+  //       this.args.sess_code +
+  //       "'"
+  //   );
+  //   //генерируем код из бд
+  //   var code = crypto
+  //     .createHmac("sha256", CONFIG.crypto_code)
+  //     .update(db_response.rows[0].login + "_" + db_response.rows[0].email)
+  //     .digest("hex");
+  //   //обновление email
+  //   db_response = await this.db.query(
+  //     "UPDATE users SET mail_code = '" +
+  //       code +
+  //       "', act_mail = true WHERE " +
+  //       "login = (SELECT login from USERS inner join sesssions on sessions.uid = users.id WHERE sess_code = '" +
+  //       this.args.sess_code +
+  //       "') RETERNING id"
+  //   );
+  //   return db_response.rows;
+  // }
   //Отправка письма для смены пароля
   async sendForgPassMail() {
     //Проверка на подтверждение почты
-    var db_response = await this.db.query("SELECT re_password_code, act_mail FROM users WHERE email= \'" + this.args.email + "\'");
+    var db_response = await this.db.query(
+      "SELECT re_password_code, act_mail FROM users WHERE email= '" +
+        this.args.email +
+        "'"
+    );
     if (db_response.rows[0].act_mail === true) {
       await this.transporter.sendMail({
         from: "noreplay@bvs45.ru",
@@ -394,34 +451,52 @@ export class User {
         //Отправка ссылки с кодом для подтверждения
         html:
           'This message was sent from bvs_server to reset your password. <h1><a href="http://' +
-          CONFIG.server_config.host +
+          CONFIG.front_config.host +
           ":" +
-          CONFIG.server_config.port +
-          "/forgot_pass?code= " +
+          CONFIG.front_config.port +
+          "/reset_pass?code= " +
           db_response.rows[0].re_password_code +
           '">Click this link</a></h1>',
       });
       return true;
+    } else {
+      return false;
     }
-    else { return false; }
   }
 
   //Обновление данных пароля после перхода по письму
   updatePassRePass() {
     //Генерация пароля
-    var pass = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.new_password).digest('hex');
+    var pass = crypto
+      .createHmac("sha256", CONFIG.crypto_code)
+      .update(this.args.new_password)
+      .digest("hex");
     //генерация нового кода re_pass_code
-    var re_pass_code = crypto.createHmac('sha256', CONFIG.crypto_code).update(this.args.login + "_" + pass).digest('hex');
-    var db_response = this.args.query("SELECT re_password_code FROM users WHERE login =\'" + this.args.login + "\'");
+    var re_pass_code = crypto
+      .createHmac("sha256", CONFIG.crypto_code)
+      .update(this.args.login + "_" + pass)
+      .digest("hex");
+    var db_response = this.args.query(
+      "SELECT re_password_code FROM users WHERE login ='" +
+        this.args.login +
+        "'"
+    );
     if (db_response.rows[0].re_password_code === this.args.code) {
-      db_response = this.db.query("UPDATE users SET re_password_code = \'" + re_pass_code + "\', password = \'" + pass + "\' WHERE login = \'" + this.args.login + "\'");
+      db_response = this.db.query(
+        "UPDATE users SET re_password_code = '" +
+          re_pass_code +
+          "', password = '" +
+          pass +
+          "' WHERE login = '" +
+          this.args.login +
+          "'"
+      );
       return true;
+    } else {
+      return false;
     }
-    else { return false; }
   }
 
-
-  
   transporter: nodemailer.Transporter = nodemailer.createTransport({
     host: "smtp.mail.ru",
     port: 465,

@@ -86,14 +86,14 @@ export const EditLocationMenu: FC<Props> = ({
         onClick={() =>
           handleOpenModal(
             eVariantModal.newDevs,
-            `Загрузить список устройств для ${location?.g_name}`
+            `Импортировать устройства для ${location?.g_name}`
           )
         }
       >
         <ListItemIcon>
           <PostAddOutlinedIcon fontSize="small" />
         </ListItemIcon>
-        Загрузить список устройств
+        Импортировать устройства
       </MenuItem>
       <MenuItem
         onClick={() =>

@@ -103,6 +103,27 @@ var DevVerif = (function () {
             });
         });
     };
+    DevVerif.prototype.selectExpireDevVerif = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var d, data, db_response, result, dv;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        d = new Date();
+                        d.setMonth(d.getMonth() + 1);
+                        data = (0, DateStr_1.dateTimeToSQL)(d);
+                        return [4, this.db.query("SELECT * FROM dev_povs WHERE end_povs <= '".concat(data, "'"))];
+                    case 1:
+                        db_response = _a.sent();
+                        result = new Array();
+                        for (dv in db_response.rows) {
+                            result.push(db_response.rows[dv]);
+                        }
+                        return [2, result];
+                }
+            });
+        });
+    };
     return DevVerif;
 }());
 exports.DevVerif = DevVerif;

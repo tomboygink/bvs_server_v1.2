@@ -55,7 +55,7 @@ export const EditLocation: FC<Props> = ({ handleClose }) => {
       g_name: values.g_name,
       latitude: values.latitude,
       longitude: values.longitude,
-      org_id: values.org_id,
+      org_id: values.org_id ?? selectedLocation?.org_id,
       g_info: values.g_info,
       deleted: values.deleted === "on" ? true : false,
     };
@@ -65,12 +65,13 @@ export const EditLocation: FC<Props> = ({ handleClose }) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries((formData as any).entries());
-    const { g_name, org_id, latitude, longitude } = formJson;
+    const { g_name, latitude, longitude } = formJson;
 
-    if (!g_name || !org_id || !latitude || !longitude) {
+    if (!g_name || !latitude || !longitude) {
       setMessage(INVALID_FORM);
     } else {
       setMessage("");
+
       changeLocation(formJson);
     }
   };

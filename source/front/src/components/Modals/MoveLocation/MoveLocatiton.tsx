@@ -16,7 +16,7 @@ export const MoveLocatiton: FC<Props> = ({ handleClose }) => {
   const dispatch = useAppDispatch();
   const { selectedLocation } = useAppSelector((state) => state.locationSlice);
   const { data: orgs } = useGetAllOrgsQuery({});
-  const [editLocation, { isError, isLoading, isSuccess }] =
+  const [editLocation, { data: response, isError, isLoading, isSuccess }] =
     useEditLocationMutation();
   const { resetForm, handleCloseSelect } = useFormValidation();
   const [orgsOptions, setOrgsOptions] = useState<(IOrg | undefined)[]>([
@@ -59,24 +59,32 @@ export const MoveLocatiton: FC<Props> = ({ handleClose }) => {
         : generateArgs(parent || "");
 
     editLocation(args).then((res) => {
-      if ("data" in res && res.data?.data?.error) {
-        setMessage("Произошла ошибка при сохранении данных");
+      if ("data" in res && !res.data?.data?.error) {
+        dispatch(
+          setSelectedLocation({ ...(selectedLocation as ILocation), ...args })
+        );
       }
     });
+  };
+
+  const isSuccessSave = () => {
+    return Boolean(isSuccess && response && !response.error);
   };
   useEffect(() => {
     if (orgs && "data" in orgs) setOrgsOptions(orgs.data);
   }, []);
-  //useEffect(() => {}, [values.org_id]);
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && !response.error) {
       setTimeout(() => {
         handleClose();
         resetForm();
       }, 2000);
     }
   }, [isSuccess]);
+  useEffect(() => {
+    if (response && response.error) setMessage(response.error);
+  }, [response]);
   return (
     <form onSubmit={moveLocation} noValidate>
       <MoveLocationView
@@ -87,7 +95,7 @@ export const MoveLocatiton: FC<Props> = ({ handleClose }) => {
         handleCloseSelect={handleCloseSelect}
         handleSelectLocation={handleSelectLocation}
         isErrorSave={isError}
-        isSuccessSave={isSuccess}
+        isSuccessSave={isSuccessSave()}
         isLoading={isLoading}
         isRootLocation={isRootLocation}
       />

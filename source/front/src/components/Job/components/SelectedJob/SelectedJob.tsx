@@ -55,7 +55,7 @@ export const SelectedJob = () => {
         />
       )}
       <BigButton handleClick={handleOpenModalNewJob}>
-        Добавить скважину
+        Добавить должность
       </BigButton>
       <Modal open={open} handleClose={closeModal} />
     </>

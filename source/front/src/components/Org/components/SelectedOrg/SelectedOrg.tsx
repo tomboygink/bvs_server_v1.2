@@ -40,6 +40,7 @@ export const SelectedOrg = () => {
     openModal();
   };
   // console.log("selectedWell in Select", selectedWell);
+
   return (
     <>
       {selectedOrg && isSelectedOrg && (

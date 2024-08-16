@@ -22,9 +22,11 @@ import { NewWell } from "@components/Modals/NewWell";
 import { EditWell } from "@components/Modals/EditWell";
 import { EditOrg } from "@components/Modals/EditOrg";
 import { EditJob } from "@components/Modals/EditJob";
+import { EditProfile } from "@components/Modals/EditProfile";
 import { CloseButton } from "../CloseButton";
 import { Typography } from "../Typography";
 import styles from "./styles.module.scss";
+
 interface Props {
   open: boolean;
   handleClose: () => void;
@@ -71,6 +73,8 @@ export const Modal: FC<Props> = ({ open, handleClose }) => {
       return <EditOrg handleClose={handleClose} />;
     } else if (variant === eVariantModal.editJob) {
       return <EditJob handleClose={handleClose} />;
+    } else if (variant === eVariantModal.editProfile) {
+      return <EditProfile handleClose={handleClose} />;
     }
   };
 

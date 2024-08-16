@@ -40,7 +40,9 @@ export const NewDev: FC<Props> = ({ handleClose }) => {
     dispatch(setNewSensors(filteredSensors));
   };
   const setSensors = (depth: number) => {
-    dispatch(setNewSensors([...newSensors, { depth, value: 1 }]));
+    const sensors = [...newSensors, { depth, value: 1 }];
+    const sortedSensors = sensors.sort((a, b) => a.depth - b.depth);
+    dispatch(setNewSensors(sortedSensors));
   };
   const generateArgs = () => {
     if (
@@ -75,7 +77,6 @@ export const NewDev: FC<Props> = ({ handleClose }) => {
 
   const createNewDev = () => {
     const args = generateArgs();
-
     if (args) {
       createDev(args);
     }

@@ -1,8 +1,11 @@
 import { FC, ChangeEvent } from "react";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 
 interface Props {
   value?: boolean;
@@ -22,29 +25,13 @@ export const RadioButton: FC<Props> = ({
 
   return (
     <FormControl>
+      <FormLabel>Статус пользователя</FormLabel>
       <RadioGroup
         value={value}
         defaultValue={defaultValue}
         onChange={onChange}
         name={name}
       >
-        <FormControlLabel
-          sx={{
-            "& .MuiTypography-root": {
-              fontSize: 12,
-            },
-          }}
-          value={true}
-          control={
-            <Radio
-              size="small"
-              sx={{
-                color: "#266bf1",
-              }}
-            />
-          }
-          label="Действующая"
-        />
         <FormControlLabel
           sx={{
             "& .MuiTypography-root": {
@@ -60,7 +47,24 @@ export const RadioButton: FC<Props> = ({
               }}
             />
           }
-          label="Закрытая"
+          label="Действующий"
+        />
+        <FormControlLabel
+          sx={{
+            "& .MuiTypography-root": {
+              fontSize: 12,
+            },
+          }}
+          value={true}
+          control={
+            <Radio
+              size="small"
+              sx={{
+                color: "#266bf1",
+              }}
+            />
+          }
+          label="Закрытый"
         />
       </RadioGroup>
     </FormControl>

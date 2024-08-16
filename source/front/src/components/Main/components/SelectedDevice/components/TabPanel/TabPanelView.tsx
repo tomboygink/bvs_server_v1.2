@@ -63,7 +63,7 @@ export const TabPanelView = (props: TabPanelViewProps) => {
         />
         <Tab
           sx={{ fontSize: "10px" }}
-          label="Выбранная сессия"
+          label="Таблица температур"
           disabled={!isSelectedSession}
         />
       </Tabs>

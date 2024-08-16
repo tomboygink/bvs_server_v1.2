@@ -4,6 +4,8 @@ export enum ECOMMAND {
   GETUSERBYLOGIN = "get_UserByAuth",
   //Авторизация по коду сессии
   GETUSERBYSESSCODE = "get_UserBySessionCode",
+  //Удаление сессии пользователя
+  DELETESESSCODE = "deleteCookie",
 
   //-------------------------------Организация
   // Получение организации авторизованного пользователя
@@ -26,6 +28,14 @@ export enum ECOMMAND {
   SETUSER = "set_User",
   // Изменение данных пользователя
   CHANGEUSER = "set_UpdateUserData",
+  //Отрпавка письма на email с кодом подтверждения email
+  SENDCODEEMAIL = "set_ActMail",
+  //Обновление email при переходе по ссылке с кодом подтверждения
+  CONFIRMEMAIL = "set_MailCode",
+  //Отправка письма на email с кодом для восстановления пароля
+  SENDRESETPASSCODE = "set_ForgPass",
+  //Обновление пароля при переходе по ссылке с кодом для сброса пароля
+  RESETPASSWORD = "set_Pass",
 
   //--------------------------------Пользователи
   GETUSERS = "get_AllUsers",
@@ -55,6 +65,8 @@ export enum ECOMMAND {
   GETALLDEVS = "get_AllDevs",
   //Получение поверочного интервала устройства
   GETVERIFRANGE = "get_DevVerif",
+  ////Получение поверочных интервалов, у которых истекает срок поверки
+  GETEXPIREVERIFRANGE = "get_ExpireDevVerif",
   //Установка поверочного интервала устройства
   SETVERIFRANGE = "set_DevVerif",
 
@@ -83,7 +95,7 @@ export enum ECOMMAND {
   //Получение всех скважин
   GETALLWELLS = "get_AllThermalWells",
   //Получение скважины по id группы
-  GETWELLSBYLOCATIONID = "get_ThermalWells",
+  GETWELLSBYLOCATIONID = "get_ThermalWell",
   //Добавление скважины
   SETWELL = "set_ThermalWell",
   //Редактирование скважины

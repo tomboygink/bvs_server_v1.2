@@ -5,14 +5,21 @@ import FolderIcon from "@mui/icons-material/Folder";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 import { ILocation } from "@src/types/ILocation";
 import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
+import { ItemLabel } from "./ItemLabel";
 import { IDev } from "@src/types/IDev";
+import { IVerifRange } from "@src/types/IVerifRange";
 
 interface Props {
   location: ILocation;
   isLoading: boolean;
+  verifRanges: IVerifRange[];
 }
 
-export const LocationItem: FC<Props> = ({ location, isLoading }) => {
+export const LocationItem: FC<Props> = ({
+  location,
+  isLoading,
+  verifRanges,
+}) => {
   const getIcon = () => {
     return location?.devs?.length !== 0 ? FolderIcon : FolderZipIcon;
   };
@@ -47,6 +54,10 @@ export const LocationItem: FC<Props> = ({ location, isLoading }) => {
     else return "#EF4335";
   };
 
+  const getMarker = (dev: IDev) => {
+    return verifRanges?.some((item) => item.dev_id === dev.id);
+  };
+
   return (
     <TreeItem
       itemId={location.id || ""}
@@ -77,13 +88,48 @@ export const LocationItem: FC<Props> = ({ location, isLoading }) => {
       {location.subLocations?.length !== 0 && (
         <>
           {location.subLocations?.map((item) => (
-            <LocationItem key={item.id} location={item} isLoading={isLoading} />
+            <LocationItem
+              key={item.id}
+              location={item}
+              isLoading={isLoading}
+              verifRanges={verifRanges}
+            />
           ))}
         </>
       )}
 
       <>
         {location?.devs?.map((dev) => {
+          return (
+            <TreeItem
+              key={dev.id}
+              itemId={`dev_${dev.id}`}
+              //label={dev.number}
+              label={
+                <ItemLabel
+                  name={dev.number}
+                  expireVerifRange={getMarker(dev)}
+                />
+              }
+              slots={{
+                endIcon: CrisisAlertIcon,
+              }}
+              sx={{
+                color: `${
+                  dev.deleted ? "#808080" : dev.time ? "#222" : "#EA4335"
+                }`,
+                // `${dev.time ? "#222" : "#EA4335"}`,
+                fontSize: "14px",
+                "& .MuiSvgIcon-root": {
+                  color: getColorDevIcon(dev),
+                },
+              }}
+            />
+          );
+        })}
+
+        {/* Отрисовка устройств, полученных при клике на локацию */}
+        {/* {devs?.map((dev) => {
           return (
             <TreeItem
               key={dev.id}
@@ -104,7 +150,7 @@ export const LocationItem: FC<Props> = ({ location, isLoading }) => {
               }}
             />
           );
-        })}
+        })} */}
       </>
     </TreeItem>
   );
