@@ -21,6 +21,7 @@ interface Props {
   isOpenMenu: boolean;
   isScheme: boolean;
   isLoading: boolean;
+  isAdmin: boolean;
 }
 
 export const SelectedLocationView: FC<Props> = (props) => {
@@ -32,6 +33,7 @@ export const SelectedLocationView: FC<Props> = (props) => {
     closeMenu,
     handleOpenModal,
     isScheme,
+    isAdmin,
     ...other
     //handleChange,
   } = props;
@@ -42,21 +44,25 @@ export const SelectedLocationView: FC<Props> = (props) => {
     <div className={cx("container")}>
       <div className={cx("fields-container")}>
         <div className={cx("head")}>
-          <IconButton
-            onClick={handleClickMenuButton}
-            aria-controls={isOpenMenu ? "editLocationMenu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={isOpenMenu ? "true" : undefined}
-          >
-            <MoreVertIcon />
-          </IconButton>
-          <EditLocationMenu
-            anchorEl={anchorEl}
-            isOpen={isOpenMenu}
-            onClose={closeMenu}
-            handleOpenModal={handleOpenModal}
-            location={location}
-          />
+          {isAdmin && (
+            <>
+              <IconButton
+                onClick={handleClickMenuButton}
+                aria-controls={isOpenMenu ? "editLocationMenu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={isOpenMenu ? "true" : undefined}
+              >
+                <MoreVertIcon />
+              </IconButton>
+              <EditLocationMenu
+                anchorEl={anchorEl}
+                isOpen={isOpenMenu}
+                onClose={closeMenu}
+                handleOpenModal={handleOpenModal}
+                location={location}
+              />
+            </>
+          )}
         </div>
         <fieldset className={cx("fields")}>
           <InputText

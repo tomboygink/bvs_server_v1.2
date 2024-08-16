@@ -11,6 +11,7 @@ import { useLocalStorage } from "./useLocalStorage";
 import { IUser } from "@src/types/IUser";
 import { IResponse } from "@src/types/IResponse";
 import { ScreenRoute } from "@src/types/Screen.routes.enum";
+import { useDeleteSessionMutation } from "@src/redux/services/authApi";
 
 type Response = {
   data: IResponse;
@@ -29,6 +30,7 @@ const AuthContext = createContext<Context | null>(null);
 //const AuthContext = createContext();
 
 export const AuthProvider: FC<Props> = ({ children }) => {
+  const [deleteSession] = useDeleteSessionMutation();
   const [user, setUser] = useLocalStorage("user", null);
   const [code, setCode] = useLocalStorage("code", null);
   const [error, setError] = useState("");
@@ -46,9 +48,11 @@ export const AuthProvider: FC<Props> = ({ children }) => {
   };
 
   const logout = () => {
+    deleteSession({});
     setUser(null);
     setCode(null);
     localStorage.clear();
+
     navigate("/login", { replace: true });
   };
 

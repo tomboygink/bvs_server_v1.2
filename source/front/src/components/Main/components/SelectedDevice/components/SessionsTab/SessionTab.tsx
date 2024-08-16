@@ -40,7 +40,7 @@ export const SessionTab = () => {
     if (auth && "user" in auth && auth?.user?.roles_ids.roles[1] === 2)
       setIsAdmin(true);
   }, [auth?.user]);
-  console.log("selelectedDev", selectedDev);
+
   return (
     <SessonsTabView
       errors={errors}

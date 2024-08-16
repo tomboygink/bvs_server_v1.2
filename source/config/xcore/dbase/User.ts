@@ -93,7 +93,7 @@ export class User {
   //Удаление кода сессии пользователя
   async deleteSessionCode() {
     await this.db.query(
-      "DELETE FROM sessions WHERE sess_code = '" + this.args.code + "'"
+      "DELETE FROM sessions WHERE sess_code = '" + this.sess_code + "'"
     );
   }
 

@@ -4,6 +4,8 @@ export enum ECOMMAND {
   GETUSERBYLOGIN = "get_UserByAuth",
   //Авторизация по коду сессии
   GETUSERBYSESSCODE = "get_UserBySessionCode",
+  //Удаление сессии пользователя
+  DELETESESSCODE = "deleteCookie",
 
   //-------------------------------Организация
   // Получение организации авторизованного пользователя

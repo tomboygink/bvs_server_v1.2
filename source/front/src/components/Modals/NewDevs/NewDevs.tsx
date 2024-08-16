@@ -29,6 +29,7 @@ export const NewDevs: FC<Props> = ({ handleClose }) => {
     let lat: string;
     let lng: string;
     let sess: string | number;
+
     const filterRows = newDevsTable?.rows.filter((row) => {
       const isValid = () => {
         return (
@@ -44,7 +45,7 @@ export const NewDevs: FC<Props> = ({ handleClose }) => {
         );
       };
       if (numbersDevs.includes(String(row[0]))) {
-        setDuplicatesDevs([...duplicatesDevs, String(row[0])]);
+        setDuplicatesDevs((prev) => [...prev, String(row[0])]);
       } else if (!isValid()) {
         setInvalidDevs([...inValidDevs, String(row[0])]);
       } else return row.length;
@@ -120,7 +121,7 @@ export const NewDevs: FC<Props> = ({ handleClose }) => {
       if (args.length) createNewDevs(args);
     }
   };
-
+  console.log("duplicate: ", duplicatesDevs);
   const createNewDevs = (args: any) => {
     createDevs(args).then((res) => {
       if ("data" in res && "error" in res?.data) {

@@ -38,7 +38,7 @@ export const RadioButton: FC<Props> = ({
               fontSize: 12,
             },
           }}
-          value={true}
+          value={false}
           control={
             <Radio
               size="small"
@@ -55,7 +55,7 @@ export const RadioButton: FC<Props> = ({
               fontSize: 12,
             },
           }}
-          value={false}
+          value={true}
           control={
             <Radio
               size="small"

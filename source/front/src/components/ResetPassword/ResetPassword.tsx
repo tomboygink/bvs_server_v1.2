@@ -6,7 +6,9 @@ import { useResetPasswordMutation } from "@src/redux/services/userApi";
 import {
   PASSWORDS_NOT_MATCH,
   MATCHING_LOGIN_AND_PASS_ERROR,
+  INVALID_PASSWORD_ERROR,
 } from "@src/utils/messages";
+import { passwordRegex } from "@src/utils/regexp";
 import { ScreenRoute } from "@src/types/Screen.routes.enum";
 
 export const ResetPassword = () => {
@@ -24,8 +26,9 @@ export const ResetPassword = () => {
   };
   const validationForm = (event: FormEvent) => {
     event.preventDefault();
-
-    if (values.new_password !== values.repeat) {
+    if (!passwordRegex.test(String(values.new_password))) {
+      setMessage(INVALID_PASSWORD_ERROR);
+    } else if (values.new_password !== values.repeat) {
       setMessage(PASSWORDS_NOT_MATCH);
     } else if (values.login === values.new_password) {
       setMessage(MATCHING_LOGIN_AND_PASS_ERROR);

@@ -4,14 +4,13 @@ import { ILocation } from "@src/types/ILocation";
 import { IOrg } from "@src/types/IOrg";
 
 type TArgs = {
-  //[key: string]: string | number | boolean;
   [key: string]: string | number | boolean;
 };
 export const createBodyQuery = (command: ECOMMAND, args: TArgs | TArgs[]) => {
-  const code = JSON.parse(localStorage.getItem("code") || "");
+  const code = localStorage.getItem("code");
   const query: IQuery = {
     cmd: command,
-    sess_code: code,
+    sess_code: code ?? "",
     args,
   };
 

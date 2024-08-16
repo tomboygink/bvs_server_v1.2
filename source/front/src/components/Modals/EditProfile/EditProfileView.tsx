@@ -5,6 +5,7 @@ import { Button } from "@components/_shared/Button";
 import { IUser } from "@src/types/IUser";
 import { FormErrors } from "@hooks/useFormWithValidation";
 import { SAVE_ERROR, SAVE_SUCCESS } from "@src/utils/messages";
+import { Switch } from "@components/_shared/Switch";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 
@@ -71,7 +72,7 @@ export const EditProfileView: FC<Props> = (props) => {
           error={Boolean(errors.email)}
           helperText={errors.email}
         />
-        {/* <Switch
+        <Switch
           name="act_mail"
           label={`${
             user?.act_mail
@@ -80,7 +81,7 @@ export const EditProfileView: FC<Props> = (props) => {
           }`}
           defaultChecked={user?.act_mail}
           disabled
-        /> */}
+        />
         <InputText
           name="info"
           label="Дополнительная информация"

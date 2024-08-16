@@ -20,7 +20,7 @@ export const ForgotPassword = () => {
   const sendCode = (event: FormEvent) => {
     event.preventDefault();
     const args = generateArgs();
-    sendResetPasswordCode(args);
+    if (args) sendResetPasswordCode(args);
   };
 
   const isSuccessSave = () => {

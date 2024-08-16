@@ -5,7 +5,7 @@
     },
     "front_config": {
         "host": "localhost",
-        "port": "3001"
+        "port": "3041"
     },
     "server_receiver_config": {
         "host": "127.0.0.1",

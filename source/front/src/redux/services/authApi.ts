@@ -18,7 +18,15 @@ export const authApi = createApi({
       }),
       providesTags: () => ["Auth"],
     }),
+    deleteSession: build.mutation({
+      query: (args) => ({
+        url: "/api",
+        method: "POST",
+        body: createBodyQuery(ECOMMAND.DELETESESSCODE, args),
+      }),
+      invalidatesTags: ["Auth"],
+    }),
   }),
 });
 
-export const { useAuthBySessionCodeQuery } = authApi;
+export const { useAuthBySessionCodeQuery, useDeleteSessionMutation } = authApi;
