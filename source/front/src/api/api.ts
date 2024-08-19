@@ -1,3 +1,4 @@
+import CONFIG from "./../../../config/config.json";
 class Api {
   constructor(private baseUrl: string) {}
 
@@ -25,6 +26,6 @@ class Api {
   }
 }
 
-export const api = new Api(`${import.meta.env.VITE_BASE_API_URL}`);
-
-export const api1 = new Api(`http://localhost:3040}`);
+export const api = new Api(
+  `http://${CONFIG.server_config.host}:${CONFIG.server_config.port}`
+);
