@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, useState } from "react";
+import { FC, ChangeEvent } from "react";
 import {
   TextareaAutosize,
   Alert,
@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import { InputText } from "@components/_shared/Inputs/InputText";
 import { Button } from "@components/_shared/Button";
-import { RadioButton } from "@components/_shared/RadioButton";
 import { IUser } from "@src/types/IUser";
 import { FormErrors, FormValues } from "@hooks/useFormWithValidation";
 import { SAVE_ERROR, SAVE_SUCCESS } from "@src/utils/messages";
