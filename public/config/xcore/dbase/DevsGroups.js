@@ -61,12 +61,20 @@ var DevsGroups = (function () {
     }
     DevsGroups.prototype.selectDevsGroups = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var db_response, result, dg;
+            var db_response, db_response, result, dg;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM devs_groups WHERE id = " + this.args.id)];
+                    case 0:
+                        if (!(this.args.id !== undefined)) return [3, 2];
+                        return [4, this.db.query("SELECT * FROM devs_groups WHERE id = " + this.args.id)];
                     case 1:
                         db_response = _a.sent();
+                        return [3, 4];
+                    case 2: return [4, this.db.query("SELECT * FROM devs_groups WHERE parent_id = " + this.args.parent_id)];
+                    case 3:
+                        db_response = _a.sent();
+                        _a.label = 4;
+                    case 4:
                         result = new Array();
                         for (dg in db_response.rows) {
                             result.push(db_response.rows[dg]);
