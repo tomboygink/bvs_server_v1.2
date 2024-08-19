@@ -98,9 +98,9 @@ function Router(body) {
                         case "set_ChangeThermalWell": return [3, 74];
                         case "get_AllThermalWells": return [3, 76];
                         case "get_ThermalWell": return [3, 78];
-                        case "set_ActMail": return [3, 80];
-                        case "set_ForgPass": return [3, 82];
-                        case "set_Pass": return [3, 84];
+                        case "set_ForgPass": return [3, 80];
+                        case "set_Pass": return [3, 82];
+                        case "set_ChangePass": return [3, 84];
                         case "deleteCookie": return [3, 86];
                     }
                     return [3, 87];
@@ -777,14 +777,8 @@ function Router(body) {
                     return [3, 88];
                 case 80:
                     u = new User_1.User(body.args, body.sess_code);
-                    return [4, u.sendConfirmMail()];
-                case 81:
-                    _b.sent();
-                    return [3, 88];
-                case 82:
-                    u = new User_1.User(body.args, body.sess_code);
                     return [4, u.sendForgPassMail()];
-                case 83:
+                case 81:
                     data = _b.sent();
                     if (data === false) {
                         res.cmd = body.cmd;
@@ -800,10 +794,10 @@ function Router(body) {
                         res.user_sess_code = body.sess_code;
                     }
                     return [3, 88];
-                case 84:
+                case 82:
                     u = new User_1.User(body.args, body.sess_code);
                     return [4, u.updatePassRePass()];
-                case 85:
+                case 83:
                     data = _b.sent();
                     if (data === false) {
                         res.cmd = body.cmd;
@@ -817,6 +811,12 @@ function Router(body) {
                         res.data = null;
                         res.user_sess_code = body.sess_code;
                     }
+                    return [3, 88];
+                case 84:
+                    u = new User_1.User(body.args, body.sess_code);
+                    return [4, u.changePass()];
+                case 85:
+                    data = _b.sent();
                     return [3, 88];
                 case 86:
                     {
