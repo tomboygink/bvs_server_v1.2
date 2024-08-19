@@ -347,103 +347,103 @@ export class User {
 
 
 
-  async sendConfirmMail() {
-    //запрос на данные из бд на логин/почту/код подтверждения почты и активацию через код сессии 
-    var db_response = await this.db.query(
-      "SELECT login, email, mail_code, act_mail FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
-      this.sess_code +
-      "'"
-    );
-    console.log(db_response.rows[0])
+  // async sendConfirmMail() {
+  //   //запрос на данные из бд на логин/почту/код подтверждения почты и активацию через код сессии 
+  //   var db_response = await this.db.query(
+  //     "SELECT login, email, mail_code, act_mail FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
+  //     this.sess_code +
+  //     "'"
+  //   );
+  //   console.log(db_response.rows[0])
 
-    //Генерируем код почты
-    let code_generate = crypto
-      .createHmac("sha256", CONFIG.crypto_code)
-      .update(this.args.login + "_" + this.args.email)
-      .digest("hex");
+  //   //Генерируем код почты
+  //   let code_generate = crypto
+  //     .createHmac("sha256", CONFIG.crypto_code)
+  //     .update(this.args.login + "_" + this.args.email)
+  //     .digest("hex");
 
-    //проверка на соответстие логина
-    //если соответствую идем дальше
-    if (db_response.rows[0].login === this.args.login) {
-      console.log("Логин совпадает");
-      //Проверка email
-      if (db_response.rows[0].email === this.args.email) {
-        console.log("Мыло совпадает");
-        //Проверка mail_code и code_generated
-        if (db_response.rows[0].mail_code === code_generate) {
-          console.log("Данные mail_code совпадают");
-          //Проверка на активацию почты 
-          if (db_response.rows[0].act_mail === true) {
-            //Активация true
-            console.log("Email подтвержден");
-          }
-          else {
-            //Отправляем письмо
-            await this.transporter.sendMail({
-              from: "noreplay@bvs45.ru",
-              //Получение email от пользователя
-              to: this.args.email,
-              subject: "Activate mail",
-              //Отправка ссылки с кодом для подтверждения
-              html:
-                'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
-                CONFIG.front_config.host +
-                ":" +
-                CONFIG.front_config.port +
-                "/confirm_mail?code= " +
-                code_generate +
-                '">Click this link</a></h1>',
-            });
-          }
-        }
-        //иначе обновляем БД mail_code = code_generate act_mail = false
-        else {
-          await this.db.query("UPDATE users SET mail_code = \'" + code_generate + "\', act_mail = false WHERE login = \'" + this.args.login + "\'");
-          //Отправляем письмо
-          await this.transporter.sendMail({
-            from: "noreplay@bvs45.ru",
-            //Получение email от пользователя
-            to: this.args.email,
-            subject: "Activate mail",
-            //Отправка ссылки с кодом для подтверждения
-            html:
-              'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
-              CONFIG.front_config.host +
-              ":" +
-              CONFIG.front_config.port +
-              "/confirm_mail?code= " +
-              code_generate +
-              '">Click this link</a></h1>',
-          });
-        }
-      }
-      else {
-        await this.db.query("UPDATE users SET email = \'" + this.args.email + "\' , mail_code = \'" + code_generate + "\', act_mail = false WHERE login = \'" + this.args.login + "\'")
-        //Отправляем письмо
-        await this.transporter.sendMail({
-          from: "noreplay@bvs45.ru",
-          //Получение email от пользователя
-          to: this.args.email,
-          subject: "Activate mail",
-          //Отправка ссылки с кодом для подтверждения
-          html:
-            'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
-            CONFIG.front_config.host +
-            ":" +
-            CONFIG.front_config.port +
-            "/confirm_mail?code= " +
-            code_generate +
-            '">Click this link</a></h1>',
-        });
-      }
+  //   //проверка на соответстие логина
+  //   //если соответствую идем дальше
+  //   if (db_response.rows[0].login === this.args.login) {
+  //     console.log("Логин совпадает");
+  //     //Проверка email
+  //     if (db_response.rows[0].email === this.args.email) {
+  //       console.log("Мыло совпадает");
+  //       //Проверка mail_code и code_generated
+  //       if (db_response.rows[0].mail_code === code_generate) {
+  //         console.log("Данные mail_code совпадают");
+  //         //Проверка на активацию почты 
+  //         if (db_response.rows[0].act_mail === true) {
+  //           //Активация true
+  //           console.log("Email подтвержден");
+  //         }
+  //         else {
+  //           //Отправляем письмо
+  //           await this.transporter.sendMail({
+  //             from: "noreplay@bvs45.ru",
+  //             //Получение email от пользователя
+  //             to: this.args.email,
+  //             subject: "Activate mail",
+  //             //Отправка ссылки с кодом для подтверждения
+  //             html:
+  //               'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
+  //               CONFIG.front_config.host +
+  //               ":" +
+  //               CONFIG.front_config.port +
+  //               "/confirm_mail?code= " +
+  //               code_generate +
+  //               '">Click this link</a></h1>',
+  //           });
+  //         }
+  //       }
+  //       //иначе обновляем БД mail_code = code_generate act_mail = false
+  //       else {
+  //         await this.db.query("UPDATE users SET mail_code = \'" + code_generate + "\', act_mail = false WHERE login = \'" + this.args.login + "\'");
+  //         //Отправляем письмо
+  //         await this.transporter.sendMail({
+  //           from: "noreplay@bvs45.ru",
+  //           //Получение email от пользователя
+  //           to: this.args.email,
+  //           subject: "Activate mail",
+  //           //Отправка ссылки с кодом для подтверждения
+  //           html:
+  //             'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
+  //             CONFIG.front_config.host +
+  //             ":" +
+  //             CONFIG.front_config.port +
+  //             "/confirm_mail?code= " +
+  //             code_generate +
+  //             '">Click this link</a></h1>',
+  //         });
+  //       }
+  //     }
+  //     else {
+  //       await this.db.query("UPDATE users SET email = \'" + this.args.email + "\' , mail_code = \'" + code_generate + "\', act_mail = false WHERE login = \'" + this.args.login + "\'")
+  //       //Отправляем письмо
+  //       await this.transporter.sendMail({
+  //         from: "noreplay@bvs45.ru",
+  //         //Получение email от пользователя
+  //         to: this.args.email,
+  //         subject: "Activate mail",
+  //         //Отправка ссылки с кодом для подтверждения
+  //         html:
+  //           'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
+  //           CONFIG.front_config.host +
+  //           ":" +
+  //           CONFIG.front_config.port +
+  //           "/confirm_mail?code= " +
+  //           code_generate +
+  //           '">Click this link</a></h1>',
+  //       });
+  //     }
 
 
-    }
-    //иначе
-    else {
-      console.log("Логин и мыло не верны ");
-    }
-  }
+  //   }
+  //   //иначе
+  //   else {
+  //     console.log("Логин и мыло не верны ");
+  //   }
+  // }
 
 
   // //Отправка письма для подтверждения email
@@ -566,6 +566,9 @@ export class User {
       return false;
     }
   }
+
+  //Смена пароля из под авторизованного пользователя себе 
+  changePass(){}
 
   transporter: nodemailer.Transporter = nodemailer.createTransport({
     host: "smtp.mail.ru",
