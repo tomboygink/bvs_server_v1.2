@@ -26,9 +26,17 @@ export class DevsGroups {
 
   // Получение групп
   async selectDevsGroups(): Promise<DevsGroupsEntity[]> {
-    var db_response = await this.db.query(
-      "SELECT * FROM devs_groups WHERE id = " + this.args.id
-    );
+    if (this.args.id !== undefined ) {
+      var db_response = await this.db.query(
+        "SELECT * FROM devs_groups WHERE id = " + this.args.id
+      );
+    }
+    else{
+      var db_response = await this.db.query(
+        "SELECT * FROM devs_groups WHERE parent_id = " + this.args.parent_id
+      );
+    }
+
     var result: DevsGroupsEntity[] = new Array();
     for (var dg in db_response.rows) {
       result.push(db_response.rows[dg]);
