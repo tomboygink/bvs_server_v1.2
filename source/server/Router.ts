@@ -759,12 +759,12 @@ export async function Router(body: any) {
 
     //----------------------------------------- ПОЧТА
     //Отправка сообщения на почту с кодом
-    case "set_ActMail":
-      {
-        var u = new User(body.args, body.sess_code);
-        await u.sendConfirmMail();
-      }
-      break;
+    // case "set_ActMail":
+    //   {
+    //     var u = new User(body.args, body.sess_code);
+    //     await u.sendConfirmMail();
+    //   }
+    //   break;
 
     // //Обновление email пользователя
     // case "set_MailCode": {
@@ -821,6 +821,19 @@ export async function Router(body: any) {
         }
       }
       break;
+
+
+    
+    //-----------------------------------------ПАРОЛЬ
+    //Смена пароля из под авторизованного пользователя себе 
+    case "set_ChangePass":{
+      var u = new User(body.args, body.sess_code);
+      data = await u.changePass();
+
+    }
+    break
+
+
 
     //-----------------------------------------УДАЛЕНИЕ КУКОВ ПОСЛЕ ВЫХОДА
     case "deleteCookie":
