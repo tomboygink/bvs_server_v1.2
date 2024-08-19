@@ -762,26 +762,26 @@ export async function Router(body: any) {
     case "set_ActMail":
       {
         var u = new User(body.args, body.sess_code);
-        await u.sencConfirmMail();
+        await u.sendConfirmMail();
       }
       break;
 
-    //Обновление email пользователя
-    case "set_MailCode": {
-      var u = new User(body.args, body.sess_code);
-      data = await u.updateMail();
-      if (data === null || data === undefined) {
-        res.cmd = body.cmd;
-        res.error = "Ошибка в обновлении данных email";
-        res.data = null;
-        res.user_sess_code = body.sess_code;
-      } else {
-        res.cmd = body.cmd;
-        res.error = null;
-        res.data = null;
-        res.user_sess_code = body.sess_code;
-      }
-    }
+    // //Обновление email пользователя
+    // case "set_MailCode": {
+    //   var u = new User(body.args, body.sess_code);
+    //   data = await u.updateMail();
+    //   if (data === null || data === undefined) {
+    //     res.cmd = body.cmd;
+    //     res.error = "Ошибка в обновлении данных email";
+    //     res.data = null;
+    //     res.user_sess_code = body.sess_code;
+    //   } else {
+    //     res.cmd = body.cmd;
+    //     res.error = null;
+    //     res.data = null;
+    //     res.user_sess_code = body.sess_code;
+    //   }
+    // }
 
     //-----------------------------------------ЗАБЫЛИ ПАРОЛЬ
     //Отправка сообщения на почту на смену пароля

@@ -387,17 +387,49 @@ var User = (function () {
             });
         });
     };
-    User.prototype.sencConfirmMail = function () {
+    User.prototype.sendConfirmMail = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var a;
+            var db_response, code_generate;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        a = "";
-                        a = crypto_1.default
+                    case 0: return [4, this.db.query("SELECT login, email, mail_code, act_mail FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
+                            this.sess_code +
+                            "'")];
+                    case 1:
+                        db_response = _a.sent();
+                        console.log(db_response.rows[0]);
+                        code_generate = crypto_1.default
                             .createHmac("sha256", config_json_1.default.crypto_code)
                             .update(this.args.login + "_" + this.args.email)
                             .digest("hex");
+                        if (!(db_response.rows[0].login === this.args.login)) return [3, 13];
+                        console.log("Логин совпадает");
+                        if (!(db_response.rows[0].email === this.args.email)) return [3, 9];
+                        console.log("Мыло совпадает");
+                        if (!(db_response.rows[0].mail_code === code_generate)) return [3, 5];
+                        console.log("Данные mail_code совпадают");
+                        if (!(db_response.rows[0].act_mail === true)) return [3, 2];
+                        console.log("Email подтвержден");
+                        return [3, 4];
+                    case 2: return [4, this.transporter.sendMail({
+                            from: "noreplay@bvs45.ru",
+                            to: this.args.email,
+                            subject: "Activate mail",
+                            html: 'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
+                                config_json_1.default.front_config.host +
+                                ":" +
+                                config_json_1.default.front_config.port +
+                                "/confirm_mail?code= " +
+                                code_generate +
+                                '">Click this link</a></h1>',
+                        })];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [3, 8];
+                    case 5: return [4, this.db.query("UPDATE users SET mail_code = \'" + code_generate + "\', act_mail = false WHERE login = \'" + this.args.login + "\'")];
+                    case 6:
+                        _a.sent();
                         return [4, this.transporter.sendMail({
                                 from: "noreplay@bvs45.ru",
                                 to: this.args.email,
@@ -407,39 +439,36 @@ var User = (function () {
                                     ":" +
                                     config_json_1.default.front_config.port +
                                     "/confirm_mail?code= " +
-                                    a +
+                                    code_generate +
                                     '">Click this link</a></h1>',
                             })];
-                    case 1:
+                    case 7:
                         _a.sent();
-                        return [2];
-                }
-            });
-        });
-    };
-    User.prototype.updateMail = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var db_response, code;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT login, email FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
-                            this.sess_code +
-                            "'")];
-                    case 1:
-                        db_response = _a.sent();
-                        code = crypto_1.default
-                            .createHmac("sha256", config_json_1.default.crypto_code)
-                            .update(db_response.rows[0].login + "_" + db_response.rows[0].email)
-                            .digest("hex");
-                        return [4, this.db.query("UPDATE users SET mail_code = '" +
-                                code +
-                                "', act_mail = true WHERE " +
-                                "login = (SELECT login from USERS inner join sessions on sessions.uid = users.id WHERE sess_code = '" +
-                                this.sess_code +
-                                "') RETURNING id")];
-                    case 2:
-                        db_response = _a.sent();
-                        return [2, db_response.rows];
+                        _a.label = 8;
+                    case 8: return [3, 12];
+                    case 9: return [4, this.db.query("UPDATE users SET email = \'" + this.args.email + "\' , mail_code = \'" + code_generate + "\', act_mail = false WHERE login = \'" + this.args.login + "\'")];
+                    case 10:
+                        _a.sent();
+                        return [4, this.transporter.sendMail({
+                                from: "noreplay@bvs45.ru",
+                                to: this.args.email,
+                                subject: "Activate mail",
+                                html: 'This message was sent from bvs_server to activate mail. <h1><a href="http://' +
+                                    config_json_1.default.front_config.host +
+                                    ":" +
+                                    config_json_1.default.front_config.port +
+                                    "/confirm_mail?code= " +
+                                    code_generate +
+                                    '">Click this link</a></h1>',
+                            })];
+                    case 11:
+                        _a.sent();
+                        _a.label = 12;
+                    case 12: return [3, 14];
+                    case 13:
+                        console.log("Логин и мыло не верны ");
+                        _a.label = 14;
+                    case 14: return [2];
                 }
             });
         });
