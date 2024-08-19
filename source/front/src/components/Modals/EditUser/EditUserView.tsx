@@ -13,8 +13,6 @@ import { Button } from "@components/_shared/Button";
 import { IUser } from "@src/types/IUser";
 import { FormErrors, FormValues } from "@hooks/useFormWithValidation";
 import { SAVE_ERROR, SAVE_SUCCESS } from "@src/utils/messages";
-
-//import { Switch } from "@components/_shared/Switch";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 

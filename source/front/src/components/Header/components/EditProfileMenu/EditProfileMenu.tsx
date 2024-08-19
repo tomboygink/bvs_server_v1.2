@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Menu, MenuItem, ListItemIcon, Avatar, Divider } from "@mui/material";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 import Logout from "@mui/icons-material/Logout";
 import { eVariantModal } from "@src/types/EvariantModal";
 import { IUser } from "@src/types/IUser";
@@ -42,6 +43,16 @@ export const EditProfileMenu: FC<Props> = ({
           <PermIdentityIcon fontSize="small" sx={{ color: "#007FFF" }} />
         </ListItemIcon>
         Настройка профиля
+      </MenuItem>
+      <MenuItem
+        onClick={() =>
+          handleOpenModal(eVariantModal.editPassword, "Изменить пароль")
+        }
+      >
+        <ListItemIcon>
+          <LockOpenIcon fontSize="small" sx={{ color: "#007FFF" }} />
+        </ListItemIcon>
+        Изменить пароль
       </MenuItem>
       <Divider sx={{ m: "16px" }} />
 

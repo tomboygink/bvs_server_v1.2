@@ -39,7 +39,9 @@ export const JobList = () => {
   return (
     <>
       {isError ? (
-        <Alert severity="error">Произошла ошибка при загрузке данных</Alert>
+        <Alert severity="error">
+          Произошла ошибка при загрузке данных. Обратитесь к администратору
+        </Alert>
       ) : (
         <JobListView
           isLoading={isLoading}

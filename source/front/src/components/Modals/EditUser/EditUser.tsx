@@ -38,7 +38,6 @@ export const EditUser: FC<Props> = ({ handleClose }) => {
   };
 
   const generateArgs = (formData: FormValues) => {
-    //TODO: поле deleted в каких случаях true?
     const args = {
       id: String(selectedUser?.id),
       isAdmin: Boolean(isWrite ? true : false),
@@ -59,6 +58,7 @@ export const EditUser: FC<Props> = ({ handleClose }) => {
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries((formData as any).entries());
     const { family, name, email, login } = formJson;
+
     if (!family || !name || !email || !login) {
       setMessage(INVALID_FORM);
     } else if (values.password) {

@@ -89,8 +89,6 @@ export const LocationTree = () => {
         const selectedDev = devs?.data.find((dev: IDev) => dev.id === devId);
 
         dispatch(setSelectedDev(selectedDev));
-        // TODO: проверить работу без этой строчки
-        //dispatch(setSelectedLocation(null));
       }
     } else {
       dispatch(setVisibleDevice(false));
@@ -134,7 +132,9 @@ export const LocationTree = () => {
   return (
     <>
       {isError ? (
-        <Alert severity="error">Произошла ошибка при загрузке устройств</Alert>
+        <Alert severity="error">
+          Произошла ошибка при загрузке устройств. Обратитесь к администратору.
+        </Alert>
       ) : (
         <LocationTreeView
           // TODO: проверить под пользователем, у которого нет прав редактирования

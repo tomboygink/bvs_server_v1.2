@@ -14,7 +14,7 @@ export const ItemLabel: FC<Props> = ({ expireVerifRange, name }) => {
     <div className={cx("label")}>
       <p>{name}</p>
       {expireVerifRange && (
-        <Tooltip title="Истекает срок поверки">
+        <Tooltip title="Истекает межповерочный интервал">
           <p className={cx("marker")}>!</p>
         </Tooltip>
       )}

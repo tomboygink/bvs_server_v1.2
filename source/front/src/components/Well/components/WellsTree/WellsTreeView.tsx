@@ -37,10 +37,8 @@ export const WellsTreeView: FC<Props> = ({
         <>
           <div className={cx("search")}>
             <InputBase
-              // id="search"
               sx={{ ml: 1, flex: 1, fontSize: "14px", pl: "14px" }}
               placeholder="Поиск по номеру"
-              // inputProps={{ "aria-label": "search google maps" }}
               onChange={handleSearch}
             />
             <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
@@ -49,6 +47,7 @@ export const WellsTreeView: FC<Props> = ({
             </IconButton>
           </div>
           <SimpleTreeView
+            className={cx("list")}
             onSelectedItemsChange={(_, id) => handleClick(id ?? "")}
           >
             {locations.length > 0 ? (

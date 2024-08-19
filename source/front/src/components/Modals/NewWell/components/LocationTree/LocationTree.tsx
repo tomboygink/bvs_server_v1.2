@@ -24,7 +24,9 @@ export const LocationTree: FC<Props> = (props) => {
   return (
     <>
       {isError ? (
-        <Alert severity="error">Произошла ошибка при загрузке устройств</Alert>
+        <Alert severity="error">
+          Произошла ошибка при загрузке скважин. Обратитесь к администратору.
+        </Alert>
       ) : (
         <LocationTreeView
           {...other}

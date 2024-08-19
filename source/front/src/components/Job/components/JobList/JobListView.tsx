@@ -43,6 +43,7 @@ export const JobListView: FC<Props> = (props) => {
             ))}
           </Select>
           <SimpleTreeView
+            className={cx("list")}
             onSelectedItemsChange={(_, id) => handleClick(id ?? "")}
           >
             {jobs?.length > 0 ? (

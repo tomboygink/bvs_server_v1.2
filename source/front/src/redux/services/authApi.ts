@@ -10,6 +10,14 @@ export const authApi = createApi({
   }),
   tagTypes: ["Auth"],
   endpoints: (build) => ({
+    auth: build.query({
+      query: (args) => ({
+        url: "/api",
+        method: "POST",
+        body: createBodyQuery(ECOMMAND.GETUSERBYLOGIN, args),
+      }),
+      providesTags: () => ["Auth"],
+    }),
     authBySessionCode: build.query({
       query: (args) => ({
         url: "/api",
@@ -29,4 +37,8 @@ export const authApi = createApi({
   }),
 });
 
-export const { useAuthBySessionCodeQuery, useDeleteSessionMutation } = authApi;
+export const {
+  useAuthQuery,
+  useAuthBySessionCodeQuery,
+  useDeleteSessionMutation,
+} = authApi;

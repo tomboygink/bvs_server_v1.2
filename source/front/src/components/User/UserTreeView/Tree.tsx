@@ -47,9 +47,9 @@ export const Tree: FC<Props> = ({
           <SimpleTreeView
             onSelectedItemsChange={(_, id) => handleSelected(id)}
             className={cx("tree")}
-            slots={{
-              endIcon: AccountCircleOutlinedIcon,
-            }}
+            // slots={{
+            //   endIcon: AccountCircleOutlinedIcon,
+            // }}
             sx={{
               "& .MuiSvgIcon-root": {
                 color: "#266bf1",
@@ -63,9 +63,16 @@ export const Tree: FC<Props> = ({
                   itemId={user.id}
                   label={`${user.name} ${user.father} ${user.family}`}
                   className={cx("tree-item")}
+                  slots={{
+                    endIcon: AccountCircleOutlinedIcon,
+                  }}
                   sx={{
                     "& .MuiTreeItem-content": {
                       alignItems: "flex-start",
+                      color: `${user.deleted ? "#808080" : "#000"}`,
+                      "& .MuiSvgIcon-root": {
+                        color: `${user.deleted ? "#808080" : "#266bf1"}`,
+                      },
                     },
                   }}
                 />

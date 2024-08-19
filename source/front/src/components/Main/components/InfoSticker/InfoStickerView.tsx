@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
 interface IProps {
   isVisible: boolean;
@@ -19,6 +20,7 @@ export const InfoStickerView: FC<IProps> = ({ isVisible, isAdmin }) => {
             borderRadius: "4px",
           }}
         >
+          <Warning />
           <PeriodWindowInitial />
           <PeriodWindowRed />
           <PeriodWindowOrange />
@@ -28,6 +30,27 @@ export const InfoStickerView: FC<IProps> = ({ isVisible, isAdmin }) => {
         </Stack>
       ) : null}
     </>
+  );
+};
+
+export const Warning = () => {
+  return (
+    <Stack
+      direction="row"
+      spacing={2}
+      alignItems="center"
+      sx={{
+        background: "#FFF",
+
+        borderRadius: "4px",
+      }}
+    >
+      <PriorityHighIcon fontSize="small" sx={{ color: "#EA4335" }} />
+      <Typography sx={{ color: "#000", fontSize: "12px" }}>
+        {" "}
+        Истекает межповерочный интервал
+      </Typography>
+    </Stack>
   );
 };
 export const PeriodWindowGreen = () => {

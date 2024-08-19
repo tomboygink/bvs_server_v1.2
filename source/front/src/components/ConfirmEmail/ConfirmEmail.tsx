@@ -8,10 +8,12 @@ import { setUser } from "@src/redux/reducers/UserSlice";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { IUser } from "@src/types/IUser";
 import { useLocalStorage } from "@hooks/useLocalStorage";
+import { useAuth } from "@hooks/useAuth";
 
 export const ConfirmEmail = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const auth = useAuth();
   const { user } = useAppSelector((state) => state.userSlice);
   const [useLS, setUserLS] = useLocalStorage("user", null);
   const [message, setMessage] = useState("");
@@ -23,6 +25,7 @@ export const ConfirmEmail = () => {
   const generateArgs = () => {
     const args = {
       code: code ?? "",
+      email: auth?.user?.email ?? "",
     };
     return args;
   };
@@ -48,6 +51,8 @@ export const ConfirmEmail = () => {
   useEffect(() => {
     if (response && response.error) setMessage(response.error);
   }, [response]);
+
+  console.log("auth", auth);
   return (
     <ConfirmEmailView
       handleSubmit={handleConfirm}

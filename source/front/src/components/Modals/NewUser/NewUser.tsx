@@ -1,9 +1,9 @@
 import { FC, useEffect, useState, FormEvent } from "react";
-
 import { useFormValidation } from "@hooks/useFormWithValidation";
 import { useCreateUserMutation } from "@src/redux/services/userApi";
 import { useGetAllJobsQuery } from "@src/redux/services/jobsApi";
 import { useGetAllOrgsQuery } from "@src/redux/services/orgApi";
+import { useGetAllUsersQuery } from "@src/redux/services/userApi";
 import { setVariant } from "@src/redux/reducers/ModalSlice";
 import { useAppDispatch } from "@hooks/redux";
 import { useModal } from "@hooks/useModal";
@@ -14,10 +14,12 @@ import {
   MATCHING_LOGIN_AND_PASS_ERROR,
   PASSWORDS_NOT_MATCH,
   INVALID_PASSWORD_ERROR,
+  DOUBL_LOGIN_ERROR,
 } from "@src/utils/messages";
 
 import { IJob } from "@src/types/IJob";
 import { eVariantModal } from "@src/types/EvariantModal";
+import { IUser } from "@src/types/IUser";
 
 interface Props {
   handleClose: () => void;
@@ -42,8 +44,8 @@ export const NewUser: FC<Props> = ({ handleClose }) => {
   const [createUser, { isLoading, isSuccess, isError }] =
     useCreateUserMutation();
   const { data: orgs } = useGetAllOrgsQuery({});
-
   const { data: jobs } = useGetAllJobsQuery({});
+  const { data: users } = useGetAllUsersQuery({});
   const dispatch = useAppDispatch();
 
   const generateArgs = () => {
@@ -85,12 +87,11 @@ export const NewUser: FC<Props> = ({ handleClose }) => {
         setMessage(PASSWORDS_NOT_MATCH);
       } else if (values.password === values.login) {
         setMessage(MATCHING_LOGIN_AND_PASS_ERROR);
-      }
-      // TODO: добавить проверку на совпадение с существующим пользователем, когда будет готов запрос getAllUsers:
-      // else if() {
-      //   setMessage(DOUBL_LOGIN_ERROR)
-      // }
-      else {
+      } else if (
+        users?.data?.some((user: IUser) => user.login === values.login)
+      ) {
+        setMessage(DOUBL_LOGIN_ERROR);
+      } else {
         setMessage("");
         createNewUser();
       }
@@ -117,7 +118,7 @@ export const NewUser: FC<Props> = ({ handleClose }) => {
       }, 2000);
     }
   }, [isSuccess]);
-
+  console.log("users", users?.data);
   return (
     <form onSubmit={validationFormValues} noValidate>
       <NewUserView

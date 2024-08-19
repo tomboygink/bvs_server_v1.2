@@ -42,7 +42,9 @@ export const OrgList = () => {
   return (
     <>
       {isError ? (
-        <Alert severity="error">Произошла ошибка при загрузке данных</Alert>
+        <Alert severity="error">
+          Произошла ошибка при загрузке данных. Обратитесь к администратору.
+        </Alert>
       ) : (
         <OrgListView
           isLoading={isLoading}

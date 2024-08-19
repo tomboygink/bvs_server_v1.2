@@ -36,6 +36,8 @@ export enum ECOMMAND {
   SENDRESETPASSCODE = "set_ForgPass",
   //Обновление пароля при переходе по ссылке с кодом для сброса пароля
   RESETPASSWORD = "set_Pass",
+  //Изменение пароля
+  CHANGEPASSWORD = "set_ChangePassword",
 
   //--------------------------------Пользователи
   GETUSERS = "get_AllUsers",
