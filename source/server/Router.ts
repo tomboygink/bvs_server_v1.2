@@ -829,6 +829,18 @@ export async function Router(body: any) {
     case "set_ChangePass":{
       var u = new User(body.args, body.sess_code);
       data = await u.changePass();
+      if (data = false)
+      {
+        res.cmd = body.cmd;
+          res.code = body.sess_code;
+          res.data = null;
+          res.error = "Произошла ошибка при смене пароля";
+      }else{
+        res.cmd = body.cmd;
+        res.error = null;
+        res.data = null;
+        res.user_sess_code = body.sess_code;
+      }
 
     }
     break

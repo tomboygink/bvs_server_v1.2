@@ -4,11 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build_server": "npx tsc -w -p source/server",
+    "build_server": "npx tsc -w -p source/server", 
     "run_server": "node public/server/server.js",
+    
     "build_server_receiver": "npx tsc -w -p source/server_receiver",
     "run_server_receiver": "node public/server_receiver/main.js",
-    "build_client": "npx webpack --config source/client/webpack.dev.js --watch"
+    
+    "build_client": "npx webpack --config source/client/webpack.dev.js --watch", 
+    
+    "build_installer": "npx tsc -w -p source/installer_db",
+    "run_installer": "node public/installer_db/main.js"
+
+
   },
   "keywords": [],
   "author": "",

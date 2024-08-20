@@ -1,0 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.control_dev_sess_table = void 0;
+exports.control_dev_sess_table = {
+    sql: "\n    DROP TABLE IF EXISTS control_dev_sess;\n    CREATE TABLE control_dev_sess \n    (\n        id BIGSERIAL NOT NULL PRIMARY KEY,\n        dev_sess_id BIGSERIAL NOT NULL,\n        dev_id BIGSERIAL NOT NULL,\n        dev_number VARCHAR(80) NOT NULL DEFAULT('')\n    );\n    COMMENT ON TABLE control_dev_sess IS '\u041A\u043E\u043D\u0442\u0440\u043E\u043B\u044C\u043D\u0430\u044F \u0441\u0435\u0441\u0441\u0438\u044F \u043F\u043E\u0441\u043B\u0435 \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438 \u0442\u0435\u0440\u043C\u043E\u043A\u043E\u0441\u044B';\n    COMMENT ON COLUMN control_dev_sess.id IS '\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u043A\u043E\u043D\u0442\u0440\u043E\u043B\u044C\u043D\u043E\u0439 \u0441\u0435\u0441\u0441\u0438\u0438';\n    COMMENT ON COLUMN control_dev_sess.dev_sess_id IS '\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u0441\u0435\u0441\u0441\u0438\u0438 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430';\n    COMMENT ON COLUMN control_dev_sess.dev_id IS '\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430';\n    COMMENT ON COLUMN control_dev_sess.dev_number IS '\u041D\u043E\u043C\u0435\u0440 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430';\n    ",
+    args: new Array()
+};
+//# sourceMappingURL=control_dev_sess.js.map

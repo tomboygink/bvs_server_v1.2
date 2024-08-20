@@ -1,0 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.skvazhiny_table = void 0;
+exports.skvazhiny_table = {
+    sql: "\n    DROP TABLE IF EXISTS skvazhiny;\n    CREATE TABLE skvazhiny (\n        id          BIGINT NOT NULL PRIMARY KEY,\n        number      VARCHAR(60) DEFAULT(''),\n        org_id      BIGINT DEFAULT(0),\n        group_id    BIGINT DEFAULT(0),\n        dev_id      BIGINT DEFAULT(0),\n        create_at   TIMESTAMP DEFAULT(CURRENT_TIMESTAMP) \n    );\n\n    COMMENT ON TABLE skvazhiny IS '\u0420\u043E\u043B\u0442 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0435\u0439 \u0432 \u0441\u0438\u0441\u0442\u0435\u043C\u0435';\n    COMMENT ON COLUMN skvazhiny.id IS '\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u0441\u043A\u0432\u0430\u0436\u0438\u043D\u044B';\n    COMMENT ON COLUMN skvazhiny.number IS '\u041D\u043E\u0438\u0435\u0440 \u0441\u043A\u0432\u0430\u0436\u0438\u043D\u044B';\n    COMMENT ON COLUMN skvazhiny.org_id IS '\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438';\n    COMMENT ON COLUMN skvazhiny.group_id IS '\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u0433\u0440\u0443\u043F\u043F\u044B';\n    COMMENT ON COLUMN skvazhiny.dev_id IS '\u0418\u0434\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u043E\u0440 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430';\n    COMMENT ON COLUMN skvazhiny.create_at IS '\u0412\u0440\u0435\u043C\u044F \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u044F \u0437\u0430\u043F\u0438\u0441\u0438';\n    ",
+    args: new Array()
+};
+//# sourceMappingURL=skvazhiny.js.map

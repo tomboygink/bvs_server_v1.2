@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.org_insert_admin = exports.orgs_table = void 0;
+var DateStr_1 = require("../../config/xcore/dbase/DateStr");
+exports.orgs_table = {
+    sql: "\n    DROP TABLE IF EXISTS orgs;\n    CREATE TABLE orgs (\n        id          BIGSERIAL NOT NULL PRIMARY KEY,\n        name        VARCHAR(250) DEFAULT(''),\n        full_name   VARCHAR(400) DEFAULT(''),\n        inn         VARCHAR(50) DEFAULT(''),\n        address     VARCHAR(400) DEFAULT(''),\n        latitude    VARCHAR(60) DEFAULT(''),\n        longitude   VARCHAR(60) DEFAULT(''),\n        created_at  TIMESTAMP DEFAULT(CURRENT_TIMESTAMP),\n        info        TEXT DEFAULT('')\n    );\n\n    COMMENT ON TABLE orgs IS '\u041E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438';\n    COMMENT ON COLUMN orgs.name IS '\u0421\u043E\u043A\u0440\u0430\u0449\u0435\u043D\u043D\u043E\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438';\n    COMMENT ON COLUMN orgs.full_name IS '\u041F\u043E\u043B\u043D\u043E\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438';\n    COMMENT ON COLUMN orgs.inn IS '\u0418\u041D\u041D \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438 \u0434\u043B\u044F \u043F\u043E\u0438\u0441\u043A\u0430 \u043F\u043E \u0418\u041D\u041D';\n    COMMENT ON COLUMN orgs.address IS '\u0410\u0434\u0440\u0435\u0441 \u043E\u0440\u0433\u0430\u043D\u0438\u0437\u0430\u0446\u0438\u0438';\n    COMMENT ON COLUMN orgs.latitude IS '\u0428\u0438\u0440\u043E\u0442\u0430';\n    COMMENT ON COLUMN orgs.longitude IS '\u0414\u043E\u043B\u0433\u043E\u0442\u0430';\n    COMMENT ON COLUMN orgs.created_at IS '\u0412\u0440\u0435\u043C\u044F \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u044F \u0437\u0430\u043F\u0438\u0441\u0438';\n    COMMENT ON COLUMN orgs.info IS '\u0434\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435';\n    ",
+    args: new Array()
+};
+exports.org_insert_admin = {
+    sql: "INSERT INTO orgs(name, full_name, inn, address, latitude, longitude, created_at, info) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)",
+    args: ['ООО СБИ', 'ООО СЕВЕРБУРИНСТРУМЕНТ', '4501225901', 'К.Мяготина 39, стр.10', '55.42936450314359', '65.28275430661108', (0, DateStr_1.dateTimeToSQL)(new Date(Date.now())), '']
+};
+//# sourceMappingURL=orgs.js.map

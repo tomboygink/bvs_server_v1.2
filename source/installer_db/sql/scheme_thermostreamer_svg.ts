@@ -1,4 +1,4 @@
-import { CONFIG } from '../../xcore/config';
+import CONFIG from '../../config/config.json';
 
 
 export const scheme_thermostreamer_svg_table = {
