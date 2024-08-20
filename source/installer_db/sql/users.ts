@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { CONFIG } from '../../xcore/config';
-import { dateTimeToSQL } from '../../xcore/dbase/DateStr'
+import CONFIG from '../../config/config.json';
+import {dateTimeToSQL} from '../../config/xcore/dbase/DateStr'
 
 
 export const users_table = {
@@ -56,5 +56,5 @@ export const users_table = {
 
 export const insert_admin = {
     sql: `INSERT INTO users(login, password, family, name, father, telephone, email, org_id, job_title_id, roles_ids, user_data, mail_code, act_mail, re_password_code, deleted, deleted_date, created_at, info) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
-    args:['admin', crypto.createHmac('sha256', CONFIG.key_code).update('admin').digest('hex'), 'admin', 'admin', 'admin', '0(000)000-00-00', '',1, 1, '{"roles":[1,2]}', '{"user_data":[]}', '', false, crypto.createHmac('sha256', CONFIG.key_code).update('admin'+'_'+crypto.createHmac('sha256', CONFIG.key_code).update('admin').digest('hex')).digest('hex'), false, null, dateTimeToSQL(new Date(Date.now())), '']
+    args:['admin', crypto.createHmac('sha256', CONFIG.crypto_code).update('admin').digest('hex'), 'admin', 'admin', 'admin', '0(000)000-00-00', '',1, 1, '{"roles":[1,2]}', '{"user_data":[]}', '', false, crypto.createHmac('sha256', CONFIG.crypto_code).update('admin'+'_'+crypto.createHmac('sha256', CONFIG.crypto_code).update('admin').digest('hex')).digest('hex'), false, null, dateTimeToSQL(new Date(Date.now())), '']
 };

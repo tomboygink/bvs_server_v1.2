@@ -1,6 +1,10 @@
 
-import { DBase, endDB, getDB } from '../xcore/dbase/DBase';
-import { dateTimeToStr } from '../xcore/dbase/DateStr';
+//import { DBase, endDB, getDB } from '../xcore/dbase/DBase';
+//import { dateTimeToStr } from '../xcore/dbase/DateStr';
+
+import {dateTimeToStr} from '../config/xcore/dbase/DateStr'
+import { DBase, endDB, getDB } from '../config/xcore/dbase/DBase';
+
 
 //Таблицы пользователя
 import { users_table, insert_admin } from './sql/users';

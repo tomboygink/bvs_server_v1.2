@@ -419,32 +419,75 @@ var User = (function () {
         });
     };
     User.prototype.updatePassRePass = function () {
-        var pass = crypto_1.default
-            .createHmac("sha256", config_json_1.default.crypto_code)
-            .update(this.args.new_password)
-            .digest("hex");
-        var re_pass_code = crypto_1.default
-            .createHmac("sha256", config_json_1.default.crypto_code)
-            .update(this.args.login + "_" + pass)
-            .digest("hex");
-        var db_response = this.args.query("SELECT re_password_code FROM users WHERE login ='" +
-            this.args.login +
-            "'");
-        if (db_response.rows[0].re_password_code === this.args.code) {
-            db_response = this.db.query("UPDATE users SET re_password_code = '" +
-                re_pass_code +
-                "', password = '" +
-                pass +
-                "' WHERE login = '" +
-                this.args.login +
-                "'");
-            return true;
-        }
-        else {
-            return false;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var pass, re_pass_code, db_response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        pass = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.new_password)
+                            .digest("hex");
+                        re_pass_code = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.login + "_" + pass)
+                            .digest("hex");
+                        return [4, this.args.query("SELECT re_password_code FROM users WHERE login ='" +
+                                this.args.login +
+                                "'")];
+                    case 1:
+                        db_response = _a.sent();
+                        if (!(db_response.rows[0].re_password_code === this.args.code)) return [3, 3];
+                        return [4, this.db.query("UPDATE users SET re_password_code = '" +
+                                re_pass_code +
+                                "', password = '" +
+                                pass +
+                                "' WHERE login = '" +
+                                this.args.login +
+                                "'")];
+                    case 2:
+                        db_response = _a.sent();
+                        return [2, true];
+                    case 3: return [2, false];
+                }
+            });
+        });
     };
-    User.prototype.changePass = function () { };
+    User.prototype.changePass = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var db_response, old_pass, new_pass, re_pass_code;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.db.query("SELECT password FROM users WHERE id = " + this.args.id)];
+                    case 1:
+                        db_response = _a.sent();
+                        old_pass = crypto_1.default.createHmac("sha256", config_json_1.default.crypto_code).update(this.args.old_password).digest("hex");
+                        if (!(db_response.rows[0].password !== old_pass)) return [3, 2];
+                        return [2, false];
+                    case 2:
+                        new_pass = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.new_password)
+                            .digest("hex");
+                        re_pass_code = crypto_1.default
+                            .createHmac("sha256", config_json_1.default.crypto_code)
+                            .update(this.args.login + "_" + new_pass)
+                            .digest("hex");
+                        return [4, this.db.query("UPDATE users SET password=\'" + this.args.new_pass + "\', re_password_code = \'" + re_pass_code + "\' RETURNING id ")];
+                    case 3:
+                        db_response = _a.sent();
+                        if (db_response.rows[0].id === 1) {
+                            return [2, true];
+                        }
+                        else {
+                            return [2, false];
+                        }
+                        _a.label = 4;
+                    case 4: return [2];
+                }
+            });
+        });
+    };
     return User;
 }());
 exports.User = User;
