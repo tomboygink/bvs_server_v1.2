@@ -508,11 +508,12 @@ export class User {
   async sendForgPassMail() {
     //Проверка на подтверждение почты
     var db_response = await this.db.query(
-      "SELECT re_password_code, act_mail FROM users WHERE email= '" +
+      "SELECT re_password_code FROM users WHERE email= '" +
       this.args.email +
       "'"
     );
-    if (db_response.rows[0].act_mail === true) {
+    //if (db_response.rows[0].act_mail === true) {
+      if (db_response.rows[0].length !== 0) {
       await this.transporter.sendMail({
         from: "noreplay@bvs45.ru",
         //Получение email от пользователя
