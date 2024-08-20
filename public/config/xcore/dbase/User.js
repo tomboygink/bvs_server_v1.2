@@ -392,12 +392,12 @@ var User = (function () {
             var db_response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT re_password_code, act_mail FROM users WHERE email= '" +
+                    case 0: return [4, this.db.query("SELECT re_password_code FROM users WHERE email= '" +
                             this.args.email +
                             "'")];
                     case 1:
                         db_response = _a.sent();
-                        if (!(db_response.rows[0].act_mail === true)) return [3, 3];
+                        if (!(db_response.rows[0].length !== 0)) return [3, 3];
                         return [4, this.transporter.sendMail({
                                 from: "noreplay@bvs45.ru",
                                 to: this.args.email,
