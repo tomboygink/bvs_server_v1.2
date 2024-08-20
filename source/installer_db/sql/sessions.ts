@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { CONFIG } from '../../xcore/config';
+import CONFIG from '../../config/config.json';
 
 
 

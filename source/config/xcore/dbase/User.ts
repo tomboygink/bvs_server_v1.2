@@ -535,7 +535,7 @@ export class User {
   }
 
   //Обновление данных пароля после перхода по письму
-  updatePassRePass() {
+  async updatePassRePass() {
     //Генерация пароля
     var pass = crypto
       .createHmac("sha256", CONFIG.crypto_code)
@@ -546,13 +546,13 @@ export class User {
       .createHmac("sha256", CONFIG.crypto_code)
       .update(this.args.login + "_" + pass)
       .digest("hex");
-    var db_response = this.args.query(
+    var db_response = await this.args.query(
       "SELECT re_password_code FROM users WHERE login ='" +
       this.args.login +
       "'"
     );
     if (db_response.rows[0].re_password_code === this.args.code) {
-      db_response = this.db.query(
+      db_response = await this.db.query(
         "UPDATE users SET re_password_code = '" +
         re_pass_code +
         "', password = '" +
@@ -568,7 +568,44 @@ export class User {
   }
 
   //Смена пароля из под авторизованного пользователя себе 
-  changePass(){}
+  async changePass() {
+    // id, login, old_password, new_password
+
+    //crypto.createHmac('sha256', CONFIG.key_code).update('admin').digest('hex')
+
+    //Запрос в бд на получение старого пароля для проверки 
+    var db_response = await this.db.query("SELECT password FROM users WHERE id = " + this.args.id);
+
+    //генерация старого пароля полученный от пользователя
+    var old_pass = crypto.createHmac("sha256", CONFIG.crypto_code).update(this.args.old_password).digest("hex");
+
+    //Проверка на соответствие пароля из БД и полученного старого пароля 
+    if (db_response.rows[0].password !== old_pass) {
+      return false;
+    }
+    //Если проверка прошла успешно меняем пароль и код для сброса пароля 
+    else {
+      //Генерация нового пароля пароля
+      var new_pass = crypto
+        .createHmac("sha256", CONFIG.crypto_code)
+        .update(this.args.new_password)
+        .digest("hex");
+
+      //генерация нового кода re_pass_code
+      var re_pass_code = crypto
+        .createHmac("sha256", CONFIG.crypto_code)
+        .update(this.args.login + "_" + new_pass)
+        .digest("hex");
+
+        db_response = await this.db.query("UPDATE users SET password=\'"+this.args.new_pass+"\', re_password_code = \'"+re_pass_code+"\' RETURNING id ");
+
+
+        if(db_response.rows[0].id === 1)
+        {return true}
+        else{return false}
+    }
+
+  }
 
   transporter: nodemailer.Transporter = nodemailer.createTransport({
     host: "smtp.mail.ru",

@@ -1,7 +1,7 @@
 import crypto from 'crypto';
-import { CONFIG } from '../../xcore/config';
-import { dateTimeToSQL } from '../../xcore/dbase/DateStr'
-import { DBase, endDB, getDB } from '../../xcore/dbase/DBase';
+import CONFIG from '../../config/config.json';
+import {dateTimeToSQL} from '../../config/xcore/dbase/DateStr'
+import {DBase, endDB, getDB} from '../../config/xcore/dbase/DBase'
 
 
 

@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
+    "sourceMap": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true,
-    "outDir": "../../server/installer"
+    "outDir": "../../public"
   },
   "include": [
     "./**/*",
@@ -17,3 +18,21 @@
     "**/*.spec.ts"
   ]
 }
+
+// "compilerOptions": {
+//   "module": "CommonJS",
+//   "sourceMap": true,
+//   "resolveJsonModule": true,
+//   "esModuleInterop": true,
+//   "noImplicitAny": true,
+//   "removeComments": true,
+//   "preserveConstEnums": true,
+//   "outDir": "../../public"
+// },
+// "include": [
+//   "./**/*"
+// ],
+// "exclude": [
+//   "node_modules",
+//   "**/*.spec.ts"
+// ]

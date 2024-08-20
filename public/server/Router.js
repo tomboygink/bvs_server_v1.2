@@ -817,6 +817,18 @@ function Router(body) {
                     return [4, u.changePass()];
                 case 85:
                     data = _b.sent();
+                    if (data = false) {
+                        res.cmd = body.cmd;
+                        res.code = body.sess_code;
+                        res.data = null;
+                        res.error = "Произошла ошибка при смене пароля";
+                    }
+                    else {
+                        res.cmd = body.cmd;
+                        res.error = null;
+                        res.data = null;
+                        res.user_sess_code = body.sess_code;
+                    }
                     return [3, 88];
                 case 86:
                     {

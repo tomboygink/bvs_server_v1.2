@@ -37,13 +37,37 @@
 				"isDefault": true
 			}
 		},
-        // Запусе сервера приема передачи
+        // Запуск сервера приема передачи
 		{
 			"type": "npm",
 			"script": "run_server_receiver",
 			"problemMatcher": [],
 			"label": "npm: run_server_receiver",
 			"detail": "запуск сервера передачи данных",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		// Компиляция предустановки БД
+		{
+			"type": "npm",
+			"script": "build_installer",
+			"problemMatcher": [],
+			"label": "npm: build_installer",
+			"detail": "запуск сервера",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		// Запуск БД 
+		{
+			"type": "npm",
+			"script": "run_installer",
+			"problemMatcher": [],
+			"label": "npm: run_installer",
+			"detail": "запуск сервера",
 			"group": {
 				"kind": "build",
 				"isDefault": true
