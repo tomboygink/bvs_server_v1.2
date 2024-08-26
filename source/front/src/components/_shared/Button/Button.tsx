@@ -8,6 +8,7 @@ interface Props {
   disabled?: boolean;
   isLoading?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  size?: "small" | "medium" | "large";
 }
 
 export const Button: FC<Props> = ({
@@ -17,6 +18,7 @@ export const Button: FC<Props> = ({
   disabled = false,
   isLoading = false,
   onClick,
+  size = "medium",
 }) => {
   return (
     <ButtonMui
@@ -25,6 +27,7 @@ export const Button: FC<Props> = ({
       sx={{ backgroundColor: "#266bf1", minWidth: "118px", height: "36px" }}
       disabled={disabled}
       onClick={onClick}
+      size={size}
     >
       {isLoading ? <CircularProgress sx={{ color: "white" }} /> : children}
       {/* {children}

@@ -2,8 +2,8 @@
 @import "./text-style.scss";
 @import "./colors.scss";
 @import "./reset.scss";
+@import "./size.scss";
 .title {
-  color: red;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 1rem;
   line-height: 1.5;
@@ -11,4 +11,16 @@
   color: $black-text;
   font-weight: 600;
   margin-bottom: 8px;
+}
+
+@media screen and (max-width: $small) {
+  .title {
+    margin: 32px 24px 32px 24px;
+  }
+  .section-left,
+  .section-right {
+    padding: 0 24px;
+    width: 100%;
+    box-sizing: border-box;
+  }
 }

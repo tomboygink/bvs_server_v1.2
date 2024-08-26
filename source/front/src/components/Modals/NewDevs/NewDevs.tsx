@@ -121,7 +121,7 @@ export const NewDevs: FC<Props> = ({ handleClose }) => {
       if (args.length) createNewDevs(args);
     }
   };
-  console.log("duplicate: ", duplicatesDevs);
+
   const createNewDevs = (args: any) => {
     createDevs(args).then((res) => {
       if ("data" in res && "error" in res?.data) {

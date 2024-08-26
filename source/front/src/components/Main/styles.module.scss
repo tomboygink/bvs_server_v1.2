@@ -1,0 +1,24 @@
+@import "../../assets/styles/font-family.scss";
+@import "../../assets/styles/text-style.scss";
+@import "../../assets/styles/colors.scss";
+@import "../../assets/styles/reset.scss";
+@import "../../assets//styles/size.scss";
+.appbar {
+  margin-top: 1px;
+  display: none;
+  margin-bottom: 32px;
+  .toolbar {
+    background-color: $blue;
+    display: none;
+    justify-content: space-around;
+  }
+}
+
+@media screen and (max-width: $small) {
+  .appbar {
+    display: block;
+    .toolbar {
+      display: flex;
+    }
+  }
+}

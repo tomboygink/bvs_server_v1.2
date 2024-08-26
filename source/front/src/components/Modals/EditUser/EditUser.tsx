@@ -77,7 +77,6 @@ export const EditUser: FC<Props> = ({ handleClose }) => {
 
   const changeUser = (formValues: FormValues) => {
     const args = generateArgs(formValues);
-
     editUser(args).then((res) => {
       if ("data" in res && !res.data.error) {
         dispatch(setSelectedUser({ ...(selectedUser as IUser), ...args }));

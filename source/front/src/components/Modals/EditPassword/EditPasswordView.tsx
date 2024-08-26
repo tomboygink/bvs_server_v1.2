@@ -5,11 +5,13 @@ import { InputWithIcon } from "@components/_shared/Inputs/InputWithIcon";
 import { Button } from "@components/_shared/Button";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
+import { FormErrors } from "@hooks/useFormWithValidation";
 
 interface Props {
   handleChange: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => void;
+  errors: FormErrors;
   message: string;
   isSuccessSave: boolean;
   isErrorSave: boolean;
@@ -19,6 +21,7 @@ interface Props {
 
 export const EditPasswordView: FC<Props> = ({
   handleChange,
+  errors,
   message,
   isErrorSave,
   isLoading,
@@ -31,22 +34,28 @@ export const EditPasswordView: FC<Props> = ({
       <div className={cx("container")}>
         <fieldset className={cx("input-container")}>
           <InputWithIcon
-            name="password"
-            placeholder="Пароль"
+            name="old_password"
+            placeholder="Старый пароль"
             onChange={handleChange}
             variant="outlined"
+            error={Boolean(errors.old_password)}
+            helperText={errors.old_password}
           />
           <InputWithIcon
             name="new_password"
             placeholder="Новый пароль"
             onChange={handleChange}
             variant="outlined"
+            error={Boolean(errors.new_password)}
+            helperText={errors.new_password}
           />
           <InputWithIcon
             name="confirm"
             placeholder="Повторите пароль"
             onChange={handleChange}
             variant="outlined"
+            error={Boolean(errors.confirm)}
+            helperText={errors.confirm}
           />
         </fieldset>
       </div>

@@ -1,7 +1,9 @@
+@import "../../../../../../assets/styles/size.scss";
 .tab-container {
   padding: 12px 24px;
-
   margin-bottom: 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 .head {
   background-color: #fff;
@@ -15,4 +17,10 @@
   margin-top: 24px;
   background-color: #fff;
   width: 100%;
+}
+
+@media screen and (max-width: $small) {
+  .tab-container {
+    // padding: 12px 0px;
+  }
 }

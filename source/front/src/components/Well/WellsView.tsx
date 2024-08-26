@@ -13,11 +13,11 @@ export const WellsView: FC<Props> = () => {
   const cxShared = useStyles(sharedStyles);
   return (
     <>
-      <section>
+      <section className={cxShared("section-left")}>
         <h2 className={cxShared("title")}>Скважины</h2>
         <WellsTree />
       </section>
-      <section>
+      <section className={cxShared("section-left")}>
         <h2 className={cxShared("title")}>Подробная информация</h2>
         <SelectedWell />
       </section>

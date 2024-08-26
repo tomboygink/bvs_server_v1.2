@@ -1,3 +1,4 @@
+@import "../../../../../../assets//styles/size.scss";
 .container {
   background-color: #fff;
   max-width: 300px;
@@ -47,5 +48,24 @@
     background-color: rgba(255, 255, 255, 0);
     grid-column: 1/12;
     grid-row: 2/38;
+  }
+}
+
+@media screen and (max-width: $large) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .container {
+    max-width: 1px;
+  }
+}
+
+@media screen and (max-width: $small) {
+  .container {
+    max-width: 100%;
+    min-width: 272px;
   }
 }

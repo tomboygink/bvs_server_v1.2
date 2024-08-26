@@ -2,6 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ECOMMAND } from "@src/types/ECommand";
 import { createBodyQuery } from "@src/utils/functions";
 import CONFIG from "./../../../../config/config.json";
+import { IResponse } from "@src/types/IResponse";
+import { FormValues } from "@hooks/useFormWithValidation";
 export const authApi = createApi({
   reducerPath: "auth",
   baseQuery: fetchBaseQuery({
@@ -10,13 +12,13 @@ export const authApi = createApi({
   }),
   tagTypes: ["Auth"],
   endpoints: (build) => ({
-    auth: build.query({
-      query: (args) => ({
+    auth: build.mutation({
+      query: (body) => ({
         url: "/api",
         method: "POST",
-        body: createBodyQuery(ECOMMAND.GETUSERBYLOGIN, args),
+        body,
       }),
-      providesTags: () => ["Auth"],
+      invalidatesTags: ["Auth"],
     }),
     authBySessionCode: build.query({
       query: (args) => ({
@@ -26,7 +28,7 @@ export const authApi = createApi({
       }),
       providesTags: () => ["Auth"],
     }),
-    deleteSession: build.mutation({
+    deleteSession: build.mutation<IResponse, FormValues>({
       query: (args) => ({
         url: "/api",
         method: "POST",
@@ -38,7 +40,7 @@ export const authApi = createApi({
 });
 
 export const {
-  useAuthQuery,
+  useAuthMutation,
   useAuthBySessionCodeQuery,
   useDeleteSessionMutation,
 } = authApi;

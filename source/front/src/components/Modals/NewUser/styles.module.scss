@@ -2,6 +2,7 @@
 @import "../../../assets/styles/text-style.scss";
 @import "../../../assets/styles/colors.scss";
 @import "../../../assets/styles/reset.scss";
+@import "../../../assets/styles/size.scss";
 
 .container {
   display: flex;
@@ -36,5 +37,11 @@
 
   .add-job-button {
     font-size: 12px;
+  }
+}
+
+@media screen and (max-width: $small) {
+  .name_container {
+    flex-direction: column;
   }
 }

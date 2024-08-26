@@ -72,7 +72,7 @@ export const EditProfileView: FC<Props> = (props) => {
           error={Boolean(errors.email)}
           helperText={errors.email}
         />
-        <Switch
+        {/* <Switch
           name="act_mail"
           label={`${
             user?.act_mail
@@ -81,7 +81,7 @@ export const EditProfileView: FC<Props> = (props) => {
           }`}
           defaultChecked={user?.act_mail}
           disabled
-        />
+        /> */}
         <InputText
           name="info"
           label="Дополнительная информация"
@@ -90,8 +90,6 @@ export const EditProfileView: FC<Props> = (props) => {
           rows={4}
           defaultValue={user?.info}
           onChange={handleChange}
-          error={Boolean(errors.email)}
-          helperText={errors.email}
         />
       </div>
       {message && (

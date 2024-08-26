@@ -69,8 +69,13 @@ export const ForgotPasswordView: FC<Props> = (props) => {
             <Link className={cx("link")} to={ScreenRoute.LOGIN}>
               ← Вернуться на форму авторизации
             </Link>
-            <Button disabled={!isValid} isLoading={isLoading} type="submit">
-              Получить код
+            <Button
+              disabled={!isValid}
+              isLoading={isLoading}
+              type="submit"
+              size="small"
+            >
+              Получить&nbsp;код
             </Button>
           </fieldset>
           {message && (

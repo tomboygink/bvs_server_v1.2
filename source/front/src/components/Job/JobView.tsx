@@ -8,11 +8,11 @@ const cxShared = useStyles(sharedStyles);
 export const JobView = () => {
   return (
     <>
-      <section>
+      <section className={cxShared("section-left")}>
         <h2 className={cxShared("title")}>Должности</h2>
         <JobList />
       </section>
-      <section>
+      <section className={cxShared("section-left")}>
         <h2 className={cxShared("title")}>Подробная информация</h2>
         <SelectedJob />
       </section>

@@ -77,7 +77,7 @@ export const Modal: FC<Props> = ({ open, handleClose }) => {
     } else if (variant === eVariantModal.editProfile) {
       return <EditProfile handleClose={handleClose} />;
     } else if (variant === eVariantModal.editPassword) {
-      return <EditPassword />;
+      return <EditPassword handleClose={handleClose} />;
     }
   };
 

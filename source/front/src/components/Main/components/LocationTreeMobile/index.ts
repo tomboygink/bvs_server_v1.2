@@ -1,0 +1,1 @@
+export { LocationTreeMobile } from "./LocationTreeMobile";

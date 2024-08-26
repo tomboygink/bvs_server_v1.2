@@ -11,6 +11,7 @@ import { IDev } from "@src/types/IDev";
 import { ScreenRoute } from "@src/types/Screen.routes.enum";
 import { eVariantModal } from "@src/types/EvariantModal";
 import { EditDeviceMenu } from "../EditDeviceMenu";
+import { API_KEY } from "@src/utils/constans";
 
 interface Props {
   device: IDev | null;
@@ -32,7 +33,6 @@ export const AboutDevPanelView = (props: Props) => {
     ...other
   } = props;
   const cx = useStyles(styles);
-
   return (
     <div className={cx("container")}>
       <div className={cx("fields-container")}>
@@ -90,7 +90,7 @@ export const AboutDevPanelView = (props: Props) => {
             }}
           />
           <InputText
-            label="Широта"
+            label="Долгота"
             value={device?.longitude || ""}
             InputProps={{
               readOnly: true,
@@ -121,19 +121,23 @@ export const AboutDevPanelView = (props: Props) => {
             <DirectionsIcon />
           </Link>
         </div>
-        <YMaps>
-          <Map
-            state={{
-              center: [Number(device?.latitude), Number(device?.longitude)],
-              zoom: 13,
-            }}
-            style={{ width: "100%", height: "300px" }}
-          >
-            <Placemark
-              geometry={[Number(device?.latitude), Number(device?.longitude)]}
-            />
-          </Map>
-        </YMaps>
+
+        <div id="map-container" className={cx("map-container")}>
+          <YMaps query={{ apikey: API_KEY }}>
+            <Map
+              className={cx("map")}
+              state={{
+                center: [Number(device?.latitude), Number(device?.longitude)],
+                zoom: 13,
+              }}
+              style={{ width: "100%", height: "300px" }}
+            >
+              <Placemark
+                geometry={[Number(device?.latitude), Number(device?.longitude)]}
+              />
+            </Map>
+          </YMaps>
+        </div>
       </div>
     </div>
   );

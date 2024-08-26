@@ -74,7 +74,6 @@ export const LocationTree = () => {
             .then((res) => {
               const svg = res?.data?.[0]?.svg;
               const newSelectedLocation = { ...selectedLocation, org, svg };
-
               dispatch(setSelectedLocation(newSelectedLocation));
               dispatch(setIsSelected(true));
             })
@@ -85,9 +84,9 @@ export const LocationTree = () => {
         }
       } else {
         dispatch(setVisibleDevice(true));
+        // dispatch(setIsSelected(false));
         const devId = id.replace("dev_", "");
         const selectedDev = devs?.data.find((dev: IDev) => dev.id === devId);
-
         dispatch(setSelectedDev(selectedDev));
       }
     } else {

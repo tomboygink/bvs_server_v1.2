@@ -1,3 +1,4 @@
+@import "../../../../../assets/styles/size.scss";
 .paper {
   padding: 20;
   text-align: center;
@@ -53,4 +54,15 @@
 
 .alert {
   margin: 14px auto;
+}
+
+@media screen and (max-width: $small) {
+  .button {
+    flex-direction: column;
+  }
+  .paper {
+    .label {
+      font-size: 12px;
+    }
+  }
 }

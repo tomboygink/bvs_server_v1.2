@@ -118,7 +118,7 @@ export const NewUser: FC<Props> = ({ handleClose }) => {
       }, 2000);
     }
   }, [isSuccess]);
-  console.log("users", users?.data);
+
   return (
     <form onSubmit={validationFormValues} noValidate>
       <NewUserView

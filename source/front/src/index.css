@@ -49,6 +49,12 @@ p {
   padding: 24px;
 }
 
+@media screen and (max-width: 1400px) {
+  .content {
+    flex-direction: column;
+  }
+}
+
 /* .ExcelTable2007 {
   border: 1px solid #b0cbef;
 

@@ -37,7 +37,7 @@ export enum ECOMMAND {
   //Обновление пароля при переходе по ссылке с кодом для сброса пароля
   RESETPASSWORD = "set_Pass",
   //Изменение пароля
-  CHANGEPASSWORD = "set_ChangePassword",
+  CHANGEPASSWORD = "set_ChangePass",
 
   //--------------------------------Пользователи
   GETUSERS = "get_AllUsers",
