@@ -794,7 +794,7 @@ export async function Router(body: any) {
           res.code = body.sess_code;
           res.data = null;
           res.error =
-            "Такого email не существует/email не активирован/проверте введенные данные или обратитесть к администратору системы";
+            "Такого email не существует/ проверте введенные данные или обратитесть к администратору системы";
         } else {
           res.cmd = body.cmd;
           res.error = null;
