@@ -397,7 +397,7 @@ var User = (function () {
                             "'")];
                     case 1:
                         db_response = _a.sent();
-                        if (!(db_response.rows[0].length !== 0)) return [3, 3];
+                        if (!(db_response.rows.length !== 0)) return [3, 3];
                         return [4, this.transporter.sendMail({
                                 from: "noreplay@bvs45.ru",
                                 to: this.args.email,
