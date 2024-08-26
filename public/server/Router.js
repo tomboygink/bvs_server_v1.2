@@ -117,7 +117,6 @@ function Router(body) {
                     return [4, u.insertSessionCode()];
                 case 3:
                     user_sess_code = _b.sent();
-                    console.log(user_sess_code);
                     if (!(user_sess_code === undefined)) return [3, 4];
                     res.cmd = body.cmd;
                     res.error =
@@ -817,7 +816,7 @@ function Router(body) {
                     return [4, u.changePass()];
                 case 85:
                     data = _b.sent();
-                    if (data = false) {
+                    if (data === false) {
                         res.cmd = body.cmd;
                         res.code = body.sess_code;
                         res.data = null;

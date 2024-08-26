@@ -506,7 +506,7 @@ export class User {
       "'"
     );
     //if (db_response.rows[0].act_mail === true) {
-      if (db_response.rows[0].length !== 0) {
+      if (db_response.rows.length !== 0 ) {
       await this.transporter.sendMail({
         from: "noreplay@bvs45.ru",
         //Получение email от пользователя

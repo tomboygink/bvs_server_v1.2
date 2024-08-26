@@ -41,7 +41,6 @@ export async function Router(body: any) {
         // Создание записи сессии пользователя и
         // проверка на наличие пользователя и введенных данных
         var user_sess_code = await u.insertSessionCode();
-        console.log(user_sess_code);
         // Проверка на наличие данных от сервера
         // Если данные отсутствуют отправка ошибки
         if (user_sess_code === undefined) {
@@ -823,19 +822,18 @@ export async function Router(body: any) {
       break;
 
 
-    
+
     //-----------------------------------------ПАРОЛЬ
     //Смена пароля из под авторизованного пользователя себе 
-    case "set_ChangePass":{
+    case "set_ChangePass": {
       var u = new User(body.args, body.sess_code);
       data = await u.changePass();
-      if (data = false)
-      {
+      if (data === false) {
         res.cmd = body.cmd;
-          res.code = body.sess_code;
-          res.data = null;
-          res.error = "Произошла ошибка при смене пароля";
-      }else{
+        res.code = body.sess_code;
+        res.data = null;
+        res.error = "Произошла ошибка при смене пароля";
+      } else {
         res.cmd = body.cmd;
         res.error = null;
         res.data = null;
@@ -843,7 +841,7 @@ export async function Router(body: any) {
       }
 
     }
-    break
+      break
 
 
 
