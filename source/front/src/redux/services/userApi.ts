@@ -39,6 +39,14 @@ export const userAPI = createApi({
       }),
       invalidatesTags: () => ["User"],
     }),
+    editPassword: build.mutation<IResponse, FormValues>({
+      query: (args) => ({
+        url: "/api",
+        method: "POST",
+        body: createBodyQuery(ECOMMAND.CHANGEPASSWORD, args),
+      }),
+      invalidatesTags: () => ["User"],
+    }),
     sendEmail: build.mutation<IResponse, FormValues>({
       query: (args) => ({
         url: "/api",
@@ -74,6 +82,7 @@ export const {
   useGetAllUsersQuery,
   useCreateUserMutation,
   useEditUserMutation,
+  useEditPasswordMutation,
   useSendEmailMutation,
   useConfirmEmailMutation,
   useSendResetPasswordCodeMutation,

@@ -34,7 +34,7 @@ export const VerifRange: FC<Props> = ({ period, isVisible }) => {
             ) : (
               <div className={cx("text-wrapper")}>
                 <AccessTimeIcon sx={{ color: "#eee", mr: "4px" }} />
-                Поверочный интервал не установлен
+                <p className={cx("text")}>Поверочный интервал не установлен</p>
               </div>
             )}
           </div>

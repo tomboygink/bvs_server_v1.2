@@ -9,7 +9,10 @@ import { SelectedLocationView } from "./SelectedLocationView";
 import { useAuth } from "@hooks/useAuth";
 import sharedStyles from "../../../../assets/styles/shared.module.scss";
 import { useStyles } from "@hooks/useStyles";
+
+import styles from "./styles.module.scss";
 export const SelectedLocation = () => {
+  const cx = useStyles(styles);
   const dispatch = useAppDispatch();
   const auth = useAuth();
   const cxShared = useStyles(sharedStyles);
@@ -74,12 +77,12 @@ export const SelectedLocation = () => {
         />
       ) : null}
       {isAdmin && (
-        <>
+        <div className={cx("button")}>
           <BigButton handleClick={handleOpenModalNewLocation}>
             Добавить новое расположение
           </BigButton>
           <Modal open={open} handleClose={closeModal} />
-        </>
+        </div>
       )}
     </>
   );

@@ -21,4 +21,5 @@ export enum eVariantModal {
   deleteControlSession = "deleteControlessSession",
   editProfile = "editProfile",
   confirmEmail = "confirmEmail",
+  editPassword = "editPassword",
 }

@@ -2,6 +2,7 @@
 @import "../../../../../../assets/styles/text-style.scss";
 @import "../../../../../../assets/styles/colors.scss";
 @import "../../../../../../assets/styles/reset.scss";
+@import "../../../../../../assets/styles/size.scss";
 
 .fields-container {
   background-color: #ffff;
@@ -61,5 +62,32 @@
   -webkit-appearance: none;
   &:hover {
     text-decoration: underline;
+  }
+}
+.map-container {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 320px;
+}
+.map {
+  max-width: 710px;
+}
+@media screen and (min-width: $extra-large) {
+  .map {
+    max-width: 510px;
+  }
+}
+
+@media screen and (max-width: $large) {
+  .map {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: $small) {
+  .map-container {
+    display: none;
   }
 }

@@ -10,7 +10,7 @@ export const createBodyQuery = (command: ECOMMAND, args: TArgs | TArgs[]) => {
   const code = localStorage.getItem("code");
   const query: IQuery = {
     cmd: command,
-    sess_code: code ?? "",
+    sess_code: code ? JSON.parse(code) : "",
     args,
   };
 
@@ -59,3 +59,17 @@ export function isInnInArray<T extends keyof IOrg>(
 ) {
   return orgs.some((org) => org[field] === value);
 }
+
+export const getTextPeriod = (period: string | undefined) => {
+  if (period) {
+    if (period === "1") {
+      return "один раз в день";
+    } else if (period === "7") {
+      return "один раз в 7 дней";
+    } else if (period === "14") {
+      return "один раз в 14 дней";
+    } else if (period === "31") {
+      return "один раз в 30 (31) дней";
+    } else return "не установлен";
+  }
+};

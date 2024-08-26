@@ -83,10 +83,12 @@ export const MoveLocationView: FC<Props> = (props) => {
       )}
 
       <div className={cx("button")}>
-        <Button isLoading={isLoading} disabled={isRootLocation}>
+        <Button isLoading={isLoading} disabled={isRootLocation} size="small">
           Переместить в корень
         </Button>
-        <Button isLoading={isLoading}>Сохранить</Button>
+        <Button isLoading={isLoading} size="small">
+          Сохранить
+        </Button>
       </div>
     </>
   );

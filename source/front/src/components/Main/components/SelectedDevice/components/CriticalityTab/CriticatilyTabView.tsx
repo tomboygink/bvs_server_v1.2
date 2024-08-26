@@ -66,7 +66,7 @@ export const CriticatilyTabView: FC<Props> = ({ selectedDev }) => {
                         <>
                           {last_sess ? (
                             <TableCell align="center">
-                              {JSON.parse(last_sess.sess_data).s[i].data}
+                              {JSON.parse(last_sess.sess_data)?.s[i].data}
                             </TableCell>
                           ) : (
                             <TableCell align="center">Нет данных</TableCell>

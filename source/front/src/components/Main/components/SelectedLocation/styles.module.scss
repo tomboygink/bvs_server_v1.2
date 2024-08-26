@@ -2,6 +2,7 @@
 @import "../../../../assets/styles/text-style.scss";
 @import "../../../../assets/styles/colors.scss";
 @import "../../../../assets/styles/reset.scss";
+@import "../../../../assets/styles/size.scss";
 
 .container {
 }
@@ -57,5 +58,15 @@
   -webkit-appearance: none;
   &:hover {
     text-decoration: underline;
+  }
+}
+
+@media screen and (max-width: $small) {
+  .button {
+    padding: 0 24px;
+  }
+  .container {
+    padding: 12px 24px;
+    margin-top: 24px;
   }
 }

@@ -1,0 +1,32 @@
+@import "../../../../assets/styles/font-family.scss";
+@import "../../../../assets/styles/text-style.scss";
+@import "../../../../assets/styles/colors.scss";
+@import "../../../../assets/styles/reset.scss";
+@import "../../../../assets/styles/size.scss";
+
+.info {
+  display: none;
+  flex-direction: column;
+  padding: 0 24px;
+  margin-bottom: 32px;
+  gap: 8px;
+}
+.text {
+  font-family: $Roboto;
+  font-size: 16px;
+  font-weight: 400;
+}
+.span {
+  font-weight: 500;
+}
+.drop {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  color: $blue-text;
+}
+@media screen and (max-width: $small) {
+  .info {
+    display: flex;
+  }
+}

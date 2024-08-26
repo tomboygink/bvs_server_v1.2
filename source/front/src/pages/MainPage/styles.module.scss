@@ -1,5 +1,35 @@
+@import "../../assets/styles/size.scss";
 .section {
   border-radius: 4px;
   max-height: 90vh;
-  overflow: auto;
+  // overflow-y: auto;
+}
+
+@media screen and (max-width: $large) {
+  .section {
+    max-height: 100%;
+    width: 100%;
+    &:nth-child(2) {
+      grid-row: 1/3;
+      grid-column: 2/4;
+    }
+    &:last-child {
+      grid-row: 2;
+      grid-column: 1/2;
+    }
+  }
+}
+
+@media screen and (max-width: $small) {
+  .section {
+    max-height: 100%;
+    width: 100%;
+
+    &:first-child {
+      display: none;
+    }
+    &:last-child {
+      display: none;
+    }
+  }
 }

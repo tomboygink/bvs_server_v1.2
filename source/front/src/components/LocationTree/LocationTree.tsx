@@ -157,10 +157,11 @@ export const LocationTree: FC<Props> = (props) => {
   return (
     <>
       {isError ? (
-        <Alert severity="error">Произошла ошибка при загрузке устройств</Alert>
+        <Alert severity="error">
+          Произошла ошибка при загрузке устройств. Обратитесь к администратору.
+        </Alert>
       ) : (
         <LocationTreeView
-          // TODO: проверить под пользователем, у которого нет прав редактирования
           {...other}
           locations={isAdmin ? locations : filteredLocations}
           handleClick={handleSelectLocation}

@@ -7,12 +7,12 @@ export const UsersPage = () => {
   //const [open, openModal, closeModal] = useModal();
   return (
     <>
-      <section>
+      <section className={cxShared("section-left")}>
         <h2 className={cxShared("title")}>Пользователи</h2>
         <UserTree />
       </section>
 
-      <section>
+      <section className={cxShared("section-right")}>
         <h2 className={cxShared("title")}>Подробная информация</h2>
         <SelectedUser />
       </section>

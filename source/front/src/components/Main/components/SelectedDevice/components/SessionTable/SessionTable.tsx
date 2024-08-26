@@ -145,22 +145,29 @@ export const SessionTable: FC<Props> = ({
                       <Table>
                         <TableHead>
                           <TableRow key={"row_head"}>
-                            <TableCell component="th" scope="row">
+                            <TableCell align="center" sx={{ padding: "12px" }}>
                               Номер устройства
                             </TableCell>
 
-                            <TableCell style={{ width: 160 }} align="center">
+                            <TableCell align="center" sx={{ padding: "12px" }}>
                               Время сессии
                             </TableCell>
-                            <TableCell style={{ width: 160 }} align="center">
+                            <TableCell align="center" sx={{ padding: "12px" }}>
                               Заряд
                             </TableCell>
                             {isAdmin && (
-                              <TableCell style={{ width: 160 }} align="center">
+                              <TableCell
+                                align="center"
+                                sx={{ padding: "12px" }}
+                              >
                                 Контрольная сессия
                               </TableCell>
                             )}
-                            <TableCell component="th" scope="row">
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              sx={{ padding: "12px" }}
+                            >
                               На графике
                             </TableCell>
                           </TableRow>
@@ -173,22 +180,27 @@ export const SessionTable: FC<Props> = ({
                             )
                             .map((session) => (
                               <TableRow key={session.id}>
-                                <TableCell component="td" scope="row">
-                                  {session.dev_number}
-                                </TableCell>
                                 <TableCell
-                                  style={{ width: 160 }}
                                   component="td"
                                   scope="row"
                                   align="center"
+                                  sx={{ padding: "12px" }}
+                                >
+                                  {session.dev_number}
+                                </TableCell>
+                                <TableCell
+                                  component="td"
+                                  scope="row"
+                                  align="center"
+                                  sx={{ padding: "12px" }}
                                 >
                                   {moment(session.time_dev).format(
                                     "DD.MM.YYYY hh:mm"
                                   )}
                                 </TableCell>
                                 <TableCell
-                                  style={{ width: 160 }}
                                   align="center"
+                                  sx={{ padding: "12px" }}
                                 >
                                   <Box
                                     sx={{
@@ -209,9 +221,8 @@ export const SessionTable: FC<Props> = ({
                                   !device?.control_sess &&
                                   device?.last_sess?.id !== session.id && (
                                     <TableCell
-                                      component="td"
-                                      scope="row"
                                       align="center"
+                                      sx={{ padding: "12px" }}
                                     >
                                       {isLoading &&
                                       session.id === selectedSession?.id ? (

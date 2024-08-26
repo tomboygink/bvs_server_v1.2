@@ -185,7 +185,7 @@ export const DragDropFileUpload: React.FC<DragDropFileUploadProps> = ({
               >
                 <ExelSvg />
               </IconButton>
-              <Typography>
+              <Typography className={cx("label")}>
                 Перетащите файлы сюда или нажмите, чтобы выбрать файлы
               </Typography>
             </Box>
@@ -254,10 +254,10 @@ export const DragDropFileUpload: React.FC<DragDropFileUploadProps> = ({
         </Alert>
       )}
       <div className={cx("button")}>
-        <Button onClick={handleExportExel} type="button">
+        <Button onClick={handleExportExel} type="button" size="small">
           Скачать шаблон файла
         </Button>
-        <Button disabled={isDisabled} isLoading={isLoading}>
+        <Button disabled={isDisabled} isLoading={isLoading} size="small">
           Сохранить
         </Button>
       </div>

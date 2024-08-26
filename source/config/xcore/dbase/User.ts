@@ -18,7 +18,7 @@ export class UsersEntity {
   deleted: boolean = false;
   info: string = "";
 
-  constructor() { }
+  constructor() {}
 }
 
 export class User {
@@ -39,10 +39,10 @@ export class User {
       .digest("hex");
     var db_response = await this.db.query(
       "SELECT id FROM users WHERE login = '" +
-      this.args.login +
-      "' and password = '" +
-      pass +
-      "'"
+        this.args.login +
+        "' and password = '" +
+        pass +
+        "'"
     );
 
     if (db_response.rows.length !== 0) {
@@ -64,27 +64,27 @@ export class User {
         .createHmac("sha256", CONFIG.crypto_code)
         .update(
           id +
-          "_" +
-          dateTimeToSQL(date) +
-          "_" +
-          db_response.rows[0].selectiduser
+            "_" +
+            dateTimeToSQL(date) +
+            "_" +
+            db_response.rows[0].selectiduser
         )
         .digest("hex");
 
       //записываем в Sessions
       await this.db.query(
         "INSERT INTO sessions (id, uid, expires, created_at, sess_code, sess_data) " +
-        "VALUES (" +
-        id +
-        ", " +
-        db_response.rows[0].id +
-        ", '" +
-        dateTimeToSQL(date) +
-        "', '" +
-        dateTimeToSQL(new Date(Date.now())) +
-        "', '" +
-        sess +
-        "', '{\"data\":[]}')"
+          "VALUES (" +
+          id +
+          ", " +
+          db_response.rows[0].id +
+          ", '" +
+          dateTimeToSQL(date) +
+          "', '" +
+          dateTimeToSQL(new Date(Date.now())) +
+          "', '" +
+          sess +
+          "', '{\"data\":[]}')"
       );
       return sess;
     }
@@ -110,12 +110,12 @@ export class User {
 
       db_response = await this.db.query(
         "SELECT " +
-        "id, login, family, name, father, email, org_id as id_org," +
-        "job_title_id as id_job, roles_ids, act_mail, deleted, info FROM users WHERE login ='" +
-        this.args.login +
-        "' and password = '" +
-        pass +
-        "'"
+          "id, login, family, name, father, email, org_id as id_org," +
+          "job_title_id as id_job, roles_ids, act_mail, deleted, info FROM users WHERE login ='" +
+          this.args.login +
+          "' and password = '" +
+          pass +
+          "'"
       );
     }
 
@@ -123,8 +123,8 @@ export class User {
     else {
       var time_for_exit = await this.db.query(
         "SELECT expires FROM sessions WHERE sess_code = '" +
-        this.args.code +
-        "'"
+          this.args.code +
+          "'"
       );
 
       if (
@@ -133,13 +133,13 @@ export class User {
       ) {
         db_response = await this.db.query(
           "SELECT " +
-          "users.id, users.login, users.family, users.name, " +
-          "users.father, users.email, users.org_id as id_org," +
-          "users.job_title_id as id_job, users.roles_ids, " +
-          "users.act_mail, users.deleted, users.info FROM users INNER JOIN sessions ON " +
-          "users.id=sessions.uid WHERE sessions.sess_code = '" +
-          this.args.code +
-          "'"
+            "users.id, users.login, users.family, users.name, " +
+            "users.father, users.email, users.org_id as id_org," +
+            "users.job_title_id as id_job, users.roles_ids, " +
+            "users.act_mail, users.deleted, users.info FROM users INNER JOIN sessions ON " +
+            "users.id=sessions.uid WHERE sessions.sess_code = '" +
+            this.args.code +
+            "'"
         );
       } else {
         console.log("Время авторизации вышло");
@@ -193,34 +193,34 @@ export class User {
       // Запрос на добавление пользователя
       var db_response = await this.db.query(
         "INSERT INTO users (login, password, family, name, father, telephone, " +
-        "email, org_id, job_title_id, roles_ids, user_data, mail_code, act_mail, re_password_code, " +
-        "deleted, deleted_date, created_at, info) VALUES ('" +
-        this.args.login +
-        "', '" +
-        pass +
-        "', '" +
-        this.args.family +
-        "', '" +
-        this.args.name +
-        "', '" +
-        this.args.father +
-        "', '---', '" +
-        this.args.email +
-        "', " +
-        this.args.id_org +
-        ", " +
-        this.args.id_jobs +
-        ", '" +
-        access +
-        "', '{\"user_data\":[]}', '" +
-        mail_code +
-        "', false , '" +
-        re_pass_code +
-        "', false, null, '" +
-        dateTimeToSQL(new Date(Date.now())) +
-        "','" +
-        this.args.info +
-        "') RETURNING id"
+          "email, org_id, job_title_id, roles_ids, user_data, mail_code, act_mail, re_password_code, " +
+          "deleted, deleted_date, created_at, info) VALUES ('" +
+          this.args.login +
+          "', '" +
+          pass +
+          "', '" +
+          this.args.family +
+          "', '" +
+          this.args.name +
+          "', '" +
+          this.args.father +
+          "', '---', '" +
+          this.args.email +
+          "', " +
+          this.args.id_org +
+          ", " +
+          this.args.id_jobs +
+          ", '" +
+          access +
+          "', '{\"user_data\":[]}', '" +
+          mail_code +
+          "', false , '" +
+          re_pass_code +
+          "', false, null, '" +
+          dateTimeToSQL(new Date(Date.now())) +
+          "','" +
+          this.args.info +
+          "') RETURNING id"
       );
 
       return db_response.rows;
@@ -248,17 +248,17 @@ export class User {
       );
       db_response = await this.db.query(
         "UPDATE users SET family = '" +
-        this.args.family +
-        "', name ='" +
-        this.args.name +
-        "', father = '" +
-        this.args.father +
-        "'," +
-        " info = '" +
-        this.args.info +
-        "' WHERE id = " +
-        this.args.id +
-        "RETURNING id"
+          this.args.family +
+          "', name ='" +
+          this.args.name +
+          "', father = '" +
+          this.args.father +
+          "'," +
+          " info = '" +
+          this.args.info +
+          "' WHERE id = " +
+          this.args.id +
+          "RETURNING id"
       );
       //Редактирование данных почты
       if (checkMail.rows[0].email !== this.args.email) {
@@ -268,11 +268,11 @@ export class User {
           .digest("hex");
         await this.db.query(
           "UPDATE users SET email = '" +
-          this.args.email +
-          "', mail_code = '" +
-          mail_code +
-          "' , act_mail = false WHERE id = " +
-          this.args.id
+            this.args.email +
+            "', mail_code = '" +
+            mail_code +
+            "' , act_mail = false WHERE id = " +
+            this.args.id
         );
       }
     }
@@ -284,19 +284,19 @@ export class User {
 
       db_response = await this.db.query(
         "UPDATE users SET family = '" +
-        this.args.family +
-        "', name ='" +
-        this.args.name +
-        "', father = '" +
-        this.args.father +
-        "'," +
-        " info = '" +
-        this.args.info +
-        "', deleted = " +
-        this.args.deleted +
-        " WHERE id = " +
-        this.args.id +
-        "RETURNING id"
+          this.args.family +
+          "', name ='" +
+          this.args.name +
+          "', father = '" +
+          this.args.father +
+          "'," +
+          " info = '" +
+          this.args.info +
+          "', deleted = " +
+          this.args.deleted +
+          " WHERE id = " +
+          this.args.id +
+          "RETURNING id"
       );
 
       //Редактирование данных с паролем
@@ -317,11 +317,11 @@ export class User {
 
         await this.db.query(
           "UPDATE users SET password = '" +
-          pass +
-          "', re_password_code = '" +
-          re_pass_code +
-          "' WHERE id = " +
-          this.args.id
+            pass +
+            "', re_password_code = '" +
+            re_pass_code +
+            "' WHERE id = " +
+            this.args.id
         );
       }
 
@@ -333,11 +333,11 @@ export class User {
           .digest("hex");
         await this.db.query(
           "UPDATE users SET email = '" +
-          this.args.email +
-          "', mail_code = '" +
-          mail_code +
-          "' , act_mail = false WHERE id = " +
-          this.args.id
+            this.args.email +
+            "', mail_code = '" +
+            mail_code +
+            "' , act_mail = false WHERE id = " +
+            this.args.id
         );
       }
     }
@@ -345,10 +345,8 @@ export class User {
     return db_response.rows;
   }
 
-
-
   // async sendConfirmMail() {
-  //   //запрос на данные из бд на логин/почту/код подтверждения почты и активацию через код сессии 
+  //   //запрос на данные из бд на логин/почту/код подтверждения почты и активацию через код сессии
   //   var db_response = await this.db.query(
   //     "SELECT login, email, mail_code, act_mail FROM users INNER JOIN sessions ON users.id = sessions.uid WHERE sess_code = '" +
   //     this.sess_code +
@@ -372,7 +370,7 @@ export class User {
   //       //Проверка mail_code и code_generated
   //       if (db_response.rows[0].mail_code === code_generate) {
   //         console.log("Данные mail_code совпадают");
-  //         //Проверка на активацию почты 
+  //         //Проверка на активацию почты
   //         if (db_response.rows[0].act_mail === true) {
   //           //Активация true
   //           console.log("Email подтвержден");
@@ -437,14 +435,12 @@ export class User {
   //       });
   //     }
 
-
   //   }
   //   //иначе
   //   else {
   //     console.log("Логин и мыло не верны ");
   //   }
   // }
-
 
   // //Отправка письма для подтверждения email
   // async sendConfirmMail() {
@@ -499,15 +495,12 @@ export class User {
   //   return db_response.rows;
   // }
 
-
-
-
   //Отправка письма для смены пароля
-
 
   async sendForgPassMail() {
     //Проверка на подтверждение почты
     var db_response = await this.db.query(
+
       "SELECT re_password_code FROM users WHERE email= '" +
       this.args.email +
       "'"
@@ -547,20 +540,20 @@ export class User {
       .createHmac("sha256", CONFIG.crypto_code)
       .update(this.args.login + "_" + pass)
       .digest("hex");
-    var db_response = await this.args.query(
+    var db_response = await this.db.query(
       "SELECT re_password_code FROM users WHERE login ='" +
-      this.args.login +
-      "'"
+        this.args.login +
+        "'"
     );
     if (db_response.rows[0].re_password_code === this.args.code) {
       db_response = await this.db.query(
         "UPDATE users SET re_password_code = '" +
-        re_pass_code +
-        "', password = '" +
-        pass +
-        "' WHERE login = '" +
-        this.args.login +
-        "'"
+          re_pass_code +
+          "', password = '" +
+          pass +
+          "' WHERE login = '" +
+          this.args.login +
+          "'"
       );
       return true;
     } else {
@@ -568,23 +561,28 @@ export class User {
     }
   }
 
-  //Смена пароля из под авторизованного пользователя себе 
+  //Смена пароля из под авторизованного пользователя себе
   async changePass() {
     // id, login, old_password, new_password
 
     //crypto.createHmac('sha256', CONFIG.key_code).update('admin').digest('hex')
 
-    //Запрос в бд на получение старого пароля для проверки 
-    var db_response = await this.db.query("SELECT password FROM users WHERE id = " + this.args.id);
+    //Запрос в бд на получение старого пароля для проверки
+    var db_response = await this.db.query(
+      "SELECT password FROM users WHERE id = " + this.args.id
+    );
 
     //генерация старого пароля полученный от пользователя
-    var old_pass = crypto.createHmac("sha256", CONFIG.crypto_code).update(this.args.old_password).digest("hex");
+    var old_pass = crypto
+      .createHmac("sha256", CONFIG.crypto_code)
+      .update(this.args.old_password)
+      .digest("hex");
 
-    //Проверка на соответствие пароля из БД и полученного старого пароля 
+    //Проверка на соответствие пароля из БД и полученного старого пароля
     if (db_response.rows[0].password !== old_pass) {
       return false;
     }
-    //Если проверка прошла успешно меняем пароль и код для сброса пароля 
+    //Если проверка прошла успешно меняем пароль и код для сброса пароля
     else {
       //Генерация нового пароля пароля
       var new_pass = crypto
@@ -598,14 +596,22 @@ export class User {
         .update(this.args.login + "_" + new_pass)
         .digest("hex");
 
-        db_response = await this.db.query("UPDATE users SET password=\'"+this.args.new_pass+"\', re_password_code = \'"+re_pass_code+"\' RETURNING id ");
+      db_response = await this.db.query(
+        "UPDATE users SET password= '" +
+          new_pass +
+          "', re_password_code = '" +
+          re_pass_code +
+          "' WHERE login = '" +
+          this.args.login +
+          "' RETURNING id "
+      );
 
-
-        if(db_response.rows[0].id === 1)
-        {return true}
-        else{return false}
+      if (db_response.rows[0].id === 1) {
+        return true;
+      } else {
+        return false;
+      }
     }
-
   }
 
   transporter: nodemailer.Transporter = nodemailer.createTransport({

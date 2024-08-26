@@ -40,7 +40,7 @@ export const SelectWithSearch: FC<Props> = ({
   required = true,
 }) => {
   const [searchText, setSearchText] = useState("");
-  const displayedOptions = options.filter((option) =>
+  const displayedOptions = options?.filter((option) =>
     containsText(option?.name, searchText)
   );
 
@@ -96,7 +96,7 @@ export const SelectWithSearch: FC<Props> = ({
           </MenuItem>
         )}
 
-        {displayedOptions.map((option, _) => (
+        {displayedOptions?.map((option, _) => (
           <MenuItem
             key={option.id}
             value={option.id}

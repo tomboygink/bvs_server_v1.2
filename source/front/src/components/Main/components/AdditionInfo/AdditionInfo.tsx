@@ -4,7 +4,6 @@ import CommitIcon from "@mui/icons-material/Commit";
 import Battery0BarIcon from "@mui/icons-material/Battery0Bar";
 import moment from "moment";
 import { useStyles } from "@hooks/useStyles";
-
 import styles from "./styles.module.scss";
 import { IDev } from "@src/types/IDev";
 
@@ -13,23 +12,24 @@ interface Props {
   isVisible: boolean;
 }
 export const AdditionInfo: FC<Props> = (props) => {
-  const {
-    device,
-
-    isVisible,
-  } = props;
+  const { device, isVisible } = props;
   const cx = useStyles(styles);
+  const controlSess =
+    device?.control_sess?.time_srv ?? device?.last_sess?.time_srv;
+  const controlAkb =
+    device?.control_sess?.level_akb ?? device?.last_sess?.level_akb;
   return (
     <>
-      {isVisible && Boolean(device?.control_sess) && (
+      {isVisible && (
+        // && Boolean(device?.control_sess)
         <div className={cx("container")}>
           <p className={cx("title")}>Дополнительная информация</p>
           <div className={cx("content")}>
             <div className={cx("row")}>
               <CommitIcon sx={{ color: "#00b394" }} />
               <p className={cx("text")}>
-                {moment(device?.control_sess?.time_srv).format("DD.MM.YYYY")}{" "}
-                {moment(device?.control_sess?.time_srv).format("kk:mm")}
+                {moment(controlSess).format("DD.MM.YYYY")}{" "}
+                {moment(controlSess).format("kk:mm")}
               </p>
               <p className={cx("description")}>(контрольная сессия)</p>
             </div>
@@ -54,7 +54,7 @@ export const AdditionInfo: FC<Props> = (props) => {
             <Divider sx={{ m: "8px" }} />
             <div className={cx("row")}>
               <Battery0BarIcon sx={{ color: "#aaa" }} />
-              <p className={cx("text")}>{device?.control_sess?.level_akb}</p>
+              <p className={cx("text")}>{controlAkb}</p>
               <p className={cx("description")}>(заряд - контрольная сессия)</p>
             </div>
             <div className={cx("row")}>

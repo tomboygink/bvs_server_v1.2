@@ -24,7 +24,7 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
   const dispatch = useAppDispatch();
   const [_, setUserLS] = useLocalStorage("user", null);
   const [countCallSendEmail, setCountSendEmail] = useState(0);
-  const [open, openModal, closeModal] = useModal();
+  const [open, , closeModal] = useModal();
   const [updatedUser, setUpdatedUser] = useState<IUser | null>(
     auth?.user as IUser
   );
@@ -58,12 +58,13 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
     if (!family || !name || !email) {
       setMessage(INVALID_FORM);
     }
-    //Если почта не подтверждена - отправляем запрос на получение кода активации по почте
-    else if (!auth?.user?.act_mail) {
-      sendEmailFc();
-      openModal();
-      //Если форма валидна и почта подтверждена - отправляем запрос на изменение данных пользователя
-    } else {
+    // //Если почта не подтверждена - отправляем запрос на получение кода активации по почте
+    // else if (!auth?.user?.act_mail) {
+    //   sendEmailFc();
+    //   openModal();
+
+    // }
+    else {
       setMessage("");
       changeUser(formJson);
     }
@@ -78,6 +79,10 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
   };
 
   const sendEmailFc = () => {
+    console.log({
+      login: auth?.user?.login ?? "",
+      email: auth?.user?.email ?? "",
+    });
     sendEmail({
       login: auth?.user?.login ?? "",
       email: auth?.user?.email ?? "",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Tabs, Tab, Box } from "@mui/material";
 import { Chart } from "../Chart/Chart";
 import { AboutDevPanel } from "../AboutDevPanel";
@@ -7,6 +7,7 @@ import { SelectedSessionTab } from "../SelectedSessionTab";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 import { SessionTab } from "../SessionsTab";
+import { useCurrentWidth } from "@hooks/useCurrentWidth";
 
 interface PanelProps {
   children?: React.ReactNode;
@@ -15,10 +16,12 @@ interface PanelProps {
 }
 interface TabPanelViewProps {
   isSelectedSession: boolean;
+  isVisibleDevice: boolean;
 }
 function Panel(props: PanelProps) {
   const { children, value, index, ...other } = props;
   const cx = useStyles(styles);
+
   return (
     <div
       className={cx("panel")}
@@ -34,13 +37,19 @@ function Panel(props: PanelProps) {
 }
 
 export const TabPanelView = (props: TabPanelViewProps) => {
-  const { isSelectedSession } = props;
+  const panelRef = useRef<HTMLDivElement>(null);
+  const width = useCurrentWidth();
+  const { isSelectedSession, isVisibleDevice } = props;
   const cx = useStyles(styles);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [maxWidth, setMaxWidth] = useState("1px");
 
   const handleChangeTab = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  useEffect(() => {
+    setMaxWidth(`${panelRef.current?.clientWidth}px`);
+  }, [width, isVisibleDevice]);
 
   return (
     <div className={cx("tab-container")}>
@@ -49,10 +58,14 @@ export const TabPanelView = (props: TabPanelViewProps) => {
         value={value}
         onChange={handleChangeTab}
         sx={{
+          maxWidth: maxWidth,
           "& .MuiBox-root": {
             border: "1px green solid",
           },
         }}
+        variant="scrollable"
+        scrollButtons="auto"
+        allowScrollButtonsMobile={true}
       >
         <Tab sx={{ fontSize: "10px" }} label="Устройство" />
         <Tab sx={{ fontSize: "10px" }} label="Сессии за период" />
@@ -67,7 +80,7 @@ export const TabPanelView = (props: TabPanelViewProps) => {
           disabled={!isSelectedSession}
         />
       </Tabs>
-      <div className="content">
+      <div className="content" id="tabContent" ref={panelRef}>
         <Panel value={value} index={0}>
           <AboutDevPanel />
         </Panel>

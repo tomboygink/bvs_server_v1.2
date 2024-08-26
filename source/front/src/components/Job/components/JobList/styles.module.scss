@@ -2,17 +2,30 @@
 @import "../../../../assets/styles/text-style.scss";
 @import "../../../../assets/styles/colors.scss";
 @import "../../../../assets/styles/reset.scss";
+@import "../../../../assets/styles/size.scss";
 
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  // align-items: center;
+  align-items: center;
   width: 100%;
   background-color: #fff;
   padding: 20px;
   box-sizing: border-box;
+  .list {
+    align-self: flex-start;
+  }
   .MuiFormControl-root {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: $small) {
+  .container {
+    align-items: flex-start;
+  }
+  .search {
     width: 100%;
   }
 }

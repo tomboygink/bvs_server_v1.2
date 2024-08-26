@@ -23,6 +23,7 @@ import { EditWell } from "@components/Modals/EditWell";
 import { EditOrg } from "@components/Modals/EditOrg";
 import { EditJob } from "@components/Modals/EditJob";
 import { EditProfile } from "@components/Modals/EditProfile";
+import { EditPassword } from "@components/Modals/EditPassword";
 import { CloseButton } from "../CloseButton";
 import { Typography } from "../Typography";
 import styles from "./styles.module.scss";
@@ -75,6 +76,8 @@ export const Modal: FC<Props> = ({ open, handleClose }) => {
       return <EditJob handleClose={handleClose} />;
     } else if (variant === eVariantModal.editProfile) {
       return <EditProfile handleClose={handleClose} />;
+    } else if (variant === eVariantModal.editPassword) {
+      return <EditPassword handleClose={handleClose} />;
     }
   };
 
