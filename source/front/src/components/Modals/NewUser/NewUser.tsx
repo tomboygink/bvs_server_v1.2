@@ -15,6 +15,7 @@ import {
   PASSWORDS_NOT_MATCH,
   INVALID_PASSWORD_ERROR,
   DOUBL_LOGIN_ERROR,
+  DOUBL_EMAIL_ERROR,
 } from "@src/utils/messages";
 
 import { IJob } from "@src/types/IJob";
@@ -91,6 +92,13 @@ export const NewUser: FC<Props> = ({ handleClose }) => {
         users?.data?.some((user: IUser) => user.login === values.login)
       ) {
         setMessage(DOUBL_LOGIN_ERROR);
+      } else if (
+        users?.data?.some(
+          (user: IUser) =>
+            user.email.toLowerCase() === (values.email as String).toLowerCase()
+        )
+      ) {
+        setMessage(DOUBL_EMAIL_ERROR);
       } else {
         setMessage("");
         createNewUser();

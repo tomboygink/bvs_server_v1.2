@@ -52,7 +52,6 @@ export const ConfirmEmail = () => {
     if (response && response.error) setMessage(response.error);
   }, [response]);
 
-  console.log("auth", auth);
   return (
     <ConfirmEmailView
       handleSubmit={handleConfirm}

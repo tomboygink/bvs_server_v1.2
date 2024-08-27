@@ -4,12 +4,14 @@ import { useAuth } from "@hooks/useAuth";
 import { useAppSelector, useAppDispatch } from "@hooks/redux";
 import { FormValues, useFormValidation } from "@hooks/useFormWithValidation";
 import { useEditUserMutation } from "@src/redux/services/userApi";
+import { useGetAllUsersQuery } from "@src/redux/services/userApi";
 import { setSelectedUser } from "@src/redux/reducers/UserSlice";
 import {
   INVALID_FORM,
   INVALID_PASSWORD_ERROR,
   PASSWORDS_NOT_MATCH,
   MATCHING_LOGIN_AND_PASS_ERROR,
+  DOUBL_EMAIL_ERROR,
 } from "@src/utils/messages";
 import { passwordRegex } from "@src/utils/regexp";
 import { IUser } from "@src/types/IUser";
@@ -24,6 +26,7 @@ export const EditUser: FC<Props> = ({ handleClose }) => {
   const { selectedUser } = useAppSelector((state) => state.userSlice);
   const [editUser, { data: response, isError, isSuccess, isLoading }] =
     useEditUserMutation();
+  const { data: users } = useGetAllUsersQuery({});
   const { values, errors, isValid, handleChange, resetForm, setIsValid } =
     useFormValidation();
   const isWrite = selectedUser?.login === auth?.user?.login;
@@ -58,7 +61,6 @@ export const EditUser: FC<Props> = ({ handleClose }) => {
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries((formData as any).entries());
     const { family, name, email, login } = formJson;
-
     if (!family || !name || !email || !login) {
       setMessage(INVALID_FORM);
     } else if (values.password) {
@@ -69,6 +71,14 @@ export const EditUser: FC<Props> = ({ handleClose }) => {
       } else if (values.password === values.login) {
         setMessage(MATCHING_LOGIN_AND_PASS_ERROR);
       }
+    } else if (
+      users?.data?.some(
+        (user: IUser) =>
+          user.email.toLowerCase() === email.toLowerCase() &&
+          email.toLowerCase() !== selectedUser?.email.toLowerCase()
+      )
+    ) {
+      setMessage(DOUBL_EMAIL_ERROR);
     } else {
       setMessage("");
       changeUser(formJson);

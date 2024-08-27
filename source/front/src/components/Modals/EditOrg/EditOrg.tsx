@@ -90,7 +90,6 @@ export const EditOrg: FC<Props> = ({ handleClose }) => {
 
   const changeOrg = (args: FormValues) => {
     editOrg(args).then((res) => {
-      console.log({ isSuccess, res, response });
       if (res && "data" in res && !res.data.error) {
         dispatch(setSelectedOrg({ ...(selectedOrg as IOrg), ...args }));
       }
