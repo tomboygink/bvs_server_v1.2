@@ -485,14 +485,7 @@ var User = (function () {
                                 "' RETURNING id ")];
                     case 3:
                         db_response = _a.sent();
-                        if (db_response.rows[0].id === 1) {
-                            return [2, true];
-                        }
-                        else {
-                            return [2, false];
-                        }
-                        _a.label = 4;
-                    case 4: return [2];
+                        return [2, true];
                 }
             });
         });
