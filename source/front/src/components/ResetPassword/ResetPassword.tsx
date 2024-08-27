@@ -1,4 +1,5 @@
 import { useState, useEffect, FormEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ResetPasswordView } from "./ResetPasswordView";
 import { useFormValidation } from "@hooks/useFormWithValidation";
@@ -13,6 +14,8 @@ import { ScreenRoute } from "@src/types/Screen.routes.enum";
 
 export const ResetPassword = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const code = searchParams.get("code");
   const { values, errors, isValid, handleChange, resetForm } =
     useFormValidation();
   const [message, setMessage] = useState("");
@@ -21,6 +24,7 @@ export const ResetPassword = () => {
   const generateArgs = () => {
     const args = {
       ...values,
+      code: (code as string).trim() ?? "",
     };
     return args;
   };

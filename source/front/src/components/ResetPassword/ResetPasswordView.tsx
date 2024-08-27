@@ -1,5 +1,6 @@
 import { FC, ChangeEvent, FormEvent } from "react";
 import { Alert } from "@mui/material";
+
 import { Typography } from "@components/_shared/Typography";
 import { InputText } from "@components/_shared/Inputs/InputText";
 import { InputWithIcon } from "@components/_shared/Inputs/InputWithIcon";
@@ -35,6 +36,7 @@ export const ResetPasswordView: FC<Props> = (props) => {
     handleSubmit,
   } = props;
   const cx = useStyles(styles);
+
   return (
     <section className={cx("section")}>
       <form className={cx("form")} onSubmit={handleSubmit} noValidate>

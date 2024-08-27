@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Menu } from "@mui/material";
-import { InfoSticker } from "../components/InfoSticker";
+import { InfoSticker } from "../InfoSticker/InfoSticker";
 
 interface Props {
   isOpen: boolean;
