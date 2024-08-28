@@ -2,13 +2,14 @@ import { useState, useEffect, FormEvent, FC } from "react";
 import {
   useEditUserMutation,
   useSendEmailMutation,
+  useGetAllUsersQuery,
 } from "@src/redux/services/userApi";
 import { useFormValidation } from "@hooks/useFormWithValidation";
 import { useAuth } from "@hooks/useAuth";
 import { useLocalStorage } from "@hooks/useLocalStorage";
 import { EditProfileView } from "./EditProfileView";
 import { FormValues } from "@hooks/useFormWithValidation";
-import { INVALID_FORM } from "@src/utils/messages";
+import { INVALID_FORM, DOUBL_EMAIL_ERROR } from "@src/utils/messages";
 import { useModal } from "@hooks/useModal";
 import { SendEmail } from "./components/ConfirmEmail";
 import { IUser } from "@src/types/IUser";
@@ -36,6 +37,7 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
     sendEmail,
     { isLoading: isLoadingSendEmail, isSuccess: isSuccessSendEmail },
   ] = useSendEmailMutation();
+  const { data: users } = useGetAllUsersQuery({});
   const [message, setMessage] = useState("");
 
   const generateArgs = (values: FormValues) => {
@@ -57,6 +59,14 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
     const { family, name, email } = formJson;
     if (!family || !name || !email) {
       setMessage(INVALID_FORM);
+    } else if (
+      users?.data?.some(
+        (user: IUser) =>
+          user.email.toLowerCase() === email.toLowerCase() &&
+          email.toLowerCase() !== auth?.user?.email.toLowerCase()
+      )
+    ) {
+      setMessage(DOUBL_EMAIL_ERROR);
     }
     // //Если почта не подтверждена - отправляем запрос на получение кода активации по почте
     // else if (!auth?.user?.act_mail) {
@@ -79,10 +89,6 @@ export const EditProfile: FC<Props> = ({ handleClose }) => {
   };
 
   const sendEmailFc = () => {
-    console.log({
-      login: auth?.user?.login ?? "",
-      email: auth?.user?.email ?? "",
-    });
     sendEmail({
       login: auth?.user?.login ?? "",
       email: auth?.user?.email ?? "",

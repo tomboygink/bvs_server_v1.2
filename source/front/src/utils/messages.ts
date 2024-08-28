@@ -3,6 +3,7 @@ export const INVALID_FORM =
 export const SAVE_SUCCESS = "Данные успешно сохранены";
 export const SAVE_ERROR = "Произошла ошибка при сохранении данных";
 export const DOUBL_LOGIN_ERROR = "Этот логин уже используется";
+export const DOUBL_EMAIL_ERROR = "Этот e-mail уже используется";
 export const MATCHING_LOGIN_AND_PASS_ERROR =
   "Пароль и логин не должны совпадать";
 export const PASSWORDS_NOT_MATCH = "Пароли не совпадают";

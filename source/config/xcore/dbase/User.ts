@@ -540,11 +540,13 @@ export class User {
       .createHmac("sha256", CONFIG.crypto_code)
       .update(this.args.login + "_" + pass)
       .digest("hex");
+
     var db_response = await this.db.query(
       "SELECT re_password_code FROM users WHERE login ='" +
       this.args.login +
       "'"
     );
+    
     if (db_response.rows[0].re_password_code === this.args.code) {
       db_response = await this.db.query(
         "UPDATE users SET re_password_code = '" +
