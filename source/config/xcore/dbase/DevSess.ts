@@ -42,7 +42,8 @@ export class DevSess {
   //Получение последних сессий всех устройство
   async selectAllLastDevSess(): Promise<DevSessEntity[]> {
     var db_response = await this.db.query(
-      "SELECT * FROM dev_sess order by id desc;"
+      //"SELECT * FROM dev_sess order by id desc;"
+      "WITH test AS (SELECT *, ROW_NUMBER() OVER(PARTITION BY dev_number ORDER BY time_dev desc) as rn FROM dev_sess) SELECT * FROM test WHERE rn = 1"
     );
 
     var result: DevSessEntity[] = new Array();
