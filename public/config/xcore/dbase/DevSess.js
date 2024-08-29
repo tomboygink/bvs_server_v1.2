@@ -76,7 +76,7 @@ var DevSess = (function () {
             var db_response, result, lds;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM dev_sess order by id desc;")];
+                    case 0: return [4, this.db.query("WITH test AS (SELECT *, ROW_NUMBER() OVER(PARTITION BY dev_number ORDER BY time_dev desc) as rn FROM dev_sess) SELECT * FROM test WHERE rn = 1")];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();
