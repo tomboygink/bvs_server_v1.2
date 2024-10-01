@@ -164,39 +164,40 @@ var ServerData = (function () {
     };
     ServerData.prototype.saveSqlData = function (time, number, sensors, akb, data_str) {
         return __awaiter(this, void 0, void 0, function () {
-            var errors, err_info, query_devs, srv_time, obj, s, i, sess_data_sql;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var errors, err_info, query_devs, srv_time, obj, s, i, sess_data_sql, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
+                        _b.trys.push([0, 12, , 13]);
                         errors = false;
                         err_info = '';
                         return [4, this.db.query("SELECT * FROM devs WHERE number = '" + number + "'")];
                     case 1:
-                        query_devs = _a.sent();
+                        query_devs = _b.sent();
                         if (!(query_devs.rows.length === 0)) return [3, 3];
                         console.log("ДАННОЕ УСТРОЙСТВО ОТСУТСВУЕТ В БАЗЕ ДАННЫХ");
                         return [4, this.db.query("INSERT INTO info_log (msg_type, log, info) VALUES ('ERROR', '" + data_str + "', 'ДАННОЕ УСТРОЙСТВО ОТСУТСВУЕТ В БАЗЕ ДАННЫХ')")];
                     case 2:
-                        _a.sent();
+                        _b.sent();
                         errors = true;
-                        _a.label = 3;
+                        _b.label = 3;
                     case 3:
-                        if (!(errors == false)) return [3, 10];
+                        if (!(errors === false)) return [3, 11];
                         if (!(query_devs.rows[0].sensors["s"].length < sensors.length)) return [3, 5];
                         err_info = "ПРИНЯТО БОЛЬШЕ ДАННЫХ С СЕНСЕРОВ, ЧЕМ В БАЗЕ ДАННЫХ(ВОЗМОЖНА ПОТЕРЯ ДАННЫХ)";
                         return [4, this.db.query("INSERT INTO info_log (msg_type, log, info) VALUES ('WARNING', '" + data_str + "', 'ПРИНЯТО БОЛЬШЕ ДАННЫХ С СЕНСЕРОВ, ЧЕМ В БАЗЕ ДАННЫХ(ВОЗМОЖНА ПОТЕРЯ ДАННЫХ)')")];
                     case 4:
-                        _a.sent();
+                        _b.sent();
                         errors = true;
-                        _a.label = 5;
+                        _b.label = 5;
                     case 5:
                         if (!(query_devs.rows[0].sensors["s"].length > sensors.length)) return [3, 7];
                         err_info = "ПРИНЯТО МЕНЬШЕ ДАННЫХ С СЕНСЕРОВ, ЧЕМ В БАЗЕ ДАННЫХ";
                         return [4, this.db.query("INSERT INTO info_log (msg_type, log, info) VALUES ('WARNING', '" + data_str + "', 'ПРИНЯТО МЕНЬШЕ ДАННЫХ С СЕНСЕРОВ, ЧЕМ В БАЗЕ ДАННЫХ')")];
                     case 6:
-                        _a.sent();
+                        _b.sent();
                         errors = true;
-                        _a.label = 7;
+                        _b.label = 7;
                     case 7:
                         if (errors) {
                             console.log(err_info);
@@ -226,14 +227,22 @@ var ServerData = (function () {
                         s += ']}';
                         return [4, this.db.query("INSERT INTO dev_sess (time_dev, time_srv, dev_number, dev_id, level_akb, sess_data) VALUES ('" + time + "', '" + srv_time + "', '" + query_devs.rows[0].number + "', " + query_devs.rows[0].id + ", " + akb + ", '" + s + "') RETURNING id")];
                     case 8:
-                        sess_data_sql = _a.sent();
-                        if (!(sess_data_sql.rows[0].id == 0 || sess_data_sql == null || sess_data_sql == undefined)) return [3, 10];
+                        sess_data_sql = _b.sent();
+                        if (!(sess_data_sql.rows[0].id === 0 || sess_data_sql === null || sess_data_sql === undefined)) return [3, 10];
                         return [4, this.db.query("INSERT INTO info_log (msg_type, log, info) VALUES ('WARNING', '" + data_str + "', 'НЕ МОГУ СОЗДАТЬ СЕСИИЮ ДЛЯ ПРИЕМА ДАННЫХ')")];
                     case 9:
-                        _a.sent();
+                        _b.sent();
                         console.log("\x1b[33m", data_str, 'НЕ МОГУ СОЗДАТЬ СЕСИИЮ ДЛЯ ПРИЕМА ДАННЫХ');
-                        _a.label = 10;
-                    case 10: return [2];
+                        _b.label = 10;
+                    case 10:
+                        console.log("\x1b[32m ДАННЫЕ УСПЕШНО ЗАПИСАНЫ");
+                        _b.label = 11;
+                    case 11: return [3, 13];
+                    case 12:
+                        _a = _b.sent();
+                        console.log("\x1b[31m	ПРОИЗОШЛА ФАТАЛЬНАЯ ОШИБКА ПРИ ЗАПИСИ ДАННЫХ В БД СТАРОЙ ПРОШИВКИ");
+                        return [3, 13];
+                    case 13: return [2];
                 }
             });
         });

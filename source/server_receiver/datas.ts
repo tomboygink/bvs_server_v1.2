@@ -130,6 +130,8 @@ export class ServerData {
     }
 
     async saveSqlData(time: string, number: string, sensors: (string | number)[], akb: string, data_str: string) {
+
+        try{
         var errors = false;
         var err_info = '';
         //получаем устройства для проверки с полученными данными 
@@ -147,7 +149,7 @@ export class ServerData {
 
         //  console.log("Сенсеров в бд", query_devs[0].sensors["s"].length);
         //если устройство есть в бд
-        if (errors == false) {
+        if (errors === false) {
 
             //console.log(query_devs[0].sensors["s"].length," ", sensors.length);
 
@@ -170,8 +172,6 @@ export class ServerData {
                 console.log(err_info);
                 console.log("\x1b[33m", data_str, err_info);
             }
-
-
 
             //время сервера
             //var srv_time = new Date().getFullYear() +"-"+ new Date().getMonth() +"-"+ new Date().getDate()+" "+new Date().getHours() + ":" + new Date().getMinutes() +":"+ new Date().getSeconds();
@@ -205,12 +205,15 @@ export class ServerData {
 
             //console.log(sess_data_sql.rows);
 
-            if (sess_data_sql.rows[0].id == 0 || sess_data_sql == null || sess_data_sql == undefined) {
+            if (sess_data_sql.rows[0].id === 0 || sess_data_sql === null || sess_data_sql === undefined) {
                 await this.db.query("INSERT INTO info_log (msg_type, log, info) VALUES ('WARNING', '" + data_str + "', 'НЕ МОГУ СОЗДАТЬ СЕСИИЮ ДЛЯ ПРИЕМА ДАННЫХ')");
                 console.log("\x1b[33m", data_str, 'НЕ МОГУ СОЗДАТЬ СЕСИИЮ ДЛЯ ПРИЕМА ДАННЫХ');
             }
-        }
 
+            console.log("\x1b[32m ДАННЫЕ УСПЕШНО ЗАПИСАНЫ")
+        }
+    }
+    catch{console.log("\x1b[31m	ПРОИЗОШЛА ФАТАЛЬНАЯ ОШИБКА ПРИ ЗАПИСИ ДАННЫХ В БД СТАРОЙ ПРОШИВКИ")}
 
     }
 
