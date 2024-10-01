@@ -36,7 +36,6 @@ interface Props {
 }
 export const EditUserView: FC<Props> = ({
   user,
-
   message,
   handleChange,
   handleChecked,
@@ -55,7 +54,6 @@ export const EditUserView: FC<Props> = ({
       <div className={cx("container")}>
         <InputText
           onChange={handleChange}
-          //value={values.family || ""}
           defaultValue={user?.family || ""}
           name="family"
           label="Фамилия"
@@ -66,7 +64,6 @@ export const EditUserView: FC<Props> = ({
           name="name"
           onChange={handleChange}
           defaultValue={user?.name || ""}
-          //value={values.name || ""}
           error={Boolean(errors.name)}
           label="Имя"
           helperText={errors.name}
@@ -75,7 +72,6 @@ export const EditUserView: FC<Props> = ({
         <InputText
           onChange={handleChange}
           defaultValue={user?.father || ""}
-          //value={values.father || ""}
           required={false}
           name="father"
           label="Отчество"
@@ -85,7 +81,6 @@ export const EditUserView: FC<Props> = ({
         <InputText
           onChange={handleChange}
           defaultValue={user?.email || ""}
-          //value={values.email || ""}
           name="email"
           label="E-mail"
           type="email"
