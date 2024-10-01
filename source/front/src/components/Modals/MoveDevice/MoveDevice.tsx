@@ -45,6 +45,7 @@ export const MoveDevice: FC<Props> = ({ handleClose }) => {
 
   const generateArgs = () => {
     const args = {
+      id: selectedDev?.id ?? "",
       group_dev_id: selectedDev?.group_dev_id ?? "",
       number: selectedDev?.number ?? "",
       name: selectedDev?.name ?? "",

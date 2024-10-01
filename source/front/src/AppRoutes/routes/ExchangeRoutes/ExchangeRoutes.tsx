@@ -46,7 +46,7 @@ export const ExchangeRoutes: React.FC<Props> = () => {
         link: `${ScreenRoute.RESETPASSWORD}`,
         element: <ResetPasswordPage />,
       },
-      //TODO: защитить авторизацией?
+
       {
         link: `${ScreenRoute.CONFIRMEMAIL}`,
         element: <ConfirmEmailPage />,
