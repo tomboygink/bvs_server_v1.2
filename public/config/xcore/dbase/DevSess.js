@@ -130,10 +130,12 @@ var DevSess = (function () {
     };
     DevSess.prototype.selectDevSess = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var start_date, end_date, db_response, result, ds;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var start_date, end_date, db_response, result, ds, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
+                        _b.trys.push([0, 4, , 5]);
+                        if (!(this.args.sess_period_start !== '')) return [3, 2];
                         start_date = (0, DateStr_1.dateTimeToSQL)(new Date(this.args.sess_period_start));
                         end_date = (0, DateStr_1.dateTimeToSQL)(new Date(this.args.sess_period_end));
                         return [4, this.db.query("SELECT * FROM dev_sess WHERE dev_number = '" +
@@ -145,12 +147,18 @@ var DevSess = (function () {
                                 end_date +
                                 "' order by time_dev asc")];
                     case 1:
-                        db_response = _a.sent();
+                        db_response = _b.sent();
                         result = new Array();
                         for (ds in db_response.rows) {
                             result.push(db_response.rows[ds]);
                         }
                         return [2, result];
+                    case 2: return [2, []];
+                    case 3: return [3, 5];
+                    case 4:
+                        _a = _b.sent();
+                        return [2, []];
+                    case 5: return [2];
                 }
             });
         });
