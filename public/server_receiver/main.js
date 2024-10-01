@@ -85,7 +85,7 @@ var Server_Receiver = (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 dir = 'logs';
-                logs = path.join(__dirname, '..', '..', '..', 'logs');
+                logs = path.join(__dirname, '..', '..', 'logs');
                 if (!fs.existsSync(dir)) {
                     console.log('Create folder logs');
                     fs.mkdirSync(dir);

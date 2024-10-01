@@ -30,8 +30,10 @@ export class Server_Receiver {
 
     async startServer() {
 
+        //console.log(__dirname);
         var dir = 'logs';
-        var logs = path.join(__dirname, '..', '..', '..', 'logs')
+        var logs = path.join(__dirname, '..', '..', 'logs');
+        
 
         //Создание папки с логами
         if (!fs.existsSync(dir)) {
