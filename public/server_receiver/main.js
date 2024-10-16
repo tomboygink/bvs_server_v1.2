@@ -62,16 +62,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Server_Receiver = void 0;
-console.log("Hello server receiver");
+exports.ServerReceiver = void 0;
 var net_1 = __importDefault(require("net"));
 var fs = __importStar(require("fs"));
 var path = __importStar(require("path"));
-var datas_1 = require("./datas");
-var datas_error_1 = require("./datas_error");
 var config_json_1 = __importDefault(require("../config/config.json"));
-var Server_Receiver = (function () {
-    function Server_Receiver() {
+var parcing_data_1 = require("./parcing_data");
+var parcing_new_data_1 = require("./parcing_new_data");
+var ServerReceiver = (function () {
+    function ServerReceiver() {
         this.debug = true;
         this.timeout = 10000;
         this.host = config_json_1.default.server_receiver_config.host;
@@ -79,15 +78,15 @@ var Server_Receiver = (function () {
         this.server = net_1.default.createServer();
         this.scount = 0;
     }
-    Server_Receiver.prototype.startServer = function () {
+    ServerReceiver.prototype.startServer = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var dir, logs;
+            var dir, logsPath;
             var _this = this;
             return __generator(this, function (_a) {
                 dir = 'logs';
-                logs = path.join(__dirname, '..', '..', 'logs');
+                logsPath = path.join(__dirname, '..', '..', 'logs');
                 if (!fs.existsSync(dir)) {
-                    console.log('Create folder logs');
+                    console.log("Создаю папку логов");
                     fs.mkdirSync(dir);
                 }
                 this.server.maxConnections = 200;
@@ -98,7 +97,7 @@ var Server_Receiver = (function () {
                         socket.setTimeout(this.timeout);
                         socket.on('timeout', function () {
                             if (_this.debug) {
-                                console.log("socket timeout");
+                                console.log("Время ожидания вышло");
                             }
                             if (!socket.connecting) {
                                 return;
@@ -107,84 +106,87 @@ var Server_Receiver = (function () {
                         });
                         s_ind = this.scount;
                         this.scount++;
-                        if (this.scount > 2400000)
+                        if (this.scount > 10000)
                             this.scount = 0;
-                        socket.on('error', function (err) { console.log(err); });
+                        socket.on('error', function (err) {
+                            console.log("\x1b[31m Ошибка ", err);
+                            socket.end();
+                        });
                         socket.on('close', function () {
                             if (_this.debug)
-                                console.log(s_ind, " - Clent socket closed!");
+                                console.log(s_ind, ' - Клиент закрыл сокет');
                             if (!socket.connecting)
                                 socket.end();
-                            socket.destroy();
                         });
                         socket.on('data', function (data) {
                             var month = new Date().getMonth() + 1;
-                            var file = 'log ' + new Date().getFullYear() + '.' + month + '.' + new Date().getDate() + '.txt';
-                            if (!fs.existsSync(path.join(logs, file))) {
-                                console.log('Create file logs');
-                                fs.createWriteStream(path.join(logs, file), 'utf-8');
+                            var fileName = 'log ' + new Date().getFullYear() + '.' + month + '.' + new Date().getDate() + '.txt';
+                            if (!fs.existsSync(path.join(logsPath, fileName))) {
+                                console.log('Создаю файл лога с сегодняшней датой');
+                                fs.createWriteStream(path.join(logsPath, fileName), 'utf-8');
                             }
-                            var date_log = new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds() + '| ';
+                            var time_log = new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds() + '| ';
                             var data_str = Buffer.from(data).toString().trim();
-                            fs.appendFile(path.join(logs, file), date_log + data_str + '\n', 'utf-8', function (err) { });
-                            fs.appendFile(path.join(logs, file), '________________________________________________________________________________\n', 'utf-8', function (err) { });
-                            console.log("\x1B[37m", data_str);
                             if (data_str.length > 500) {
+                                console.log("\x1b[33m" + s_ind + " << \x1B[37m " + data_str);
                                 data_str = data_str.substr(0, 500);
                                 socket.write('505', function () { if (_this.debug)
-                                    console.log(s_ind, " << !505!"); });
+                                    console.log("\x1b[33m" + s_ind + " >> !505!"); });
                                 socket.end();
                             }
                             else {
-                                if (data_str[1] + data_str[2] + data_str[3] + data_str[4] === 'Time' || data_str[0] + data_str[1] === '10' || data_str[1] + data_str[2] + data_str[3] + data_str[4] === 'TEST') {
+                                if (data_str[0] + data_str[1] + data_str[2] + data_str[3] + data_str[4] === ',Time' ||
+                                    data_str[0] + data_str[1] === '10' ||
+                                    data_str[1] + data_str[2] + data_str[3] + data_str[4] === 'TEST') {
+                                    fs.appendFile(path.join(logsPath, fileName), time_log + data_str + '\n', 'utf-8', function (err) { });
+                                    fs.appendFile(path.join(logsPath, fileName), '________________________________________________________________________________\n', 'utf-8', function (err) { });
+                                    console.log("\x1b[33m" + s_ind + " << \x1B[37m " + data_str);
                                     if (data_str.length < 1) {
                                         socket.write('25', function () { if (_this.debug)
-                                            console.log(s_ind, " << !25!"); });
+                                            console.log("\x1b[33m" + s_ind + " >> \x1B[37m!25!"); });
                                         return;
                                     }
                                     if (data_str === "10") {
                                         socket.write('30', function () { if (_this.debug)
-                                            console.log(s_ind, " << 10 -> !30!"); });
+                                            console.log("\x1b[33m" + s_ind + " >> \x1B[37m 10 -> !30!"); });
                                         return;
                                     }
-                                    if (data_str.trim() === 'TEST') {
+                                    if (data_str.trim() === ',TEST') {
                                         socket.write('TEST - OK', function () { if (_this.debug)
-                                            console.log(s_ind, " << TEST -> !TEST - OK!"); });
+                                            console.log("\x1b[33m" + s_ind + " >>\x1B[37m TEST -> !TEST - OK!"); });
                                         return;
                                     }
                                     socket.write('20', function () { if (_this.debug)
-                                        console.log(s_ind, " << !20!"); });
+                                        console.log("\x1b[33m" + s_ind + " >> \x1B[37m !20!"); });
+                                    if (data_str.includes('Error')) {
+                                        var new_parcing = new parcing_new_data_1.ParcingNewData(data_str, s_ind);
+                                        new_parcing.Run();
+                                    }
+                                    else {
+                                        var parcing = new parcing_data_1.ParcingData(data_str, s_ind);
+                                        parcing.Run();
+                                    }
+                                    socket.end();
                                 }
                                 else {
+                                    console.log("\x1b[33m" + s_ind + " << \x1b[31mПопытка взлома");
                                     socket.end();
                                 }
                             }
-                            console.log("ПРОВЕРКА НА НАЛИЧЕ ОШИБКИ");
-                            console.log(data_str);
-                            if (data_str.includes('Error')) {
-                                var srv_datas_y = new datas_error_1.ServerData_Error(data_str, s_ind);
-                                srv_datas_y.Run();
-                            }
-                            else {
-                                var srv_datas = new datas_1.ServerData(data_str, s_ind);
-                                srv_datas.Run();
-                            }
-                            console.log("\x1b[0;30m");
                         });
                         return [2];
                     });
                 }); });
                 this.server.listen(this.port, this.host, function () {
-                    console.log("Слушаю порт", _this.port);
-                    console.log("Готов к приему данных");
+                    console.log("Слушаю порт ", _this.port, "\nГотов к приему данных");
                 });
                 return [2];
             });
         });
     };
-    return Server_Receiver;
+    return ServerReceiver;
 }());
-exports.Server_Receiver = Server_Receiver;
-var server = new Server_Receiver();
+exports.ServerReceiver = ServerReceiver;
+var server = new ServerReceiver();
 server.startServer();
 //# sourceMappingURL=main.js.map

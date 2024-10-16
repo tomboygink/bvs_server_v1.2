@@ -84,21 +84,27 @@ var DevVerif = (function () {
     };
     DevVerif.prototype.selectDevVerif = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var db_response, result, dv;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM dev_povs WHERE dev_id = " +
-                            this.args.dev_id +
-                            " AND dev_number = '" +
-                            this.args.dev_number +
-                            "'")];
+            var db_response, result, dv, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4, this.db.query("SELECT * FROM dev_povs WHERE dev_id = " +
+                                this.args.dev_id +
+                                " AND dev_number = '" +
+                                this.args.dev_number +
+                                "'")];
                     case 1:
-                        db_response = _a.sent();
+                        db_response = _b.sent();
                         result = new Array();
                         for (dv in db_response.rows) {
                             result.push(db_response.rows[dv]);
                         }
                         return [2, result];
+                    case 2:
+                        _a = _b.sent();
+                        return [2, []];
+                    case 3: return [2];
                 }
             });
         });
