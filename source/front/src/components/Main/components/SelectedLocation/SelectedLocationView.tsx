@@ -118,7 +118,7 @@ export const SelectedLocationView: FC<Props> = (props) => {
       {isScheme && (
         <>
           <h2 className={cxShared("title")}>
-            Схема расположения устройств на {location?.g_name}
+            Схема расположения устройств
           </h2>
           <Scheme {...other} />
         </>

@@ -1,16 +1,16 @@
 {
-  "compilerOptions": {
-  "module": "CommonJS",
-  "resolveJsonModule": true,
-  "esModuleInterop": true,
-  "noImplicitAny": true,
-  "removeComments": true,
-  "preserveConstEnums": true,
-  "sourceMap": true,
-  "outDir": "../../public"
-  },
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+    "compilerOptions": {
+        "module": "CommonJS",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "outDir": "../../public"
+    },
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
 }

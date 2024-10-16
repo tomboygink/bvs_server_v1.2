@@ -1,23 +1,23 @@
-console.log("Hello server receiver");
 import net from 'net';
 import * as fs from 'fs';
 import * as path from 'path';
 
-//Импорт парсера для данных без проверки 
-import { ServerData } from "./datas"
-//Импорт парсера для данных с проверкой у которой есть ошибка
-import { ServerData_Error } from "./datas_error"
-
 import CONFIG from "../config/config.json"
 
-export class Server_Receiver {
+import { ParcingData } from './parcing_data';
+import { ParcingNewData } from './parcing_new_data';
 
+
+
+export class ServerReceiver {
     debug: boolean;
     timeout: number;
     host: string;
     port: number;
     server: net.Server;
     scount: number;
+
+
 
     constructor() {
         this.debug = true;
@@ -28,128 +28,128 @@ export class Server_Receiver {
         this.scount = 0;
     }
 
+
     async startServer() {
 
-        //console.log(__dirname);
+        //Создание логов файла 
         var dir = 'logs';
-        var logs = path.join(__dirname, '..', '..', 'logs');
-        
-
-        //Создание папки с логами
+        var logsPath = path.join(__dirname, '..', '..', 'logs');
         if (!fs.existsSync(dir)) {
-            console.log('Create folder logs')
+            console.log("Создаю папку логов");
             fs.mkdirSync(dir);
         }
 
-
-
-        //Количество подключений
+        //Максимальное количество подключений
         this.server.maxConnections = 200;
 
         this.server.on('connection', async (socket: net.Socket) => {
+            //Установка времени ожидания
             socket.setTimeout(this.timeout);
+            //Если время ожидания вышло 
             socket.on('timeout', () => {
-                if (this.debug) { console.log("socket timeout"); }
+                if (this.debug) { console.log("Время ожидания вышло") }
                 if (!socket.connecting) { return; }
                 socket.end();
+                // socket.destroy();
             });
 
-
+            //создание счетчика подключений 
             var s_ind = this.scount;
             this.scount++;
-            if (this.scount > 2400000) this.scount = 0;
+            if (this.scount > 10000) this.scount = 0
 
-            //Если произошла ошибка
-            socket.on('error', (err) => { console.log(err); });
-
-            //При отключении клиента
-            socket.on('close', () => {
-                if (this.debug) console.log(s_ind, " - Clent socket closed!");
-                if (!socket.connecting) socket.end();
-                socket.destroy();
+            //Если произошла ошибка вывод ошибки и закрытие сокета 
+            socket.on('error', (err) => {
+                console.log("\x1b[31m Ошибка ", err)
+                socket.end();
+                // socket.destroy();
             });
 
-            //При получении данных
+            //При отключении сокета 
+            socket.on('close', () => {
+                if (this.debug) console.log(s_ind, ' - Клиент закрыл сокет');
+                if (!socket.connecting) socket.end();
+                // socket.destroy();
+            });
+
+            //При получении данных 
             socket.on('data', (data) => {
+                //Создание файла логов 
+                //месяц + 1  тк начало начинается с 0
+                var month = new Date().getMonth() + 1;
+                //Название файла лога 
+                var fileName = 'log ' + new Date().getFullYear() + '.' + month + '.' + new Date().getDate() + '.txt';
 
-                //Название лога
-                var month = new Date().getMonth() + 1
-                var file = 'log ' + new Date().getFullYear() + '.' + month + '.' + new Date().getDate() + '.txt';
-
-
-                //Создание файла лога 
-                if (!fs.existsSync(path.join(logs, file))) {
-                    console.log('Create file logs')
-                    fs.createWriteStream(path.join(logs, file), 'utf-8');
+                //Проверка на наличие файла лога с актуальной датой 
+                if (!fs.existsSync(path.join(logsPath, fileName))) {
+                    console.log('Создаю файл лога с сегодняшней датой');
+                    fs.createWriteStream(path.join(logsPath, fileName), 'utf-8');
                 }
-                //ошибка данных 
-                //console.log(Buffer.from(data).toString());
 
-                var date_log = new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds() + '| ';
-
+                //Время записи лога 
+                var time_log = new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds() + '| ';
+                //Запись принятых данных в буфер 
                 var data_str = Buffer.from(data).toString().trim();
-                fs.appendFile(path.join(logs, file), date_log + data_str + '\n', 'utf-8', function (err) { });
-                fs.appendFile(path.join(logs, file), '________________________________________________________________________________\n', 'utf-8', function (err) { });
-
-                //fs.writeFileSync(path.join(logs, file), data_str+'\n', 'utf-8');
-                //fs.writeFileSync(path.join(logs, file), '------------------------------------------------------------------------------------\n', 'utf-8');
-
-                //writeStream.end();
-
-
-                console.log("\x1B[37m", data_str);
-
 
                 if (data_str.length > 500) {
+                    //отображение принятых данных в консоле 
+                    console.log("\x1b[33m" + s_ind + " << \x1B[37m " + data_str);
                     data_str = data_str.substr(0, 500);
-                    socket.write('505', () => { if (this.debug) console.log(s_ind, " << !505!"); });
-
+                    socket.write('505', () => { if (this.debug) console.log("\x1b[33m" + s_ind + " >> !505!"); });
                     socket.end();
                 } else {
-                    if (data_str[1] + data_str[2] + data_str[3] + data_str[4] === 'Time' || data_str[0] + data_str[1] === '10' || data_str[1] + data_str[2] + data_str[3] + data_str[4] === 'TEST') {
 
-                        if (data_str.length < 1) { socket.write('25', () => { if (this.debug) console.log(s_ind, " << !25!"); }); return; }
-                        if (data_str === "10") { socket.write('30', () => { if (this.debug) console.log(s_ind, " << 10 -> !30!"); }); return; }
-                        if (data_str.trim() === 'TEST') { socket.write('TEST - OK', () => { if (this.debug) console.log(s_ind, " << TEST -> !TEST - OK!"); }); return; }
-                        socket.write('20', () => { if (this.debug) console.log(s_ind, " << !20!"); });
+                    if (data_str[0] + data_str[1] + data_str[2] + data_str[3] + data_str[4] === ',Time' ||
+                        data_str[0] + data_str[1] === '10' ||
+                        data_str[1] + data_str[2] + data_str[3] + data_str[4] === 'TEST') {
+
+                        //Запись логов в файл 
+                        fs.appendFile(path.join(logsPath, fileName), time_log + data_str + '\n', 'utf-8', function (err) { });
+                        fs.appendFile(path.join(logsPath, fileName), '________________________________________________________________________________\n', 'utf-8', function (err) { });
+
+                        //отображение принятых данных в консоле 
+                        console.log("\x1b[33m" + s_ind + " << \x1B[37m " + data_str);
+
+                        if (data_str.length < 1) { socket.write('25', () => { if (this.debug) console.log("\x1b[33m" + s_ind + " >> \x1B[37m!25!"); }); return; }
+                        if (data_str === "10") { socket.write('30', () => { if (this.debug) console.log("\x1b[33m" + s_ind + " >> \x1B[37m 10 -> !30!"); }); return; }
+                        if (data_str.trim() === ',TEST') { socket.write('TEST - OK', () => { if (this.debug) console.log("\x1b[33m" + s_ind + " >>\x1B[37m TEST -> !TEST - OK!"); }); return; }
+                        socket.write('20', () => { if (this.debug) console.log("\x1b[33m" + s_ind + " >> \x1B[37m !20!"); });
+
+                        if (data_str.includes('Error')) {
+                            var new_parcing: ParcingNewData = new ParcingNewData(data_str, s_ind);
+                            new_parcing.Run();
+                        }
+                        else{
+                            var parcing: ParcingData = new ParcingData(data_str, s_ind);
+                            parcing.Run();
+                        }
+
+                        //Закрытие сокета
+                        socket.end();
+
+
                     }
-                    else { socket.end(); }
-
+                    else {
+                        console.log("\x1b[33m" + s_ind + " << \x1b[31mПопытка взлома");
+                        socket.end();
+                    }
                 }
-
-                console.log("ПРОВЕРКА НА НАЛИЧЕ ОШИБКИ")
-                console.log(data_str);
-                if (data_str.includes('Error')) {
-                    //console.log("\x1b[31m Есть ошибка");
-                    var srv_datas_y:ServerData_Error = new ServerData_Error(data_str, s_ind);
-                    srv_datas_y.Run(); 
-                }
-                else {
-
-                    //console.log("\x1b[31m Строка без проверки на ошибку");
-                    //отправляем на парсер
-                    var srv_datas: ServerData = new ServerData(data_str, s_ind);
-                    srv_datas.Run();
-                }
-                console.log("\x1b[0;30m");
-
-
 
             });
 
 
-
         });
 
 
 
+        //Запуск сервера 
         this.server.listen(this.port, this.host, () => {
-            console.log("Слушаю порт", this.port);
-            console.log("Готов к приему данных");
-        });
+            console.log("Слушаю порт ", this.port, "\nГотов к приему данных");
+        })
 
     }
 }
 
-var server = new Server_Receiver();
+
+var server = new ServerReceiver();
 server.startServer();

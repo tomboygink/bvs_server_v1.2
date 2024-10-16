@@ -26,6 +26,10 @@ import { api } from "@api/api";
 import { createBodyQuery } from "@src/utils/functions";
 import { ECOMMAND } from "@src/types/ECommand";
 
+let old_id_dev = "0";
+let old_id_location = "0";
+let old_svg = "";
+
 export const LocationTree = () => {
   const auth = useAuth();
   const dispatch = useAppDispatch();
@@ -52,13 +56,13 @@ export const LocationTree = () => {
   const { data: verifRanges } = useGetExpireVerifRangeQuery({});
 
   const handleSelectLocation = (id: string) => {
-    // Проверяем: если выбрана та же локация, то ничего не делаем, чтобы не было повторного рендеринга компонента SelectedLocation
-    if (currentLocation?.id !== id) {
-      const query = createBodyQuery(ECOMMAND.GETSCHEME, { id_devs_groups: id });
 
-      //dispatch(setSelectedLocation(null));
-      const isLocation = !id?.includes("dev_");
-      if (isLocation) {
+    //Если выбрана локация 
+    if (!id?.includes("dev_")) {
+
+      if (currentLocation?.id !== id || old_id_location !== currentLocation?.id) {
+        const query = createBodyQuery(ECOMMAND.GETSCHEME, { id_devs_groups: id });
+        old_id_location = id;
         dispatch(setVisibleDevice(false));
         const selectedLocation = locationArr?.find(
           (location: ILocation) => location.id === id
@@ -79,20 +83,47 @@ export const LocationTree = () => {
             })
             .catch((error) => console.log("error=>", error))
             .finally(() => dispatch(setIsLoadingScheme(false)));
-        } else {
+        }
+        else {
           dispatch(setIsSelected(false));
         }
-      } else {
-        dispatch(setVisibleDevice(true));
-        // dispatch(setIsSelected(false));
-        const devId = id.replace("dev_", "");
-        const selectedDev = devs?.data.find((dev: IDev) => dev.id === devId);
-        dispatch(setSelectedDev(selectedDev));
       }
-    } else {
-      dispatch(setVisibleDevice(false));
+      else{
+        old_id_location = id;
+        dispatch(setVisibleDevice(false));
+        const selectedLocation = locationArr?.find(
+          (location: ILocation) => location.id === id
+        );
+
+        if (selectedLocation) {
+          
+          dispatch(setIsSelected(true));
+        }
+
+        else {
+          dispatch(setIsSelected(false));
+        }
+
+      }
     }
-  };
+    //Иначе если выбранно устройство
+    else {
+      const devId = id.replace("dev_", "");
+
+      if (currentLocation?.id !== id || old_id_dev !== currentLocation?.id || old_id_dev !== devId){
+        const selectedDev = devs?.data.find((dev: IDev) => dev.id === devId);
+        dispatch(setVisibleDevice(true));
+        if (old_id_dev !== devId) {
+          old_id_dev = devId;
+          old_id_location = "0"
+          dispatch(setSelectedDev(selectedDev));
+        }
+      }
+      else{
+        dispatch(setVisibleDevice(true));
+      }
+    }
+  }
 
   //Добавляем в выбранное устройство контрольную сессию, когда приходят данные о контрольной сессии
   useEffect(() => {
@@ -141,9 +172,12 @@ export const LocationTree = () => {
           handleClick={handleSelectLocation}
           isLoading={isLoading}
           verifRanges={verifRanges?.data}
-          // devs={devsByLocation?.data}
+        // devs={devsByLocation?.data}
         />
       )}
     </>
   );
 };
+
+
+

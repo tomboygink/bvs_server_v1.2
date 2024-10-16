@@ -11,7 +11,7 @@ export class DevVerifEntity {
   end_povs: Date = new Date(Date.now());
   old_dev_povs: number = 0;
 
-  constructor() {}
+  constructor() { }
 }
 
 export class DevVerif {
@@ -28,18 +28,18 @@ export class DevVerif {
   async insertDevVerif() {
     var db_response = await this.db.query(
       "INSERT INTO dev_povs(dev_id, dev_number, start_povs, end_povs, old_dev_povs) " +
-        "VALUES(" +
-        this.args.dev_id +
-        ", '" +
-        this.args.dev_number +
-        "', '" +
-        dateTimeToSQL(new Date(this.args.start_povs)) +
-        "', '" +
-        dateTimeToSQL(new Date(this.args.end_povs)) +
-        "', " +
-        this.args.old_dev_povs +
-        ") " +
-        "RETURNING id"
+      "VALUES(" +
+      this.args.dev_id +
+      ", '" +
+      this.args.dev_number +
+      "', '" +
+      dateTimeToSQL(new Date(this.args.start_povs)) +
+      "', '" +
+      dateTimeToSQL(new Date(this.args.end_povs)) +
+      "', " +
+      this.args.old_dev_povs +
+      ") " +
+      "RETURNING id"
     );
 
     return db_response.rows;
@@ -47,18 +47,23 @@ export class DevVerif {
 
   //Получение поверочного интервала
   async selectDevVerif(): Promise<DevVerifEntity[]> {
-    var db_response = await this.db.query(
-      "SELECT * FROM dev_povs WHERE dev_id = " +
+    try {
+      var db_response = await this.db.query(
+        "SELECT * FROM dev_povs WHERE dev_id = " +
         this.args.dev_id +
         " AND dev_number = '" +
         this.args.dev_number +
         "'"
-    );
-    var result: DevVerifEntity[] = new Array();
-    for (var dv in db_response.rows) {
-      result.push(db_response.rows[dv]);
+      );
+      var result: DevVerifEntity[] = new Array();
+      for (var dv in db_response.rows) {
+        result.push(db_response.rows[dv]);
+      }
+      return result;
     }
-    return result;
+    catch {
+      return [];
+    }
   }
 
   //Получение поверочных интервалов, у которых истекает срок поверки
