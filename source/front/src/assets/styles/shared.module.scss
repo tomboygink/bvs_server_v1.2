@@ -1,19 +1,19 @@
-@import "./font-family.scss";
-@import "./text-style.scss";
-@import "./colors.scss";
-@import "./reset.scss";
-@import "./size.scss";
+@use "./font-family.scss" as fontFamily;
+@use "./text-style.scss" as textStyle;
+@use "./colors.scss" as colors;
+@use "./reset.scss" as reset;
+@use "./size.scss" as size;
 .title {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   letter-spacing: 0.00938em;
-  color: $black-text;
+  color: colors.$black-text;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
-@media screen and (max-width: $small) {
+@media screen and (max-width: size.$small) {
   .title {
     margin: 32px 24px 32px 24px;
   }

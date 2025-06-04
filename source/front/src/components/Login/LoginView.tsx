@@ -1,4 +1,4 @@
-import { FC, ChangeEvent } from "react";
+import { FC, ChangeEvent, useState } from "react";
 import { Alert } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Typography } from "@components/_shared/Typography";
@@ -8,7 +8,7 @@ import { Button } from "@components/_shared/Button";
 import { ScreenRoute } from "@src/types/Screen.routes.enum";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
-import { FormErrors } from "@hooks/useFormWithValidation";
+import { FormErrors, FormValues } from "@hooks/useFormWithValidation";
 import { SAVE_ERROR } from "@src/utils/messages";
 
 interface Props {
@@ -21,6 +21,7 @@ interface Props {
 
   isLoading: boolean;
   isValid: boolean;
+  values?: FormValues;
 }
 export const LoginView: FC<Props> = ({
   message,
@@ -32,6 +33,13 @@ export const LoginView: FC<Props> = ({
   isValid,
 }) => {
   const cx = useStyles(styles);
+
+  //Состояние и функция для отслеживания значения в input для логина, чтобы при перезагрузке и автозаполнении была активна кнопка входа
+  const [valueLog, setValueLog] = useState<string>('')
+  const onInputLogHandler = (e: ChangeEvent<HTMLInputElement>): void => {
+    setValueLog(e.target.value)
+  }
+
   //const { handleChange } = useFormValidation();
   return (
     <>
@@ -47,9 +55,11 @@ export const LoginView: FC<Props> = ({
             name="login"
             placeholder="Логин"
             onChange={onChange}
+            onInput={onInputLogHandler}
             variant="standard"
             error={Boolean(errors.login)}
             helperText={errors.login}
+            
             InputProps={{
               style: {
                 fontSize: 16,
@@ -70,7 +80,7 @@ export const LoginView: FC<Props> = ({
           <Link className={cx("link")} to={ScreenRoute.FORGOTPASSWORD}>
             ← Забыли пароль?
           </Link>
-          <Button disabled={!isValid} isLoading={isLoading}>
+          <Button disabled={valueLog !== '' ? !isValid : isValid} isLoading={isLoading}>
             Войти
           </Button>
         </fieldset>

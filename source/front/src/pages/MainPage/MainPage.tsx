@@ -5,7 +5,7 @@ import { useStyles } from "@hooks/useStyles";
 
 import styles from "./styles.module.scss";
 import sharedStyles from "../../assets/styles/shared.module.scss";
-import { LeftSidebar } from "@components/Main/components/LeftSidebar";
+import { RightSidebar } from "@components/Main/components/RightSidebar";
 
 export const MainPage = () => {
   const cx = useStyles(styles);
@@ -23,7 +23,7 @@ export const MainPage = () => {
       </section>
 
       <section className={cx("section")}>
-        <LeftSidebar />
+        <RightSidebar />
       </section>
     </>
   );

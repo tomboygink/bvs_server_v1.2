@@ -1,4 +1,4 @@
-@import "../../../../../../assets//styles/size.scss";
+@use "../../../../../../assets//styles/size.scss" as size;
 .container {
   background-color: #fff;
   max-width: 300px;
@@ -51,7 +51,7 @@
   }
 }
 
-@media screen and (max-width: $large) {
+@media screen and (max-width: size.$large) {
   .container {
     max-width: 100%;
   }
@@ -63,7 +63,7 @@
   }
 }
 
-@media screen and (max-width: $small) {
+@media screen and (max-width: size.$small) {
   .container {
     max-width: 100%;
     min-width: 272px;

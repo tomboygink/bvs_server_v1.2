@@ -1,8 +1,8 @@
-@import "../../../assets/styles/font-family.scss";
-@import "../../../assets/styles/text-style.scss";
-@import "../../../assets/styles/colors.scss";
-@import "../../../assets/styles/reset.scss";
-@import "../../../assets/styles/size.scss";
+@use "../../../assets/styles/font-family.scss" as font-family;
+@use "../../../assets/styles/text-style.scss" as text-style;
+@use "../../../assets/styles/colors.scss" as colors;
+@use "../../../assets/styles/reset.scss" as reset;
+@use "../../../assets/styles/size.scss" as size;
 
 .container {
   display: flex;
@@ -13,13 +13,13 @@
   //max-height: 400px;
 }
 .fields {
-  @include fieldset;
+  @include reset.fieldset;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 .tree {
-  @include fieldset;
+  @include reset.fieldset;
   max-height: 200px;
   overflow-y: auto;
 }
@@ -32,7 +32,7 @@
   margin: 14px auto;
 }
 
-@media screen and (max-width: $small) {
+@media screen and (max-width: size.$small) {
   .button {
     flex-direction: column;
   }
