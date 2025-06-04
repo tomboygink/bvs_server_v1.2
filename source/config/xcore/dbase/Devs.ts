@@ -11,7 +11,7 @@ export class DevsEntity {
   deleted: boolean = false;
   info: string = "";
   period_sess: number = 0;
-  constructor() {}
+  constructor() { }
 }
 
 export class Devs {
@@ -83,25 +83,25 @@ export class Devs {
   async insertDevs() {
     var db_response = await this.db.query(
       "INSERT INTO devs(group_dev_id, number, name, latitude, longitude, sensors, deleted, info, period_sess) " +
-        "VALUES (" +
-        this.args.group_dev_id +
-        ", '" +
-        this.args.number +
-        "', '" +
-        this.args.name +
-        "', '" +
-        this.args.latitude +
-        "', '" +
-        this.args.longitude +
-        "', '" +
-        this.args.sensors +
-        "', " +
-        this.args.deleted +
-        ", '" +
-        this.args.info +
-        "', " +
-        this.args.period_sess +
-        ") RETURNING id"
+      "VALUES (" +
+      this.args.group_dev_id +
+      ", '" +
+      this.args.number +
+      "', '" +
+      this.args.name +
+      "', '" +
+      this.args.latitude +
+      "', '" +
+      this.args.longitude +
+      "', '" +
+      this.args.sensors +
+      "', " +
+      this.args.deleted +
+      ", '" +
+      this.args.info +
+      "', " +
+      this.args.period_sess +
+      ") RETURNING id"
     );
     return db_response.rows;
   }
@@ -122,8 +122,14 @@ export class Devs {
 
   //Обновление данных устройсва
   async updateDevs() {
-    var db_response = await this.db.query(
-      "UPDATE devs SET group_dev_id = " +
+    //Запрос на получение данных
+    var data = await this.db.query(
+      "select * from devs where number = '" + this.args.number + "' "
+    );
+
+    if (data.rows[0] === undefined || data.rows[0].id === this.args.id) {
+      var db_response = await this.db.query(
+        "UPDATE devs SET group_dev_id = " +
         this.args.group_dev_id +
         ", number = '" +
         this.args.number +
@@ -145,7 +151,25 @@ export class Devs {
         " WHERE id = " +
         this.args.id +
         " RETURNING id"
-    );
+      );
+
+      await this.db.query(
+        "UPDATE control_dev_sess SET dev_number = '" +
+        this.args.number +
+        "' WHERE dev_id = " +
+        this.args.id +
+        ""
+      );
+      //обновление устройства в принятых сессиях
+      await this.db.query(
+        "UPDATE dev_sess SET dev_number = '" +
+        this.args.number +
+        "' WHERE dev_id=" +
+        this.args.id +
+        ""
+      );
+    }
+    else {db_response.rows = [];}
 
     return db_response.rows;
   }

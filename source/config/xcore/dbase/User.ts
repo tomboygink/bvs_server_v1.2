@@ -508,7 +508,7 @@ export class User {
     //if (db_response.rows[0].act_mail === true) {
     if (db_response.rows.length !== 0) {
       await this.transporter.sendMail({
-        from: "noreplay@bvs45.ru",
+        from: "noreplay@burvodstroy45.ru",
         //Получение email от пользователя
         to: this.args.email,
         subject: "Forgot password",
@@ -621,7 +621,7 @@ export class User {
     secure: true, // true for 465, false for other ports
     auth: {
       user: "noreplay@burvodstroy45.ru", // generated ethereal user
-      pass: "RPWH8qhtD0YpY21sWWjY", // generated ethereal password
+      pass: "jeLST1X5djEqVLnlbT4b", // generated ethereal password
     },
   });
 }
