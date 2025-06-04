@@ -17,8 +17,7 @@ export class ServerReceiver {
     server: net.Server;
     scount: number;
 
-
-
+//
     constructor() {
         this.debug = true;
         this.timeout = 10000;
