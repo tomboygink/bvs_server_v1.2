@@ -26,6 +26,7 @@ interface Props {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => void;
+  onInput?: (event: ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   defaultValue?: string;
   variant?: "outlined" | "filled" | "standard";
@@ -33,7 +34,6 @@ interface Props {
   disabled?: boolean;
   multiline?: boolean;
   rows?: number;
-
   type?: "text" | "email" | "password" | "number" | "decimal";
 }
 export const InputText: FC<Props> = ({
@@ -51,6 +51,7 @@ export const InputText: FC<Props> = ({
   helperText,
   onChange,
   onBlur,
+  onInput,
   value,
   defaultValue,
   variant = "outlined",
@@ -58,10 +59,10 @@ export const InputText: FC<Props> = ({
   disabled = false,
   multiline = false,
   rows,
-
   type = "text",
 }) => {
   const cx = useStyles(styles);
+
   return (
     <TextField
       id={id}
@@ -91,6 +92,7 @@ export const InputText: FC<Props> = ({
       multiline={multiline}
       rows={rows}
       type={type}
+      onInput={onInput}
     ></TextField>
   );
 };

@@ -10,7 +10,7 @@ import { useStyles } from "@hooks/useStyles";
 
 import styles from "./styles.module.scss";
 
-export const LeftSidebar = () => {
+export const RightSidebar = () => {
   const cx = useStyles(styles);
 
   const { selectedDev, isVisibleDevice } = useAppSelector(

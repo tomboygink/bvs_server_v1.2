@@ -45,6 +45,10 @@ export const useFormValidation = () => {
         });
       } else setErrors({ ...errors, [name]: "" });
     }
+
+    if(values[name] !== '') {
+      setIsValid(true)
+    }
   };
 
   const handleSelectChange = (event: SelectChangeEvent) => {

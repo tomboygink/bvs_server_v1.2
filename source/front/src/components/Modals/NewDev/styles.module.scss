@@ -1,7 +1,7 @@
-@import "../../../assets/styles/font-family.scss";
-@import "../../../assets/styles/text-style.scss";
-@import "../../../assets/styles/colors.scss";
-@import "../../../assets/styles/reset.scss";
+@use "../../../assets/styles/font-family.scss" as fontFamily;
+@use "../../../assets/styles/text-style.scss" as textStyle;
+@use "../../../assets/styles/colors.scss" as colors;
+@use "../../../assets/styles/reset.scss" as reset;
 
 .container {
   display: flex;
@@ -12,7 +12,7 @@
 }
 
 .fields {
-  @include fieldset;
+  @include reset.fieldset;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -25,7 +25,7 @@
   margin: 14px auto;
 }
 .sensors {
-  @include ul;
+  @include reset.ul;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;

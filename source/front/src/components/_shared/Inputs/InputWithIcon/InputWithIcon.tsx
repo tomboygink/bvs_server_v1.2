@@ -12,6 +12,7 @@ interface Props {
   variant?: "outlined" | "filled" | "standard";
   error?: boolean;
   helperText?: string;
+  value?: string;
 }
 export const InputWithIcon: FC<Props> = ({
   onChange,

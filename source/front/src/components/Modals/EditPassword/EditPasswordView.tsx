@@ -70,9 +70,9 @@ export const EditPasswordView: FC<Props> = ({
         </Alert>
       )}
       {isErrorSave && (
-        <Alert className={cx("alert")} severity="error">
-          {SAVE_ERROR}
-        </Alert>
+          <Alert className={cx("alert")} severity="error">
+            {SAVE_ERROR}
+          </Alert>
       )}
 
       <div className={cx("button")}>

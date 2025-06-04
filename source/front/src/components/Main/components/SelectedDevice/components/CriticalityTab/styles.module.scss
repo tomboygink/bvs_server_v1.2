@@ -1,10 +1,10 @@
-@import "../../../../../../assets/styles/font-family.scss";
-@import "../../../../../../assets/styles/text-style.scss";
-@import "../../../../../../assets/styles/colors.scss";
-@import "../../../../../../assets/styles/reset.scss";
+@use "../../../../../../assets/styles/font-family.scss" as fontFamily;
+@use "../../../../../../assets/styles/text-style.scss" as textStyle;
+@use "../../../../../../assets/styles/colors.scss" as colors;
+@use "../../../../../../assets/styles/reset.scss" as reset;
 
 .notfound {
-  font-family: $Roboto;
+  font-family: fontFamily.$Roboto;
   font-size: 16px;
   color: rgb(38, 107, 241);
   padding: 24px;

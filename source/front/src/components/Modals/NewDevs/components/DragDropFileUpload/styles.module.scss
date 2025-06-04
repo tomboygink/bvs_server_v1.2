@@ -1,4 +1,4 @@
-@import "../../../../../assets/styles/size.scss";
+@use "../../../../../assets/styles/size.scss" as size;
 .paper {
   padding: 20;
   text-align: center;
@@ -56,7 +56,7 @@
   margin: 14px auto;
 }
 
-@media screen and (max-width: $small) {
+@media screen and (max-width: size.$small) {
   .button {
     flex-direction: column;
   }

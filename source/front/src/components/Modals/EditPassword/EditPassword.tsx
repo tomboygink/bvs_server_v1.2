@@ -40,6 +40,7 @@ export const EditPassword: FC<Props> = ({ handleClose }) => {
     } else if (values.new_password === values.old_password) {
       setMessage(MATCHING_OLD_PASSWORD_ERROR);
     } else {
+      setMessage('');
       changePassword();
     }
   };
