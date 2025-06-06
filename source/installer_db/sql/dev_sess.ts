@@ -10,7 +10,8 @@ export const dev_sess_table = {
         "dev_number" VARCHAR(80) NOT NULL DEFAULT(''),
         "dev_id" BIGSERIAL NOT NULL,
         "level_akb" FLOAT NOT NULL,
-        "sess_data" TEXT NOT NULL
+        "sess_data" TEXT NOT NULL,
+        "err" VARCHAR(50) DEFAULT('');
     );
     
     COMMENT ON TABLE dev_sess IS 'Сессии по устройствам';
@@ -21,6 +22,7 @@ export const dev_sess_table = {
     COMMENT ON COLUMN dev_sess.dev_id IS 'Идентификатор устройства';
     COMMENT ON COLUMN dev_sess.level_akb IS 'Уровень заряда устройства';
     COMMENT ON COLUMN dev_sess.sess_data IS 'Данные с устройства';
+    COMMENT ON COLUMN dev_sess.err IS 'Информация об ошибке термокосы'
     `,
     args: new Array()
 };

@@ -94,6 +94,7 @@ export class ParcingNewData {
 
 
             // console.log(" ВРЕМЯ ", TIME);
+            // console.log(" ОШИБКА КОСЫ ", ERROR);
             // console.log(" НОМЕР УСТРОЙСТВА ",NUMBER);
             // console.log(" ЗАРЯД УСТРОЙСТВА " ,AKB);
             // console.log(" ДАННЫЕ С СЕНСЕРОВ ", SENSORS.length);
@@ -113,7 +114,7 @@ export class ParcingNewData {
             }
             if (ERROR == 'y') {
                 info_err += "ВНИМАНИЕ В ТЕРМОКОСЕ ПРИСУТСТВУЮТ ОТКЛОНЕНИЯ ОТ НОРМЫ (ПРОВЕРТЕ ДАННЫЕ ТЕРМОКОСЫ)"
-                error = true;
+                //error = true;
             }
             if (AKB == null) {
                 info_err += "ОШИБКА В ПАРСИНГЕ УРОВЕНЬ ЗАРЯДА НЕ СООТВЕТСТВУЕТ ФОРМАТУ ИЛИ ОТСУТСТВУЕТ; "
@@ -142,7 +143,6 @@ export class ParcingNewData {
             }
             //Если ошибки нет 
             else {
-
                 //Делаем запрос в БД для проверки на наличие устройства
                 var query_devs = await this.db.query("SELECT * FROM devs WHERE number = '" + NUMBER + "'");
                 //Если устройство отсутствует в базе данных
@@ -196,10 +196,11 @@ export class ParcingNewData {
                     }
                     s += ']}';
 
+                    console.log("Начало записи в бд ")
 
                     //Делаем запись по сессии в базу данных с возвращением id для проверки
-                    var sess_data_sql = await this.db.query("INSERT INTO dev_sess (time_dev, time_srv, dev_number, dev_id, level_akb, sess_data) VALUES ('" +
-                        TIME + "', '" + srv_time + "', '" + query_devs.rows[0].number + "', " + query_devs.rows[0].id + ", " + AKB + ", '" + s + "') RETURNING id");
+                    var sess_data_sql = await this.db.query("INSERT INTO dev_sess (time_dev, time_srv, dev_number, dev_id, level_akb, sess_data, err) VALUES ('" +
+                        TIME + "', '" + srv_time + "', '" + query_devs.rows[0].number + "', " + query_devs.rows[0].id + ", " + AKB + ", '" + s + "', '"+ERROR+"') RETURNING id");
 
                     //Если не записалось 
                     if (sess_data_sql.rows[0].id === 0 || sess_data_sql === null || sess_data_sql === undefined) {
