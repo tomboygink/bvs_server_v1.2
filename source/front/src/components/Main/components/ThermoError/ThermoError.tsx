@@ -14,7 +14,7 @@ export const ThermoError: FC<Props> = ({ isVisible, error }) => {
 
     return (
         <>
-            {isVisible && error && (
+            {isVisible && error === 'y' && (
                 <div className={cx("container")}>
                     {error ? 
                     <Typography
