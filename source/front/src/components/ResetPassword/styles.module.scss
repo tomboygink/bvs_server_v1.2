@@ -1,8 +1,8 @@
-@import "../../assets/styles/font-family.scss";
-@import "../../assets/styles/text-style.scss";
-@import "../../assets/styles/colors.scss";
-@import "../../assets/styles/reset.scss";
-@import "../../assets/styles/reset.scss";
+@use "../../assets/styles/font-family.scss" as fontFamily;
+@use "../../assets/styles/text-style.scss" as textStyle;
+@use "../../assets/styles/colors.scss" as colors;
+@use "../../assets/styles/reset.scss" as reset;
+// @use "../../assets/styles/reset.scss" as ;
 .section {
   display: flex;
   flex-direction: column;
@@ -24,24 +24,24 @@
   gap: 20px;
 
   .title {
-    @include h1-regular;
-    color: $blue;
+    @include textStyle.h1-regular;
+    color: colors.$blue;
     margin-bottom: 20px;
   }
   .subtitle {
-    @include p12-regular;
-    color: $grey;
+    @include textStyle.p12-regular;
+    color: colors.$grey;
     margin-bottom: 12px;
   }
   .fields {
-    @include fieldset;
+    @include reset.fieldset;
     display: flex;
     flex-direction: column;
     gap: 24px;
   }
 
   .btn-container {
-    @include fieldset;
+    @include reset.fieldset;
     display: flex;
     justify-content: flex-end;
     margin-bottom: 24px;
@@ -51,14 +51,14 @@
   }
 
   .link {
-    @include p16-regular;
-    color: $blue;
+    @include textStyle.p16-regular;
+    color: colors.$blue;
     text-decoration: none;
   }
 }
 .error {
   display: inline-block;
-  @include p12-regular;
+  @include textStyle.p12-regular;
   color: red;
   min-height: 16px;
   min-width: 400px;

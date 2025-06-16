@@ -1,5 +1,5 @@
-import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from "vite";
 import path from "path";
 
 // https://vitejs.dev/config/
@@ -22,4 +22,11 @@ export default defineConfig({
     },
   },
   plugins: [tsconfigPaths()],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+      }
+    }
+  }
 });

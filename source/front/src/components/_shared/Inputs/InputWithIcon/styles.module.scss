@@ -1,4 +1,4 @@
-@import "../../../../assets/styles/reset.scss";
+@use "../../../../assets/styles/reset.scss" as reset;
 .input {
   ///padding: 4px 12px;
   input {
@@ -6,7 +6,7 @@
     box-sizing: border-box;
   }
   .button {
-    @include indents;
+    @include reset.indents;
     padding: 4px 12px;
     box-sizing: border-box;
   }

@@ -6,4 +6,5 @@ export interface ISession {
   dev_id: string;
   level_akb: number;
   sess_data: string;
+  err:string;
 }

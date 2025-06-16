@@ -21,6 +21,7 @@ export const InfoStickerView: FC<IProps> = ({ isVisible, isAdmin }) => {
           }}
         >
           <Warning />
+          <Error/>
           <PeriodWindowInitial />
           <PeriodWindowRed />
           <PeriodWindowOrange />
@@ -53,6 +54,28 @@ export const Warning = () => {
     </Stack>
   );
 };
+
+export const Error = () => {
+  return (
+    <Stack
+      direction="row"
+      spacing={2}
+      alignItems="center"
+      sx={{
+        background: "#FFF",
+
+        borderRadius: "4px",
+      }}
+    >
+      <PriorityHighIcon fontSize="small" sx={{ color: "rgb(221, 221, 1)" }} />
+      <Typography sx={{ color: "#000", fontSize: "12px" }}>
+        {" "}
+        Ошибка в термокосе
+      </Typography>
+    </Stack>
+  )
+}
+
 export const PeriodWindowGreen = () => {
   return (
     <Stack

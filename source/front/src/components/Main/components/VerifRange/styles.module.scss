@@ -1,14 +1,14 @@
-@import "../../../../assets/styles/font-family.scss";
-@import "../../../../assets/styles/text-style.scss";
-@import "../../../../assets/styles/colors.scss";
-@import "../../../../assets/styles/reset.scss";
+@use "../../../../assets/styles/font-family.scss" as fontFamily;
+@use "../../../../assets/styles/text-style.scss" as textStyle;
+@use "../../../../assets/styles/colors.scss" as colors;
+@use "../../../../assets/styles/reset.scss" as reset;
 .container {
   * {
     box-sizing: border-box;
   }
 }
 .title {
-  font-family: $Roboto;
+  font-family: fontFamily.$Roboto;
   font-weight: 600;
   margin-bottom: 12px;
 }
@@ -28,7 +28,7 @@
   //   gap: 12px;
 }
 .text {
-  font-family: $Roboto;
+  font-family: fontFamily.$Roboto;
   color: #808080;
   font-size: 12px;
   margin-left: 8px;
