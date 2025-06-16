@@ -4,5 +4,7 @@
 @use "../../../../assets/styles/reset.scss" as reset;
 
 .container {
-  padding: 12px;
+    padding: 12px;
+    border-radius: 4px;
+    background-color: rgb(255, 255, 113);
 }

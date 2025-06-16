@@ -1,7 +1,7 @@
-@import "../../../../assets/styles/font-family.scss";
-@import "../../../../assets/styles/text-style.scss";
-@import "../../../../assets/styles/colors.scss";
-@import "../../../../assets/styles/reset.scss";
+@use "../../../../assets/styles/font-family.scss" as fontFamily;
+@use "../../../../assets/styles/text-style.scss" as textStyle;
+@use "../../../../assets/styles/colors.scss" as colors;
+@use "../../../../assets/styles/reset.scss" as reset;
 
 .container {
   display: flex;
@@ -9,7 +9,9 @@
   width: 100%;
   background-color: #fff;
   padding: 20px;
-
+  max-height: 85vh;
+  overflow: scroll;
+  overflow-x: hidden;
   box-sizing: border-box;
   .tree {
     width: 100%;
@@ -25,9 +27,29 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.wrapper_tooltip {
+  display: flex;
+  align-items: center;
+}
+
 .marker {
-  font-family: $Roboto;
+  padding-right: 12px;
+  font-family: fontFamily.$Roboto;
   font-size: 24px;
   font-weight: 500;
+}
+
+.yellow-marker {
+  color: rgb(216, 216, 0);
+}
+
+.red-marker {
   color: red;
+}
+
+.wrapper_devs {
+  max-height: 500px;
+  overflow: scroll;
+  overflow-x: hidden;
 }

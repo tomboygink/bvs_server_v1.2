@@ -9,6 +9,7 @@ import { AdditionInfo } from "../AdditionInfo";
 import { useStyles } from "@hooks/useStyles";
 
 import styles from "./styles.module.scss";
+import { ThermoError } from "../ThermoError";
 
 export const RightSidebar = () => {
   const cx = useStyles(styles);
@@ -32,6 +33,7 @@ export const RightSidebar = () => {
         isTimeSession={Boolean(selectedDev?.last_sess?.time_srv)}
         isVisible={isVisibleDevice}
       />
+      <ThermoError isVisible={isVisibleDevice} error={selectedDev?.last_sess?.err}/>
       <SessionPeriod isVisible={isVisibleDevice} selectedDev={selectedDev} />
       <AdditionInfo isVisible={isVisibleDevice} device={selectedDev} />
       <VerifRange isVisible={isVisibleDevice} period={periodSess?.data?.[0]} />

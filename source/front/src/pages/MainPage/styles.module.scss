@@ -1,11 +1,11 @@
-@import "../../assets/styles/size.scss";
+@use "../../assets/styles/size.scss" as size;
 .section {
   border-radius: 4px;
   max-height: 90vh;
   // overflow-y: auto;
 }
 
-@media screen and (max-width: $large) {
+@media screen and (max-width: size.$large) {
   .section {
     max-height: 100%;
     width: 100%;
@@ -20,7 +20,7 @@
   }
 }
 
-@media screen and (max-width: $small) {
+@media screen and (max-width: size.$small) {
   .section {
     max-height: 100%;
     width: 100%;

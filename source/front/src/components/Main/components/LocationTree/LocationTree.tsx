@@ -18,6 +18,7 @@ import {
   useGetControlSessQuery,
   useGetLastSessQuery,
   useGetExpireVerifRangeQuery,
+  useGetAllLastSessQuery,
 } from "@src/redux/services/devsApi";
 import { useAuth } from "@hooks/useAuth";
 import { ILocation } from "@src/types/ILocation";
@@ -28,7 +29,7 @@ import { ECOMMAND } from "@src/types/ECommand";
 
 let old_id_dev = "0";
 let old_id_location = "0";
-let old_svg = "";
+// let old_svg = "";
 
 export const LocationTree = () => {
   const auth = useAuth();
@@ -54,6 +55,8 @@ export const LocationTree = () => {
     { skip: !isVisibleDevice }
   );
   const { data: verifRanges } = useGetExpireVerifRangeQuery({});
+
+  const { data: lastSessions } = useGetAllLastSessQuery({});
 
   const handleSelectLocation = (id: string) => {
 
@@ -138,6 +141,8 @@ export const LocationTree = () => {
     }
   }, [controlSession, lastSession]);
 
+ 
+
   useEffect(() => {
     // Если у пользователя есть права редактирования:
     if (auth && "user" in auth && auth?.user?.roles_ids.roles[1] === 2)
@@ -172,6 +177,7 @@ export const LocationTree = () => {
           handleClick={handleSelectLocation}
           isLoading={isLoading}
           verifRanges={verifRanges?.data}
+          lastSessions={lastSessions?.data}
         // devs={devsByLocation?.data}
         />
       )}
