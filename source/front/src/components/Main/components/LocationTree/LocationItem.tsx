@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import moment from "moment";
 import { TreeItem } from "@mui/x-tree-view";
 import FolderIcon from "@mui/icons-material/Folder";
@@ -16,8 +16,7 @@ interface Props {
   lastSession: ISession[];
   verifRanges: IVerifRange[];
 }
-
-export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, verifRanges, }) => {
+export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, verifRanges }) => {
 
   const getIcon = () => {
     return location?.devs?.length !== 0 ? FolderIcon : FolderZipIcon;
@@ -58,17 +57,12 @@ export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, veri
   };
 
   const getErrorMarker = (dev: IDev) => {
-
-    return lastSession?.some((item) => item.dev_id === dev.id ? item.err === 'y' ? true : false : false)}
-
-
-  useEffect(() => {
-    console.log(lastSession)
-  }, [lastSession])
+  return lastSession?.some((item) => item.dev_id === dev.id ? item.err === 'y' ? true : false : false)
+  }
 
   return (
-    <>
-      <TreeItem
+        <>
+          <TreeItem
         itemId={location.id || ""}
         label={location.g_name}
         slots={{
@@ -94,7 +88,7 @@ export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, veri
       >
         {location.subLocations?.length !== 0 && (
           <>
-            {location.subLocations?.map((item) => (
+          {location.subLocations?.map((item) => (
               <LocationItem
                 key={item.id}
                 location={item}
@@ -138,6 +132,6 @@ export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, veri
       </>
         
       </TreeItem>
-    </>
+        </>
   );
 };
