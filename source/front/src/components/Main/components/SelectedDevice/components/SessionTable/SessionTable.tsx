@@ -195,7 +195,7 @@ export const SessionTable: FC<Props> = ({
                                   sx={{ padding: "12px" }}
                                 >
                                   {moment(session.time_dev).format(
-                                    "DD.MM.YYYY hh:mm"
+                                    "DD.MM.YYYY kk:mm"
                                   )}
                                 </TableCell>
                                 <TableCell

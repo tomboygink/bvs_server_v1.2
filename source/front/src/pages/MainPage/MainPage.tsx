@@ -11,6 +11,7 @@ export const MainPage = () => {
   const cx = useStyles(styles);
   const cxShared = useStyles(sharedStyles);
 
+  
   return (
     <>
       <section className={cx("section")}>
