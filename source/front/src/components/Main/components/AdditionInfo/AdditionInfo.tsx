@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Divider } from "@mui/material";
 import CommitIcon from "@mui/icons-material/Commit";
 import Battery0BarIcon from "@mui/icons-material/Battery0Bar";
@@ -15,9 +15,10 @@ export const AdditionInfo: FC<Props> = (props) => {
   const { device, isVisible } = props;
   const cx = useStyles(styles);
   const controlSess =
-    device?.control_sess?.time_srv ?? device?.last_sess?.time_srv;
+    device?.control_sess?.time_dev ?? device?.last_sess?.time_dev;
   const controlAkb =
     device?.control_sess?.level_akb ?? device?.last_sess?.level_akb;
+
   return (
     <>
       {isVisible && (
@@ -36,8 +37,8 @@ export const AdditionInfo: FC<Props> = (props) => {
             <div className={cx("row")}>
               <CommitIcon sx={{ color: "#8e66fb" }} />
               <p className={cx("text")}>
-                {moment(device?.last_sess?.time_srv).format("DD.MM.YYYY")}{" "}
-                {moment(device?.last_sess?.time_srv).format("kk:mm")}
+                {moment(device?.last_sess?.time_dev).format("DD.MM.YYYY")}{" "}
+                {moment(device?.last_sess?.time_dev).format("kk:mm")}
               </p>
               <p className={cx("description")}>(последняя сессия)</p>
             </div>
@@ -45,8 +46,8 @@ export const AdditionInfo: FC<Props> = (props) => {
               <div className={cx("row")}>
                 <CommitIcon sx={{ color: "#fd8a04" }} />
                 <p className={cx("text")}>
-                  {moment(device.selectedSession.time_srv).format("DD.MM.YYYY")}{" "}
-                  {moment(device.selectedSession.time_srv).format("kk:mm")}
+                  {moment(device.selectedSession.time_dev).format("DD.MM.YYYY")}{" "}
+                  {moment(device.selectedSession.time_dev).format("kk:mm")}
                 </p>
                 <p className={cx("description")}>(выбранная сессия)</p>
               </div>
