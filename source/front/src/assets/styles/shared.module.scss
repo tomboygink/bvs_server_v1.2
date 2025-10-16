@@ -13,6 +13,24 @@
   margin-bottom: 8px;
 }
 
+.searchInput {
+  border: 1px solid #1c37ad;
+  height: 30px;
+  width: 100%;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  padding-left: 8px;
+}
+
+.searchInput::placeholder {
+  font-size: 14px; 
+  color: #b1b1b1;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
 @media screen and (max-width: size.$small) {
   .title {
     margin: 32px 24px 32px 24px;

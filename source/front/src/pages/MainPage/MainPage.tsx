@@ -18,7 +18,7 @@ export const MainPage = () => {
     <>
       <section className={cx("section")}>
         <h2 className={cxShared("title")}>Устройства</h2>
-        <input type="search" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />      
+        <input placeholder="Введите номер косы" className={cxShared('searchInput')} type="search" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />      
         <LocationTree searchValue={searchValue}/>
       </section>
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, FC } from "react";
 
 import { LocationTreeView } from "./LocationTreeView";
-import { Alert } from "@mui/material";
+import { Alert, dividerClasses } from "@mui/material";
 import styles from "./styles.module.scss";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import {
@@ -170,7 +170,7 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
   const filteredDevices = useMemo(() => {
     if (!searchValue || searchValue.trim() === "") return [];
     const lowerSearch = searchValue.toLowerCase();
-    return devs?.data.filter((dev: any) => dev.number.toLowerCase().includes(lowerSearch)) || [];
+    return devs?.data.filter((dev: any) => dev.number.toLowerCase().startsWith(lowerSearch)) || [];
   }, [devs, searchValue]);
 
   useEffect(() => {
@@ -232,8 +232,6 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
     return filterTree(isAdmin ? locationsTree : filteredLocations, searchValue || '');
   }, [locationsTree, filteredLocations, searchValue, isAdmin]);
 
-  console.log(lastSessions)
-
   return (
     <>
       {isError ? (
@@ -244,10 +242,7 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
         filteredDevices.length > 0 ?
           <SimpleTreeView
             className={cx("tree")} // если хочешь одинаковые стили, можешь использовать общий стиль
-            onSelectedItemsChange={(_, ids) => {
-              const id = ids?.[0] ?? "";
-              handleSelectDevice(id);
-            }}
+            onSelectedItemsChange={(_, id) => handleSelectDevice(id ?? "")}
           >
             {filteredDevices.map((dev: any) => {
               const getColorDevIcon = () => {
@@ -263,9 +258,11 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
                 return "#EF4335";
               };
 
-              const getMarker = () => verifRanges?.data?.some((item: any) => item.dev_id === dev.id) ?? false;
+              const getMarker = () => verifRanges?.data?.some((item: any) => item.dev_id === dev.id);
               const getErrorMarker = () =>
-                lastSessions?.data?.some((item: any) => item.dev_id === dev.id && item.err === "y") ?? false;
+                lastSessions?.data?.some((item: any) =>
+                  item.dev_id === dev.id ? item.err === "y" : false
+                );
 
               return (
                 <TreeItem
