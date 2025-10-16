@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { SimpleTreeView } from "@mui/x-tree-view";
 import { ILocation } from "@src/types/ILocation";
@@ -19,6 +19,10 @@ interface Props {
 export const LocationTreeView: FC<Props> = (props) => {
   const { lastSessions, locations, handleClick, isLoading, ...other } = props;
   const cx = useStyles(styles);
+
+  // useEffect(() => {
+  //   console.log(locations)
+  // }, [locations])
 
   return (
     <div className={cx(`container`)}>

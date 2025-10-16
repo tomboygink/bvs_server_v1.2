@@ -5,9 +5,9 @@ import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 
 interface Props {
-  expireVerifRange: boolean;
+  expireVerifRange?: boolean;
   name: string;
-  error: boolean|undefined;
+  error?: boolean|undefined;
 }
 
 export const ItemLabel: FC<Props> = ({ expireVerifRange, name, error }) => {
