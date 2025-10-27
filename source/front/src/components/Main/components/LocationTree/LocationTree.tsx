@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, FC } from "react";
 
 import { LocationTreeView } from "./LocationTreeView";
-import { Alert, dividerClasses } from "@mui/material";
+import { Alert } from "@mui/material";
 import styles from "./styles.module.scss";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import {
@@ -26,11 +26,11 @@ import { IDev } from "@src/types/IDev";
 import { api } from "@api/api";
 import { createBodyQuery } from "@src/utils/functions";
 import { ECOMMAND } from "@src/types/ECommand";
-import { SimpleTreeView, TreeItem } from "@mui/x-tree-view";
 import { useStyles } from "@hooks/useStyles";
-import moment from "moment";
 import { ItemLabel } from "./ItemLabel";
 import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
+import { SvgIcon } from "@mui/material";
+import moment from "moment";
 
 interface LocationTreeProps {
   searchValue?: string,
@@ -317,6 +317,29 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue, onClearSearch
     setExpandedIds(ids)
   }
 
+  const getColorDevIcon = (dev: IDev) => {
+    const dateSess = moment(dev.time);
+    const date = moment(new Date());
+    const diff = date.diff(dateSess, "days");
+
+    if (dev.deleted) return "#808080";
+    if (!dev.time) return "#EA4335";
+    if (diff <= Number(dev.period_sess)) return "#0FA958";
+    if (diff < Number(dev.period_sess) * 2) return "#FBBC05";
+    if (diff < Number(dev.period_sess) * 3) return "#FC8904";
+    return "#EF4335";
+  };
+
+  const getMarker = (dev: IDev) => {
+    return verifRanges?.data?.some((item: any) => item.dev_id === dev.id);
+  };
+
+  const getErrorMarker = (dev: IDev) => {
+    return lastSessions?.data?.some(
+      (item: any) => item.dev_id === dev.id && item.err === "y"
+    );
+  };
+
   return (
     <>
       {isError ? (
@@ -331,9 +354,20 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue, onClearSearch
                 key={dev.id}
                 className={cx("searchResultItem")}
                 onClick={() => onClickDeviceFromSearch(dev)}
-                style={{ cursor: "pointer", padding: "4px 8px" }}
+                style={{ cursor: "pointer", padding: "8px 12px", backgroundColor: 'white', borderRadius: '8px', display: 'flex', alignItems: 'center' }}
               >
-                {dev.number}
+                <SvgIcon
+                  component={CrisisAlertIcon}
+                  sx={{
+                    color: getColorDevIcon(dev),
+                    fontSize: 20,
+                  }}
+                />
+                <ItemLabel
+                  name={dev.number}
+                  expireVerifRange={getMarker(dev)}
+                  error={getErrorMarker(dev)}
+                />
               </div>
             ))}
           </div>
