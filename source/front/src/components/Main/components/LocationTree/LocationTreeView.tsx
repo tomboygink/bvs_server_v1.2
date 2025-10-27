@@ -15,9 +15,12 @@ interface Props {
   isLoading: boolean;
   lastSessions: ISession[];
   verifRanges: IVerifRange[];
+  expandedItems?: string[] | null;
+  selectedItem?: string | null,
+  onExpandedChange?: (ids: string[]) => void
 }
 export const LocationTreeView: FC<Props> = (props) => {
-  const { lastSessions, locations, handleClick, isLoading, ...other } = props;
+  const { lastSessions, locations, handleClick, isLoading, expandedItems, selectedItem, onExpandedChange, ...other } = props;
   const cx = useStyles(styles);
 
   // useEffect(() => {
@@ -32,6 +35,11 @@ export const LocationTreeView: FC<Props> = (props) => {
         <SimpleTreeView
           className={cx("tree")}
           onSelectedItemsChange={(_, id) => handleClick(id ?? "")}
+          // {...(expandedItems ? { expandedItems } : {})}
+          // {...(selectedItem ? { selectedItems: selectedItem } : {})}
+          onExpandedItemsChange={(_, ids) => onExpandedChange?.(ids)}
+          expandedItems={expandedItems ?? undefined}
+          selectedItems={selectedItem ?? undefined}
         >
           {locations?.map((location) => (
             <LocationItem

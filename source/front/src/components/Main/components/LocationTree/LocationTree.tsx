@@ -34,16 +34,19 @@ import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
 
 interface LocationTreeProps {
   searchValue?: string,
+  onClearSearch?: () => void,
 }
 
 let old_id_dev = "0";
 let old_id_location = "0";
 // let old_svg = "";
 
-export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
+export const LocationTree: FC<LocationTreeProps> = ({ searchValue, onClearSearch }) => {
   const auth = useAuth();
   const dispatch = useAppDispatch();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [expandedIds, setExpandedIds] = useState<string[]>([])
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   const {
     locations: locationArr,
     selectedLocation: currentLocation,
@@ -167,11 +170,28 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
     [locationsTree]
   );
 
+  // const filteredDevices = useMemo(() => {
+  //   if (!searchValue || searchValue.trim() === "") return [];
+  //   const lowerSearch = searchValue.toLowerCase();
+  //   return devs?.data.filter((dev: any) => dev.number.toLowerCase().startsWith(lowerSearch)) || [];
+  // }, [devs, searchValue]);
+
+  const devMapByNumber = useMemo(() => {
+    const map = new Map<string, IDev>();
+    devs?.data.forEach((dev: IDev) => {
+      map.set(dev.number.toLowerCase(), dev);
+    });
+    return map;
+  }, [devs]);
+
   const filteredDevices = useMemo(() => {
     if (!searchValue || searchValue.trim() === "") return [];
     const lowerSearch = searchValue.toLowerCase();
-    return devs?.data.filter((dev: any) => dev.number.toLowerCase().startsWith(lowerSearch)) || [];
-  }, [devs, searchValue]);
+
+    return Array.from(devMapByNumber.entries())
+      .filter(([num]) => num.startsWith(lowerSearch))
+      .map(([, dev]) => dev);
+  }, [searchValue, devMapByNumber]);
 
   useEffect(() => {
     if (devs && "data" in devs) {
@@ -179,9 +199,7 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
     }
   }, [devs]);
 
-  // console.log(locationArr)
-  // console.log(locationsTree)
-
+  //-------------------------------------------------------------
   const handleSelectDevice = (id: string) => {
     const selectedDev = devs?.data.find((d: any) => d.id === id);
     if (selectedDev) {
@@ -191,34 +209,32 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
     }
   };
 
-  const filterTree = (locations: ILocation[], query: string): ILocation[] => {
+  const filterTreeWithDevices = (locations: ILocation[], query: string): ILocation[] => {
     if (!query) return locations;
 
     const lowerQuery = query.toLowerCase();
 
-    // Рекурсивно фильтруем дерево
     const filtered = locations
       .map(location => {
-        // Фильтруем девайсы в локации
+        // Фильтруем девайсы локации по startsWith
         const filteredDevs = location.devs?.filter(dev =>
-          dev.number.toLowerCase().includes(lowerQuery)
+          dev.number.toLowerCase().startsWith(lowerQuery)
         ) || [];
 
-        // Проверяем совпадение по локации (например, location.name или другое поле)
+        // Проверяем совпадение по локации (например, location.g_name)
         const locationMatches = location.g_name?.toLowerCase().includes(lowerQuery);
 
-        // Фильтруем дочерние локации, если есть (если дерево вложенное)
-        const filteredChildren = location.subLocations ? filterTree(location.subLocations, query) : [];
+        // Рекурсивно фильтруем дочерние локации
+        const filteredChildren = location.subLocations ? filterTreeWithDevices(location.subLocations, query) : [];
 
         if (locationMatches || filteredDevs.length > 0 || filteredChildren.length > 0) {
           return {
             ...location,
             devs: filteredDevs,
-            children: filteredChildren,
+            subLocations: filteredChildren, // важно правильно указать название свойства для дочерних локаций
           };
         }
 
-        // Если нет совпадений — фильтруем локацию из итогового дерева
         return null;
       })
       .filter(Boolean) as ILocation[];
@@ -229,8 +245,77 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
   const filteredTree = useMemo(() => {
     if (!locationsTree) return [];
 
-    return filterTree(isAdmin ? locationsTree : filteredLocations, searchValue || '');
+    return filterTreeWithDevices(isAdmin ? locationsTree : filteredLocations, searchValue || '');
   }, [locationsTree, filteredLocations, searchValue, isAdmin]);
+
+
+  //-----------------------------------------------------------------------------------------------
+  // function findDevicePath(tree: ILocation[], devId: string, path: string[] = []): string[] | null {
+  //   for (const location of tree) {
+  //     const currentPath = [...path, location.id];
+
+  //     // Проверка на устройства
+  //     const devFound = location.devs?.some(dev => dev.id === devId);
+  //     if (devFound) return (currentPath as string[]);
+
+  //     // Рекурсивный поиск в подлокациях
+  //     if (location.subLocations) {
+  //       const subPath = findDevicePath(location.subLocations, devId, (currentPath as string[]));
+  //       if (subPath) return subPath;
+  //     }
+  //   }
+
+  //   return null;
+  // }
+
+  function findDevicePath(tree: ILocation[], devId: string, path: string[] = []): string[] | null {
+    for (const location of tree) {
+      const currentPath = [...path, location.id];
+      const devFound = location.devs?.some(dev => dev.id === devId);
+      if (devFound) return (currentPath as string[]);
+      if (location.subLocations) {
+        const subPath = findDevicePath(location.subLocations, devId, (currentPath as string[]));
+        if (subPath) return subPath;
+      }
+    }
+    return null;
+  }
+
+  const onClickDeviceFromSearch = (dev: IDev) => {
+    const path = findDevicePath(locationsTree ?? [], dev.id);
+    if (path) {
+      setExpandedIds(path);               // Раскрываем все локации по пути к устройству
+      setSelectedId("dev_" + String(dev.id));    // Выделяем устройство в дереве
+    }
+    dispatch(setSelectedDev(dev));
+    dispatch(setVisibleDevice(true));
+    dispatch(setIsSelected(true));
+
+    if (onClearSearch) onClearSearch();  // Сбрасываем строку поиска, чтобы показать дерево
+  };
+
+  useEffect(() => {
+    if (filteredDevices.length === 1) {
+      const dev = filteredDevices[0];
+      const path = findDevicePath(locationsTree ?? [], dev.id);
+
+      if (path) {
+        setExpandedIds(path); // локации до устройства
+        setSelectedId("dev_" + dev.id); // для дерева с "dev_" префиксом
+      }
+
+      dispatch(setSelectedDev(dev));
+      dispatch(setVisibleDevice(true));
+
+      if (onClearSearch) {
+        onClearSearch()
+      }
+    }
+  }, [filteredDevices]);
+
+  const handleExpandedChange = (ids: string[]) => {
+    setExpandedIds(ids)
+  }
 
   return (
     <>
@@ -240,75 +325,33 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue }) => {
         </Alert>
       ) : (searchValue && searchValue.trim() !== "") ? (
         filteredDevices.length > 0 ?
-          <SimpleTreeView
-            className={cx("tree")} // если хочешь одинаковые стили, можешь использовать общий стиль
-            onSelectedItemsChange={(_, id) => handleSelectDevice(id ?? "")}
-          >
-            {filteredDevices.map((dev: any) => {
-              const getColorDevIcon = () => {
-                const dateSess = moment(dev.time);
-                const date = moment(new Date());
-                const diff = date.diff(dateSess, "days");
-
-                if (dev.deleted) return "#808080";
-                if (!dev.time) return "#EA4335";
-                if (diff <= Number(dev.period_sess)) return "#0FA958";
-                if (diff < Number(dev.period_sess) * 2) return "#FBBC05";
-                if (diff < Number(dev.period_sess) * 3) return "#FC8904";
-                return "#EF4335";
-              };
-
-              const getMarker = () => verifRanges?.data?.some((item: any) => item.dev_id === dev.id);
-              const getErrorMarker = () =>
-                lastSessions?.data?.some((item: any) =>
-                  item.dev_id === dev.id ? item.err === "y" : false
-                );
-
-              return (
-                <TreeItem
-                  key={dev.id}
-                  itemId={String(dev.id)}
-                  label={
-                    <ItemLabel
-                      name={dev.number}
-                      expireVerifRange={getMarker()}
-                      error={getErrorMarker()}
-                    />
-                  }
-                  slots={{
-                    endIcon: CrisisAlertIcon,
-                  }}
-                  sx={{
-                    color: dev.deleted
-                      ? "#808080"
-                      : dev.time
-                        ? "#222"
-                        : "#EA4335",
-                    fontSize: "14px",
-                    "& .MuiSvgIcon-root": {
-                      color: getColorDevIcon(),
-                    },
-                  }}
-                />
-              );
-            })}
-          </SimpleTreeView>
+          <div className={cx("searchResults")}>
+            {filteredDevices.map((dev) => (
+              <div
+                key={dev.id}
+                className={cx("searchResultItem")}
+                onClick={() => onClickDeviceFromSearch(dev)}
+                style={{ cursor: "pointer", padding: "4px 8px" }}
+              >
+                {dev.number}
+              </div>
+            ))}
+          </div>
           :
           (
             <div>Устройства не найдены</div>
           )
       ) : (
-        <>
-          <LocationTreeView
-            // TODO: проверить под пользователем, у которого нет прав редактирования
-            locations={isAdmin ? filteredTree : filteredLocations}
-            handleClick={handleSelectLocation}
-            isLoading={isLoading}
-            verifRanges={verifRanges?.data}
-            lastSessions={lastSessions?.data}
-          // devs={devsByLocation?.data}
-          />
-        </>
+        <LocationTreeView
+          locations={isAdmin ? filteredTree : filteredLocations}
+          handleClick={handleSelectLocation}
+          isLoading={isLoading}
+          verifRanges={verifRanges?.data}
+          lastSessions={lastSessions?.data}
+          expandedItems={expandedIds}
+          selectedItem={selectedId}
+          onExpandedChange={handleExpandedChange}
+        />
       )
       }
     </>
