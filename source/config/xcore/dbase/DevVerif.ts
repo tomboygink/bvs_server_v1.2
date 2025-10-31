@@ -53,7 +53,7 @@ export class DevVerif {
         this.args.dev_id +
         " AND dev_number = '" +
         this.args.dev_number +
-        "'"
+        "' ORDER BY id DESC LIMIT 1"
       );
       var result: DevVerifEntity[] = new Array();
       for (var dv in db_response.rows) {

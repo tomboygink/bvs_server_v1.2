@@ -46,7 +46,7 @@ export class DevsGroups {
 
   // Получение всех групп
   async selectAllDevsGroups(): Promise<DevsGroupsEntity[]> {
-    var db_response = await this.db.query("SELECT * FROM devs_groups");
+    var db_response = await this.db.query("SELECT * FROM devs_groups ORDER BY g_name ASC");
     var result: DevsGroupsEntity[] = new Array();
     for (var dg in db_response.rows) {
       result.push(db_response.rows[dg]);

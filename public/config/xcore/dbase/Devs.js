@@ -87,7 +87,7 @@ var Devs = (function () {
             var db_response, result, d;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM devs WHERE group_dev_id = " + this.args.group_dev_id)];
+                    case 0: return [4, this.db.query("SELECT * FROM devs WHERE group_dev_id = " + this.args.group_dev_id + " ORDER BY number ASC")];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();
@@ -104,7 +104,7 @@ var Devs = (function () {
             var db_response, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM devs")];
+                    case 0: return [4, this.db.query("SELECT * FROM devs ORDER BY number ASC")];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();
