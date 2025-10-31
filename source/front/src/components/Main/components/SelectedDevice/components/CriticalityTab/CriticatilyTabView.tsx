@@ -50,8 +50,8 @@ export const CriticatilyTabView: FC<Props> = ({ selectedDev }) => {
                   let diff = 0;
                   if (control_sess && last_sess) {
                     diff = Math.abs(
-                      Number(JSON.parse(control_sess.sess_data).s[i].data) -
-                        Number(JSON.parse(last_sess.sess_data).s[i].data)
+                      Number(JSON.parse(control_sess.sess_data).s[i]?.data) -
+                        Number(JSON.parse(last_sess.sess_data).s[i]?.data)
                     );
                   }
 
@@ -60,13 +60,13 @@ export const CriticatilyTabView: FC<Props> = ({ selectedDev }) => {
                       <TableCell align="center">{sensor.depth}</TableCell>
                       {control_sess ? (
                         <TableCell align="center">
-                          {JSON.parse(control_sess.sess_data).s[i].data}
+                          {JSON.parse(control_sess.sess_data).s[i]?.data}
                         </TableCell>
                       ) : (
                         <>
                           {last_sess ? (
                             <TableCell align="center">
-                              {JSON.parse(last_sess.sess_data)?.s[i].data}
+                              {JSON.parse(last_sess.sess_data)?.s[i]?.data}
                             </TableCell>
                           ) : (
                             <TableCell align="center">Нет данных</TableCell>
@@ -76,7 +76,7 @@ export const CriticatilyTabView: FC<Props> = ({ selectedDev }) => {
                       {last_sess ? (
                         <TableCell align="center">
                           {" "}
-                          {JSON.parse(last_sess.sess_data).s[i].data}
+                          {JSON.parse(last_sess.sess_data).s[i]?.data}
                         </TableCell>
                       ) : (
                         <TableCell align="center">Нет данных</TableCell>

@@ -8,6 +8,7 @@ import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 import { SessionTab } from "../SessionsTab";
 import { useCurrentWidth } from "@hooks/useCurrentWidth";
+import { useAppSelector } from "@hooks/redux";
 
 interface PanelProps {
   children?: React.ReactNode;
@@ -17,6 +18,7 @@ interface PanelProps {
 interface TabPanelViewProps {
   isSelectedSession: boolean;
   isVisibleDevice: boolean;
+  isControlSess: boolean;
 }
 function Panel(props: PanelProps) {
   const { children, value, index, ...other } = props;
@@ -39,10 +41,11 @@ function Panel(props: PanelProps) {
 export const TabPanelView = (props: TabPanelViewProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const width = useCurrentWidth();
-  const { isSelectedSession, isVisibleDevice } = props;
+  const { isSelectedSession, isVisibleDevice, isControlSess } = props;
   const cx = useStyles(styles);
   const [value, setValue] = useState(0);
   const [maxWidth, setMaxWidth] = useState("1px");
+  const { selectedDev } = useAppSelector((state) => state.devSlice);
 
   const handleChangeTab = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -50,6 +53,10 @@ export const TabPanelView = (props: TabPanelViewProps) => {
   useEffect(() => {
     setMaxWidth(`${panelRef.current?.clientWidth}px`);
   }, [width, isVisibleDevice]);
+
+  useEffect(() => {
+    console.log(selectedDev)
+  }, [])
 
   return (
     <div className={cx("tab-container")}>
@@ -73,6 +80,7 @@ export const TabPanelView = (props: TabPanelViewProps) => {
         <Tab
           sx={{ fontSize: "10px" }}
           label="Контроль критичности отклонений"
+          disabled={!isControlSess}
         />
         <Tab
           sx={{ fontSize: "10px" }}

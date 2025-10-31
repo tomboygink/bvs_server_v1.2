@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, FC } from "react";
 
 import { LocationTreeView } from "./LocationTreeView";
 import { Alert } from "@mui/material";
-
+import styles from "./styles.module.scss";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import {
   setSelectedLocation,
@@ -26,15 +26,27 @@ import { IDev } from "@src/types/IDev";
 import { api } from "@api/api";
 import { createBodyQuery } from "@src/utils/functions";
 import { ECOMMAND } from "@src/types/ECommand";
+import { useStyles } from "@hooks/useStyles";
+import { ItemLabel } from "./ItemLabel";
+import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
+import { SvgIcon } from "@mui/material";
+import moment from "moment";
+
+interface LocationTreeProps {
+  searchValue?: string,
+  onClearSearch?: () => void,
+}
 
 let old_id_dev = "0";
 let old_id_location = "0";
 // let old_svg = "";
 
-export const LocationTree = () => {
+export const LocationTree: FC<LocationTreeProps> = ({ searchValue, onClearSearch }) => {
   const auth = useAuth();
   const dispatch = useAppDispatch();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [expandedIds, setExpandedIds] = useState<string[]>([])
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   const {
     locations: locationArr,
     selectedLocation: currentLocation,
@@ -57,6 +69,8 @@ export const LocationTree = () => {
   const { data: verifRanges } = useGetExpireVerifRangeQuery({});
 
   const { data: lastSessions } = useGetAllLastSessQuery({});
+
+  const cx = useStyles(styles);
 
   const handleSelectLocation = (id: string) => {
 
@@ -91,7 +105,7 @@ export const LocationTree = () => {
           dispatch(setIsSelected(false));
         }
       }
-      else{
+      else {
         old_id_location = id;
         dispatch(setVisibleDevice(false));
         const selectedLocation = locationArr?.find(
@@ -99,7 +113,7 @@ export const LocationTree = () => {
         );
 
         if (selectedLocation) {
-          
+
           dispatch(setIsSelected(true));
         }
 
@@ -113,7 +127,7 @@ export const LocationTree = () => {
     else {
       const devId = id.replace("dev_", "");
 
-      if (currentLocation?.id !== id || old_id_dev !== currentLocation?.id || old_id_dev !== devId){
+      if (currentLocation?.id !== id || old_id_dev !== currentLocation?.id || old_id_dev !== devId) {
         const selectedDev = devs?.data.find((dev: IDev) => dev.id === devId);
         dispatch(setVisibleDevice(true));
         if (old_id_dev !== devId) {
@@ -122,7 +136,7 @@ export const LocationTree = () => {
           dispatch(setSelectedDev(selectedDev));
         }
       }
-      else{
+      else {
         dispatch(setVisibleDevice(true));
       }
     }
@@ -141,8 +155,6 @@ export const LocationTree = () => {
     }
   }, [controlSession, lastSession]);
 
- 
-
   useEffect(() => {
     // Если у пользователя есть права редактирования:
     if (auth && "user" in auth && auth?.user?.roles_ids.roles[1] === 2)
@@ -158,11 +170,175 @@ export const LocationTree = () => {
     [locationsTree]
   );
 
+  // const filteredDevices = useMemo(() => {
+  //   if (!searchValue || searchValue.trim() === "") return [];
+  //   const lowerSearch = searchValue.toLowerCase();
+  //   return devs?.data.filter((dev: any) => dev.number.toLowerCase().startsWith(lowerSearch)) || [];
+  // }, [devs, searchValue]);
+
+  const devMapByNumber = useMemo(() => {
+    const map = new Map<string, IDev>();
+    devs?.data.forEach((dev: IDev) => {
+      map.set(dev.number.toLowerCase(), dev);
+    });
+    return map;
+  }, [devs]);
+
+  const filteredDevices = useMemo(() => {
+    if (!searchValue || searchValue.trim() === "") return [];
+    const lowerSearch = searchValue.toLowerCase();
+
+    return Array.from(devMapByNumber.entries())
+      .filter(([num]) => num.startsWith(lowerSearch))
+      .map(([, dev]) => dev);
+  }, [searchValue, devMapByNumber]);
+
   useEffect(() => {
     if (devs && "data" in devs) {
       dispatch(setDevs(devs.data));
     }
   }, [devs]);
+
+  //-------------------------------------------------------------
+  const handleSelectDevice = (id: string) => {
+    const selectedDev = devs?.data.find((d: any) => d.id === id);
+    if (selectedDev) {
+      dispatch(setSelectedDev(selectedDev));
+      dispatch(setVisibleDevice(true));
+      dispatch(setIsSelected(true));
+    }
+  };
+
+  const filterTreeWithDevices = (locations: ILocation[], query: string): ILocation[] => {
+    if (!query) return locations;
+
+    const lowerQuery = query.toLowerCase();
+
+    const filtered = locations
+      .map(location => {
+        // Фильтруем девайсы локации по startsWith
+        const filteredDevs = location.devs?.filter(dev =>
+          dev.number.toLowerCase().startsWith(lowerQuery)
+        ) || [];
+
+        // Проверяем совпадение по локации (например, location.g_name)
+        const locationMatches = location.g_name?.toLowerCase().includes(lowerQuery);
+
+        // Рекурсивно фильтруем дочерние локации
+        const filteredChildren = location.subLocations ? filterTreeWithDevices(location.subLocations, query) : [];
+
+        if (locationMatches || filteredDevs.length > 0 || filteredChildren.length > 0) {
+          return {
+            ...location,
+            devs: filteredDevs,
+            subLocations: filteredChildren, // важно правильно указать название свойства для дочерних локаций
+          };
+        }
+
+        return null;
+      })
+      .filter(Boolean) as ILocation[];
+
+    return filtered;
+  };
+
+  const filteredTree = useMemo(() => {
+    if (!locationsTree) return [];
+
+    return filterTreeWithDevices(isAdmin ? locationsTree : filteredLocations, searchValue || '');
+  }, [locationsTree, filteredLocations, searchValue, isAdmin]);
+
+
+  //-----------------------------------------------------------------------------------------------
+  // function findDevicePath(tree: ILocation[], devId: string, path: string[] = []): string[] | null {
+  //   for (const location of tree) {
+  //     const currentPath = [...path, location.id];
+
+  //     // Проверка на устройства
+  //     const devFound = location.devs?.some(dev => dev.id === devId);
+  //     if (devFound) return (currentPath as string[]);
+
+  //     // Рекурсивный поиск в подлокациях
+  //     if (location.subLocations) {
+  //       const subPath = findDevicePath(location.subLocations, devId, (currentPath as string[]));
+  //       if (subPath) return subPath;
+  //     }
+  //   }
+
+  //   return null;
+  // }
+
+  function findDevicePath(tree: ILocation[], devId: string, path: string[] = []): string[] | null {
+    for (const location of tree) {
+      const currentPath = [...path, location.id];
+      const devFound = location.devs?.some(dev => dev.id === devId);
+      if (devFound) return (currentPath as string[]);
+      if (location.subLocations) {
+        const subPath = findDevicePath(location.subLocations, devId, (currentPath as string[]));
+        if (subPath) return subPath;
+      }
+    }
+    return null;
+  }
+
+  const onClickDeviceFromSearch = (dev: IDev) => {
+    const path = findDevicePath(locationsTree ?? [], dev.id);
+    if (path) {
+      setExpandedIds(path);               // Раскрываем все локации по пути к устройству
+      setSelectedId("dev_" + String(dev.id));    // Выделяем устройство в дереве
+    }
+    dispatch(setSelectedDev(dev));
+    dispatch(setVisibleDevice(true));
+    dispatch(setIsSelected(true));
+
+    if (onClearSearch) onClearSearch();  // Сбрасываем строку поиска, чтобы показать дерево
+  };
+
+  useEffect(() => {
+    if (filteredDevices.length === 1) {
+      const dev = filteredDevices[0];
+      const path = findDevicePath(locationsTree ?? [], dev.id);
+
+      if (path) {
+        setExpandedIds(path); // локации до устройства
+        setSelectedId("dev_" + dev.id); // для дерева с "dev_" префиксом
+      }
+
+      dispatch(setSelectedDev(dev));
+      dispatch(setVisibleDevice(true));
+
+      if (onClearSearch) {
+        onClearSearch()
+      }
+    }
+  }, [filteredDevices]);
+
+  const handleExpandedChange = (ids: string[]) => {
+    setExpandedIds(ids)
+  }
+
+  const getColorDevIcon = (dev: IDev) => {
+    const dateSess = moment(dev.time);
+    const date = moment(new Date());
+    const diff = date.diff(dateSess, "days");
+
+    if (dev.deleted) return "#808080";
+    if (!dev.time) return "#EA4335";
+    if (diff <= Number(dev.period_sess)) return "#0FA958";
+    if (diff < Number(dev.period_sess) * 2) return "#FBBC05";
+    if (diff < Number(dev.period_sess) * 3) return "#FC8904";
+    return "#EF4335";
+  };
+
+  const getMarker = (dev: IDev) => {
+    return verifRanges?.data?.some((item: any) => item.dev_id === dev.id);
+  };
+
+  const getErrorMarker = (dev: IDev) => {
+    return lastSessions?.data?.some(
+      (item: any) => item.dev_id === dev.id && item.err === "y"
+    );
+  };
 
   return (
     <>
@@ -170,17 +346,48 @@ export const LocationTree = () => {
         <Alert severity="error">
           Произошла ошибка при загрузке устройств. Обратитесь к администратору.
         </Alert>
+      ) : (searchValue && searchValue.trim() !== "") ? (
+        filteredDevices.length > 0 ?
+          <div className={cx("searchResults")}>
+            {filteredDevices.map((dev) => (
+              <div
+                key={dev.id}
+                className={cx("searchResultItem")}
+                onClick={() => onClickDeviceFromSearch(dev)}
+                style={{ cursor: "pointer", padding: "8px 12px", backgroundColor: 'white', borderRadius: '8px', display: 'flex', alignItems: 'center' }}
+              >
+                <SvgIcon
+                  component={CrisisAlertIcon}
+                  sx={{
+                    color: getColorDevIcon(dev),
+                    fontSize: 20,
+                  }}
+                />
+                <ItemLabel
+                  name={dev.number}
+                  expireVerifRange={getMarker(dev)}
+                  error={getErrorMarker(dev)}
+                />
+              </div>
+            ))}
+          </div>
+          :
+          (
+            <div>Устройства не найдены</div>
+          )
       ) : (
         <LocationTreeView
-          // TODO: проверить под пользователем, у которого нет прав редактирования
-          locations={isAdmin ? locationsTree : filteredLocations}
+          locations={isAdmin ? filteredTree : filteredLocations}
           handleClick={handleSelectLocation}
           isLoading={isLoading}
           verifRanges={verifRanges?.data}
           lastSessions={lastSessions?.data}
-        // devs={devsByLocation?.data}
+          expandedItems={expandedIds}
+          selectedItem={selectedId}
+          onExpandedChange={handleExpandedChange}
         />
-      )}
+      )
+      }
     </>
   );
 };
