@@ -89,7 +89,7 @@ var DevsGroups = (function () {
             var db_response, result, dg;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.db.query("SELECT * FROM devs_groups")];
+                    case 0: return [4, this.db.query("SELECT * FROM devs_groups ORDER BY g_name ASC")];
                     case 1:
                         db_response = _a.sent();
                         result = new Array();

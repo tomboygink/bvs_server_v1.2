@@ -36,7 +36,7 @@ export class Devs {
   //Получение устройств при нажатии на группу
   async selectDevs(): Promise<DevsEntity[]> {
     var db_response = await this.db.query(
-      "SELECT * FROM devs WHERE group_dev_id = " + this.args.group_dev_id
+      "SELECT * FROM devs WHERE group_dev_id = " + this.args.group_dev_id + " ORDER BY number ASC"
     );
 
     var result: DevsEntity[] = new Array();
@@ -48,7 +48,7 @@ export class Devs {
 
   //Получение всех устройств
   async selectAllDevs(): Promise<DevsEntity[]> {
-    var db_response = await this.db.query("SELECT * FROM devs");
+    var db_response = await this.db.query("SELECT * FROM devs ORDER BY number ASC");
     var result: DevsEntity[] = new Array();
     result = [...db_response.rows];
     return result;

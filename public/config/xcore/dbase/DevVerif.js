@@ -93,7 +93,7 @@ var DevVerif = (function () {
                                 this.args.dev_id +
                                 " AND dev_number = '" +
                                 this.args.dev_number +
-                                "'")];
+                                "' ORDER BY id DESC LIMIT 1")];
                     case 1:
                         db_response = _b.sent();
                         result = new Array();
