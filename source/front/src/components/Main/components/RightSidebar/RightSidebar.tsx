@@ -29,6 +29,7 @@ export const RightSidebar = () => {
     <div className={cx("container")}>
       <InfoSticker />
       <InfoPassedDays
+        period = {Number(selectedDev?.period_sess)}
         timeSession={selectedDev?.last_sess?.time_srv}
         isTimeSession={Boolean(selectedDev?.last_sess?.time_srv)}
         isVisible={isVisibleDevice}

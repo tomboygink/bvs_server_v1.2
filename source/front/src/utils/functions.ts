@@ -63,13 +63,21 @@ export function isInnInArray<T extends keyof IOrg>(
 export const getTextPeriod = (period: string | undefined) => {
   if (period) {
     if (period === "1") {
-      return "один раз в день";
+      return "1 раз в день";
     } else if (period === "7") {
-      return "один раз в 7 дней";
+      return "1 раз в 7 дней";
     } else if (period === "14") {
-      return "один раз в 14 дней";
+      return "1 раз в 14 дней";
     } else if (period === "31") {
-      return "один раз в 30 (31) дней";
+      return "1 раз в 30 (31) дней";
+      } else if (period === "144") {
+      return "1 раз в 10 мин";
+      } else if (period === "24") {
+      return "1 раз в 1 час";
+      } else if (period === "8") {
+      return "1 раз в 3 часа";
+      } else if (period === "4") {
+      return "1 раз в 6 часов";
     } else return "не установлен";
   }
 };

@@ -179,7 +179,10 @@ var ServerReceiver = (function () {
                                     socket.end();
                                 }
                                 else {
+                                    console.log("\x1b[33m" + s_ind + " << \x1B[37m " + data_str);
                                     console.log("\x1b[33m" + s_ind + " << \x1b[31mПопытка взлома");
+                                    fs.appendFile(path.join(logsPath, fileName), time_log + data_str + '\n', 'utf-8', function (err) { });
+                                    fs.appendFile(path.join(logsPath, fileName), '________________________________________________________________________________\n', 'utf-8', function (err) { });
                                     socket.end();
                                 }
                             }

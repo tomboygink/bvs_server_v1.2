@@ -77,8 +77,13 @@ export const sideBarLinksData = [
 ];
 
 export const periodOptionsData = [
-  { id: "1", label: "Один раз в день", value: "1" },
-  { id: "2", label: "Один раз в 7 дней", value: "7" },
-  { id: "3", label: "Один раз в 14 дней", value: "14" },
-  { id: "4", label: "Один раз в 30(31) дней", value: "31" },
+  { id: "1", label: "1 раз в день", value: "1" },
+  { id: "2", label: "1 раз в 7 дней", value: "7" },
+  { id: "3", label: "1 раз в 14 дней", value: "14" },
+  { id: "4", label: "1 раз в 30(31) дней", value: "31" },
+  { id: "5", label: "1 раз в 10 минут", value: "144" },
+  { id: "5", label: "1 раз в 1 час", value: "24" },
+  { id: "5", label: "1 раз в 3 часа", value: "8" },
+  { id: "5", label: "1 раз в 6 часов", value: "4" }
+
 ];

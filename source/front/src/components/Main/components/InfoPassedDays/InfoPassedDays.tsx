@@ -1,9 +1,9 @@
 import { FC } from "react";
-import moment from "moment";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 
 interface Props {
+  period: number | undefined;
   timeSession: Date | undefined;
   isTimeSession: boolean;
   isVisible: boolean;
@@ -11,16 +11,11 @@ interface Props {
 
 export const InfoPassedDays: FC<Props> = (props) => {
   const cx = useStyles(styles);
-  const { isTimeSession, isVisible, timeSession } = props;
-  // const { selectedDev } = useAppSelector((state) => state.devSlice);
-  // const { data: lastSession } = useGetLastSessQuery(
-  //   { dev_number: selectedDev?.number },
-  //   { skip: !Boolean(selectedDev) }
-  // );
-  //const timeSession = lastSession?.data?.[0]?.time_srv;
-  const newDate = moment(new Date());
-  const dateOfLastSession = moment(timeSession);
-  const diff = newDate.diff(dateOfLastSession, "days");
+  const { period, isTimeSession, isVisible, timeSession } = props;
+  
+  const days = Math.floor((new Date().getTime() - Date.parse(String(timeSession))) / 1000 / 60 / 60 / 24);
+  const hours = Math.floor((new Date().getTime() - Date.parse(String(timeSession))) / 1000 / 60 / 60);
+  const minutes = Math.floor((new Date().getTime() - Date.parse(String(timeSession))) / 1000 / 60);
 
   return (
     <>
@@ -49,14 +44,24 @@ export const InfoPassedDays: FC<Props> = (props) => {
               fill="white"
             />
           </svg>
-          {isTimeSession ? (
-            <div>
-              <p className={cx("text")}>Прошло - {diff} дней</p>
-              <p className={cx("span")}>(с момента приема данных)</p>
-            </div>
-          ) : (
+          {isTimeSession ?
+            period === 1 || period === 7 || period == 14 || period === 31 ?
+              <div>
+                <p className={cx("text")}>Прошло - {days} день/дня/дней</p>
+                <p className={cx("span")}>(с момента приема данных)</p>
+              </div>
+              : period === 4 || period === 8 || period === 24 ?
+                <div>
+                  <p className={cx("text")}>Прошло - {hours} час(а/ов)</p>
+                  <p className={cx("span")}>(с момента приема данных)</p>
+                </div> : period === 144 ? <div>
+                  <p className={cx("text")}>Прошло - {minutes} минут(а/ы)</p>
+                  <p className={cx("span")}>(с момента приема данных)</p>
+                </div>
+                  : null :
             <p className={cx("text")}>Нет данных</p>
-          )}
+
+          }
 
           {/* <div className={cx("icon-wrapper")}>
             <SignalCellularAltIcon sx={{ color: "#fff" }} />

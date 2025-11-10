@@ -25,6 +25,49 @@ export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, veri
     const dateSess = moment(dev.time);
     const date = moment(new Date());
     const diff = date.diff(dateSess, "days");
+
+    //10 минут 
+    if (Number(dev.period_sess) === 144) {
+      const minutes = Math.floor((new Date().getTime() - Date.parse(String(dev.time))) / 1000 / 60);
+      if (minutes < 10) { return "#0FA958"; }
+      else if (minutes < 10 * 2) { return "#FBBC05"; }
+      else if (minutes >= 10 * 2 && minutes < 10 * 3) { return "#FC8904"; }
+      else { return "#EF4335"; }
+    }
+    //один раз в 1
+    if (Number(dev.period_sess) === 24) {
+      const hours = Math.floor((new Date().getTime() - Date.parse(String(dev.time))) / 1000 / 60 / 60);
+
+      if (hours < 1) { return "#0FA958"; }
+      else if (hours < 1 * 2) { return "#FBBC05"; }
+      else if ((hours >= 1 * 2 && hours < 1 * 3)) { return "#FC8904"; }
+      else { return "#EF4335"; }
+    }
+    //один раз в 3
+    if (Number(dev.period_sess) === 8) {
+      const hours = Math.floor((new Date().getTime() - Date.parse(String(dev.time))) / 1000 / 60 / 60);
+      if (hours < 3) { return "#0FA958"; }
+      else if (hours < 3 * 2) { return "#FBBC05"; }
+      else if (hours >= 3 * 2 && hours < 3 * 3) { return "#FC8904"; }
+      else { return "#EF4335"; }
+    }
+    //один раз в 6
+    if (Number(dev.period_sess) === 4) {
+      const hours = Math.floor((new Date().getTime() - Date.parse(String(dev.time))) / 1000 / 60 / 60);
+      if (hours < 6) { return "#0FA958"; }
+      else if (hours < 6 * 2) {  return "#FBBC05"; }
+      else if (hours >= 6 * 2 && hours < 6 * 3) { return "#FC8904"; }
+      else { return "#EF4335"; }
+    }
+
+    // Если устройство удалено - серый
+    if (dev.deleted) {
+      return "#808080";
+    }
+    // Если время последней сессии отсутствует - красный
+    if (!dev.time) {
+      return "#EA4335";
+    }
     // Если устройство удалено - серый
     if (dev.deleted) {
       return "#808080";
@@ -50,6 +93,7 @@ export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, veri
     }
     // Во всех остальных случаях - красный
     else return "#EF4335";
+
   };
 
   const getMarker = (dev: IDev) => {
@@ -57,12 +101,12 @@ export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, veri
   };
 
   const getErrorMarker = (dev: IDev) => {
-  return lastSession?.some((item) => item.dev_id === dev.id ? item.err === 'y' ? true : false : false)
+    return lastSession?.some((item) => item.dev_id === dev.id ? item.err === 'y' ? true : false : false)
   }
 
   return (
-        <>
-          <TreeItem
+    <>
+      <TreeItem
         itemId={location.id || ""}
         label={location.g_name}
         slots={{
@@ -88,7 +132,7 @@ export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, veri
       >
         {location.subLocations?.length !== 0 && (
           <>
-          {location.subLocations?.map((item) => (
+            {location.subLocations?.map((item) => (
               <LocationItem
                 key={item.id}
                 location={item}
@@ -100,38 +144,38 @@ export const LocationItem: FC<Props> = ({ location, isLoading, lastSession, veri
           </>
         )}
 
-      <>
-        {location?.devs?.map((dev) => {
-          return (
-            <TreeItem
-              key={dev.id}
-              itemId={`dev_${dev.id}`}
-              //label={dev.number}
-              label={
-                <ItemLabel
-                  name={dev.number}
-                  expireVerifRange={getMarker(dev)}
-                  error={getErrorMarker(dev)}
-                />
-              }
-              slots={{
-                endIcon: CrisisAlertIcon,
-              }}
-              sx={{
-                color: `${dev.deleted ? "#808080" : dev.time ? "#222" : "#EA4335"
-                  }`,
-                // `${dev.time ? "#222" : "#EA4335"}`,
-                fontSize: "14px",
-                "& .MuiSvgIcon-root": {
-                  color: getColorDevIcon(dev),
-                },
-              }}
-            />
-          );
-        })}
-      </>
-        
-      </TreeItem>
+        <>
+          {location?.devs?.map((dev) => {
+            return (
+              <TreeItem
+                key={dev.id}
+                itemId={`dev_${dev.id}`}
+                //label={dev.number}
+                label={
+                  <ItemLabel
+                    name={dev.number}
+                    expireVerifRange={getMarker(dev)}
+                    error={getErrorMarker(dev)}
+                  />
+                }
+                slots={{
+                  endIcon: CrisisAlertIcon,
+                }}
+                sx={{
+                  color: `${dev.deleted ? "#808080" : dev.time ? "#222" : "#EA4335"
+                    }`,
+                  // `${dev.time ? "#222" : "#EA4335"}`,
+                  fontSize: "14px",
+                  "& .MuiSvgIcon-root": {
+                    color: getColorDevIcon(dev),
+                  },
+                }}
+              />
+            );
+          })}
         </>
+
+      </TreeItem>
+    </>
   );
 };
