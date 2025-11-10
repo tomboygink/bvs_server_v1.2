@@ -54,9 +54,9 @@ export const TabPanelView = (props: TabPanelViewProps) => {
     setMaxWidth(`${panelRef.current?.clientWidth}px`);
   }, [width, isVisibleDevice]);
 
-  useEffect(() => {
-    console.log(selectedDev)
-  }, [])
+  // useEffect(() => {
+  //   console.log(selectedDev)
+  // }, [])
 
   return (
     <div className={cx("tab-container")}>
