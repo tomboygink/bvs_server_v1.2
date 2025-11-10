@@ -170,12 +170,6 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue, onClearSearch
     [locationsTree]
   );
 
-  // const filteredDevices = useMemo(() => {
-  //   if (!searchValue || searchValue.trim() === "") return [];
-  //   const lowerSearch = searchValue.toLowerCase();
-  //   return devs?.data.filter((dev: any) => dev.number.toLowerCase().startsWith(lowerSearch)) || [];
-  // }, [devs, searchValue]);
-
   const devMapByNumber = useMemo(() => {
     const map = new Map<string, IDev>();
     devs?.data.forEach((dev: IDev) => {
@@ -184,14 +178,42 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue, onClearSearch
     return map;
   }, [devs]);
 
-  const filteredDevices = useMemo(() => {
-    if (!searchValue || searchValue.trim() === "") return [];
-    const lowerSearch = searchValue.toLowerCase();
+  // const filteredDevices = useMemo(() => {
+  //   if (!searchValue || searchValue.trim() === "") return [];
+  //   const lowerSearch = searchValue.toLowerCase();
 
-    return Array.from(devMapByNumber.entries())
-      .filter(([num]) => num.startsWith(lowerSearch))
-      .map(([, dev]) => dev);
-  }, [searchValue, devMapByNumber]);
+  //   return Array.from(devMapByNumber.entries())
+  //     .filter(([num]) => num.startsWith(lowerSearch))
+  //     .map(([, dev]) => dev);
+  // }, [searchValue, devMapByNumber]);
+
+  function collectDevicesFromLocations(locations: ILocation[]): IDev[] {
+    const result: IDev[] = []
+
+    for(const loc of locations) {
+      if(loc.devs) {
+        result.push(...loc.devs)
+      }
+      if(loc.subLocations && loc.subLocations.length > 0) {
+        result.push(...collectDevicesFromLocations(loc.subLocations))
+      }
+    }
+    return result
+  }
+
+  const filteredDevices = useMemo(() => {
+    if(!searchValue || searchValue.trim() === '') {
+      return []
+    }
+
+    const lowerSearch = searchValue.toLowerCase()
+
+    const availableDevs = isAdmin
+    ? collectDevicesFromLocations(locationsTree ?? []) : collectDevicesFromLocations(filteredLocations ?? [])
+
+    return availableDevs.filter((dev: IDev) => dev.number.toLowerCase().startsWith(lowerSearch))
+
+  }, [searchValue, locationsTree, filteredLocations, isAdmin])
 
   useEffect(() => {
     if (devs && "data" in devs) {
@@ -248,26 +270,6 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue, onClearSearch
     return filterTreeWithDevices(isAdmin ? locationsTree : filteredLocations, searchValue || '');
   }, [locationsTree, filteredLocations, searchValue, isAdmin]);
 
-
-  //-----------------------------------------------------------------------------------------------
-  // function findDevicePath(tree: ILocation[], devId: string, path: string[] = []): string[] | null {
-  //   for (const location of tree) {
-  //     const currentPath = [...path, location.id];
-
-  //     // Проверка на устройства
-  //     const devFound = location.devs?.some(dev => dev.id === devId);
-  //     if (devFound) return (currentPath as string[]);
-
-  //     // Рекурсивный поиск в подлокациях
-  //     if (location.subLocations) {
-  //       const subPath = findDevicePath(location.subLocations, devId, (currentPath as string[]));
-  //       if (subPath) return subPath;
-  //     }
-  //   }
-
-  //   return null;
-  // }
-
   function findDevicePath(tree: ILocation[], devId: string, path: string[] = []): string[] | null {
     for (const location of tree) {
       const currentPath = [...path, location.id];
@@ -294,24 +296,24 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue, onClearSearch
     if (onClearSearch) onClearSearch();  // Сбрасываем строку поиска, чтобы показать дерево
   };
 
-  useEffect(() => {
-    if (filteredDevices.length === 1) {
-      const dev = filteredDevices[0];
-      const path = findDevicePath(locationsTree ?? [], dev.id);
+  // useEffect(() => {
+  //   if (filteredDevices.length === 1) {
+  //     const dev = filteredDevices[0];
+  //     const path = findDevicePath(locationsTree ?? [], dev.id);
 
-      if (path) {
-        setExpandedIds(path); // локации до устройства
-        setSelectedId("dev_" + dev.id); // для дерева с "dev_" префиксом
-      }
+  //     if (path) {
+  //       setExpandedIds(path); // локации до устройства
+  //       setSelectedId("dev_" + dev.id); // для дерева с "dev_" префиксом
+  //     }
 
-      dispatch(setSelectedDev(dev));
-      dispatch(setVisibleDevice(true));
+  //     dispatch(setSelectedDev(dev));
+  //     dispatch(setVisibleDevice(true));
 
-      if (onClearSearch) {
-        onClearSearch()
-      }
-    }
-  }, [filteredDevices]);
+  //     if (onClearSearch) {
+  //       onClearSearch()
+  //     }
+  //   }
+  // }, [filteredDevices]);
 
   const handleExpandedChange = (ids: string[]) => {
     setExpandedIds(ids)
