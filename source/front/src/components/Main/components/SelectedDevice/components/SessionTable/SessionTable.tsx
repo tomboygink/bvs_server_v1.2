@@ -208,7 +208,7 @@ export const SessionTable: FC<Props> = ({
                                       justifyContent: "center",
                                     }}
                                   >
-                                    {session.level_akb}
+                                    {String(session.level_akb).replace(".", ",")} В
                                     <BatteryChargingFullIcon
                                       fontSize="small"
                                       sx={{
