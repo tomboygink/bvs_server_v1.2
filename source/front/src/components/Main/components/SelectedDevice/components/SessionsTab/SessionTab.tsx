@@ -7,7 +7,33 @@ import { useGetSelectedDevSessionByPeriodQuery } from "@src/redux/services/devsA
 
 export const SessionTab = () => {
   const auth = useAuth();
-  const { errors, values, handleChange, isValid } = useFormValidation();
+  const { errors, values, handleChange, /*isValid,*/ setValues } = useFormValidation();
+
+  //Установка певое число актуального месяца с 00:00
+  useEffect(() => {
+    const now = new Date();
+    //начало периода
+    const firstDayMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0);
+    const firstOffsetMinutes = firstDayMonth.getTimezoneOffset();
+    const firstLocal = new Date(firstDayMonth.getTime() - firstOffsetMinutes * 60 * 1000);
+    const formattedStart = firstLocal.toISOString().slice(0, 16)
+
+    //окончание периода 
+    const todayMonth = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59)
+    const todayOffsetMinutes = todayMonth.getTimezoneOffset();
+    const todayLocal = new Date(todayMonth.getTime() - todayOffsetMinutes * 60 * 1000);
+
+    const formattedEnd = todayLocal.toISOString().slice(0, 16)
+
+    setValues(prev => ({
+      ...prev,
+      sess_period_start: formattedStart,
+      sess_period_end: formattedEnd
+    }));
+
+
+  }, []);
+
   const [isPeriod, setIsPeriod] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const { selectedDev, isVisibleDevice } = useAppSelector(
@@ -29,11 +55,15 @@ export const SessionTab = () => {
     { skip: !isNotSkip }
   );
 
+
   const setPeriod = (event: FormEvent) => {
     event.preventDefault();
 
     setIsPeriod(true);
   };
+
+
+
 
   useEffect(() => {
     // Если у пользователя есть права редактирования:
@@ -44,9 +74,10 @@ export const SessionTab = () => {
   return (
     <SessonsTabView
       errors={errors}
+      values={values}
       handleChange={handleChange}
       handleSubmit={setPeriod}
-      isValid={isValid}
+      // isValid={isValid}
       sessions={sessions?.data}
       isAdmin={isAdmin}
       device={selectedDev}

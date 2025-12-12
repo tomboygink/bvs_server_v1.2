@@ -17,8 +17,9 @@ interface Props {
     >,
     regexp?: RegExp
   ) => void;
+  values: any;
   handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  isValid: boolean;
+  // isValid: boolean;
   sessions: ISession[];
   isAdmin: boolean;
   device: IDev | null;
@@ -26,9 +27,10 @@ interface Props {
   isSuccessGetSession: boolean;
   isErrorGetSession: boolean;
 }
+
 export const SessonsTabView: FC<Props> = (props) => {
   const cx = useStyles(styles);
-  const { errors, handleChange, handleSubmit, isValid, ...other } = props;
+  const { errors, values, handleChange, handleSubmit, /*isValid,*/ ...other } = props;
   return (
     <div className={cx("container")}>
       <form onSubmit={handleSubmit}>
@@ -43,6 +45,7 @@ export const SessonsTabView: FC<Props> = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
+            value={values.sess_period_start}
             onChange={handleChange}
             error={Boolean(errors.sess_period_start)}
             helperText={errors.sess_period_start}
@@ -57,16 +60,18 @@ export const SessonsTabView: FC<Props> = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
+            value={values.sess_period_end}
             onChange={handleChange}
             error={Boolean(errors.sess_period_end)}
             helperText={errors.sess_period_end}
           />
-          <Button type="submit" disabled={!isValid}>
+          {/* <Button type="submit" disabled={!isValid}> */}
+          <Button type="submit">
             Установить
           </Button>
         </fieldset>
       </form>
-      <SessionTable {...other} />
+      <SessionTable sess_period_start = {values.sess_period_start} sess_period_end= {values.sess_period_end} {...other} />
     </div>
   );
 };
