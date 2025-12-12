@@ -34,6 +34,8 @@ interface Props {
   isLoadingGetSessions: boolean;
   isSuccessGetSession: boolean;
   isErrorGetSession: boolean;
+  sess_period_start?: string;
+  sess_period_end?: string;
 }
 export const SessionTable: FC<Props> = ({
   sessions,
@@ -42,6 +44,8 @@ export const SessionTable: FC<Props> = ({
   isLoadingGetSessions,
   isSuccessGetSession,
   isErrorGetSession,
+  sess_period_start,
+  sess_period_end,
 }) => {
   const dispatch = useAppDispatch();
   const cx = useStyles(styles);
@@ -88,7 +92,7 @@ export const SessionTable: FC<Props> = ({
   const handleExportExel = () => {
     const table = document.getElementById("sessions-exel");
     const workbook = utils.table_to_book(table);
-    writeFile(workbook, "Report.xlsx");
+    writeFile(workbook, "Report_" + device?.number + "_" + sess_period_start?.replace("T00:00","") + "_" + sess_period_end?.replace("T23:59","") + "_.xlsx");
   };
 
   const handleExoprtCsv = () => {
@@ -105,7 +109,7 @@ export const SessionTable: FC<Props> = ({
     a.setAttribute(
       "href",
       "data:text/csv; charset=utf-8," +
-        encodeURIComponent(universalBOM + csvString)
+      encodeURIComponent(universalBOM + csvString)
     );
     a.setAttribute("download", "Report.csv");
     window.document.body.appendChild(a);
@@ -195,7 +199,7 @@ export const SessionTable: FC<Props> = ({
                                   sx={{ padding: "12px" }}
                                 >
                                   {moment(session.time_dev).format(
-                                    "DD.MM.YYYY kk:mm"
+                                    "DD.MM.YYYY HH:mm"
                                   )}
                                 </TableCell>
                                 <TableCell
@@ -225,7 +229,7 @@ export const SessionTable: FC<Props> = ({
                                       sx={{ padding: "12px" }}
                                     >
                                       {isLoading &&
-                                      session.id === selectedSession?.id ? (
+                                        session.id === selectedSession?.id ? (
                                         <CircularProgress />
                                       ) : (
                                         <Button

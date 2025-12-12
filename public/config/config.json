@@ -8,8 +8,8 @@
         "port": "3041"
     },
     "server_receiver_config": {
-        "host": "0.0.0.0",
-        "port": 50
+        "host": "127.0.0.1",
+        "port": 5050
     },
     "config_db": {
         "host": "localhost",

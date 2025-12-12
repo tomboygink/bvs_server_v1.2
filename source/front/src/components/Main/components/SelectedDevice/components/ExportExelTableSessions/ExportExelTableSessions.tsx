@@ -24,7 +24,7 @@ export const ExportExelTableSessions: FC<Props> = ({
         <Table id="sessions-exel" sx={{ display: "none" }}>
           <TableHead>
             <TableRow>
-              <TableCell>Устройство</TableCell>
+              <TableCell >Устройство</TableCell>
               <TableCell>Время устройства</TableCell>
               <TableCell>Время сервера</TableCell>
               <TableCell>АКБ</TableCell>
@@ -37,12 +37,12 @@ export const ExportExelTableSessions: FC<Props> = ({
             {sessions.map((session) => {
               return (
                 <TableRow key={session.id}>
-                  <TableCell>{session.dev_number}</TableCell>
-                  <TableCell>
-                    {moment(session.time_dev).format("DD.MM.YYYY hh:mm")}
+                  <TableCell >{session.dev_number}</TableCell>
+                  <TableCell sx={{ "@media all": { msoNumberFormat: 'dd\\.mm\\.yyyy hh:mm' } }}>
+                    {moment(session.time_dev).format("YYYY-MM-DD HH:mm:ss")}
                   </TableCell>
-                  <TableCell>
-                    {moment(session.time_srv).format("DD.MM.YYYY hh:mm")}
+                  <TableCell sx={{ "@media all": { msoNumberFormat: 'dd\\.mm\\.yyyy hh:mm' } }}>
+                    {moment(session.time_srv).format("YYYY-MM-DD HH:mm:ss")}
                   </TableCell>
                   <TableCell>{session.level_akb}</TableCell>
 
