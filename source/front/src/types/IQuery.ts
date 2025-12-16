@@ -1,12 +1,12 @@
 export interface IQuery {
   cmd: string /* команда запроса */;
   args:
-    | {
-        [key: string]: string | number | boolean;
-      }
-    | {
-        [key: string]: string | number | boolean;
-      }[] /* аргументы запроса { "arg1":"agr1_value", .... } */;
+  | {
+    [key: string]: string | number | boolean;
+  }
+  | {
+    [key: string]: string | number | boolean;
+  }[] /* аргументы запроса { "arg1":"agr1_value", .... } */;
   sess_code: string /* код сессии чтобы проверять пользователя */;
 }
 

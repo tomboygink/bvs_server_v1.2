@@ -89,11 +89,33 @@ export const SessionTable: FC<Props> = ({
     dispatch(setSelectedDev({ ...(device as IDev), selectedSession: session }));
   };
 
+  // const handleExportExel = () => {
+  //   const table = document.getElementById("sessions-exel");
+  //   const workbook = utils.table_to_book(table, { sheet: "Sheet JS" });
+  //   writeFile(workbook, "Report_" + device?.number + "_" + sess_period_start?.replace("T00:00","") + "_" + sess_period_end?.replace("T23:59","") + "_.xlsx");
+  // };
+
   const handleExportExel = () => {
-    const table = document.getElementById("sessions-exel");
-    const workbook = utils.table_to_book(table);
-    writeFile(workbook, "Report_" + device?.number + "_" + sess_period_start?.replace("T00:00","") + "_" + sess_period_end?.replace("T23:59","") + "_.xlsx");
-  };
+  const data = sessions.map((session) => {
+    const sensors = JSON.parse(session.sess_data).s.map((v: any) => String(v.data));
+    return {
+      Устройство: String(session.dev_number),
+      "Время устройства": moment(session.time_dev).format("DD.MM.YYYY HH:mm:ss"),
+      "Время сервера": moment(session.time_srv).format("DD.MM.YYYY HH:mm:ss"),
+      АКБ: String(session.level_akb),
+      ...sensors.reduce((acc: any, val: any, i: any) => ({ ...acc, [`Сенсор ${i + 1}`]: val }), {})
+    };
+  });
+
+  const ws = utils.json_to_sheet(data); // без raw
+  const wb = utils.book_new();
+  utils.book_append_sheet(wb, ws, "Sheet JS");
+
+  writeFile(
+    wb,
+    `Report_${device?.number}_${sess_period_start?.replace("T00:00", "")}_${sess_period_end?.replace("T23:59", "")}.xlsx`
+  );
+};
 
   const handleExoprtCsv = () => {
     const table = document.getElementById("sessions-exel");
@@ -129,6 +151,10 @@ export const SessionTable: FC<Props> = ({
   useEffect(() => {
     isError && console.log("Error");
   }, [isError]);
+
+  useEffect(() => {
+    setPage(0)
+  }, [device?.id])
 
   return (
     <div className={cx("container")}>

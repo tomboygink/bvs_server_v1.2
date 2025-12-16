@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   TableCell,
   Table,
@@ -18,6 +18,7 @@ export const ExportExelTableSessions: FC<Props> = ({
   sessions,
   selectedDev,
 }) => {
+
   return (
     <>
       {sessions?.length > 0 && (
@@ -38,10 +39,11 @@ export const ExportExelTableSessions: FC<Props> = ({
               return (
                 <TableRow key={session.id}>
                   <TableCell >{session.dev_number}</TableCell>
-                  <TableCell sx={{ "@media all": { msoNumberFormat: 'dd\\.mm\\.yyyy hh:mm' } }}>
+                  <TableCell data-type='s' sx={{ "@media all": { msoNumberFormat: 'dd\\.mm\\.yyyy hh:mm:ss' } }}>
                     {moment(session.time_dev).format("YYYY-MM-DD HH:mm:ss")}
+                    {/* {String(session.time_dev)} */}
                   </TableCell>
-                  <TableCell sx={{ "@media all": { msoNumberFormat: 'dd\\.mm\\.yyyy hh:mm' } }}>
+                  <TableCell data-type='s' sx={{ "@media all": { msoNumberFormat: 'dd\\.mm\\.yyyy hh:mm:ss' } }}>
                     {moment(session.time_srv).format("YYYY-MM-DD HH:mm:ss")}
                   </TableCell>
                   <TableCell>{session.level_akb}</TableCell>
