@@ -415,11 +415,10 @@ export const SessionTable: FC<Props> = ({
       {sessions && <div style={{ width: "100%", height: 300, paddingTop: '20px' }}>
         <ResponsiveContainer>
           <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="1 1" />
             <XAxis dataKey="date" />
-            <YAxis />
+            <YAxis unit={' В'}/>
             <Tooltip />
-            <Legend />
             <Line type="monotone" dataKey="akb" strokeWidth={3} stroke="#00b646ff" />
           </LineChart>
         </ResponsiveContainer>
