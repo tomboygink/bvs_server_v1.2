@@ -74,6 +74,10 @@ export const LocationTree: FC<LocationTreeProps> = ({ searchValue, onClearSearch
 
   const handleSelectLocation = (id: string) => {
 
+    setSelectedId(id)
+
+    if (onClearSearch) onClearSearch()
+
     //Если выбрана локация 
     if (!id?.includes("dev_")) {
 
