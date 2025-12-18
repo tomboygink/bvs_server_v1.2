@@ -26,6 +26,7 @@ import { ISession } from "@src/types/ISession";
 import { IDev } from "@src/types/IDev";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 interface Props {
   sessions: ISession[];
@@ -96,26 +97,26 @@ export const SessionTable: FC<Props> = ({
   // };
 
   const handleExportExel = () => {
-  const data = sessions.map((session) => {
-    const sensors = JSON.parse(session.sess_data).s.map((v: any) => String(v.data));
-    return {
-      Устройство: String(session.dev_number),
-      "Время устройства": moment(session.time_dev).format("DD.MM.YYYY HH:mm:ss"),
-      "Время сервера": moment(session.time_srv).format("DD.MM.YYYY HH:mm:ss"),
-      АКБ: String(session.level_akb),
-      ...sensors.reduce((acc: any, val: any, i: any) => ({ ...acc, [`Сенсор ${i + 1}`]: val }), {})
-    };
-  });
+    const data = sessions.map((session) => {
+      const sensors = JSON.parse(session.sess_data).s.map((v: any) => String(v.data));
+      return {
+        Устройство: String(session.dev_number),
+        "Время устройства": moment(session.time_dev).format("DD.MM.YYYY HH:mm:ss"),
+        "Время сервера": moment(session.time_srv).format("DD.MM.YYYY HH:mm:ss"),
+        АКБ: String(session.level_akb),
+        ...sensors.reduce((acc: any, val: any, i: any) => ({ ...acc, [`Сенсор ${i + 1}`]: val }), {})
+      };
+    });
 
-  const ws = utils.json_to_sheet(data); // без raw
-  const wb = utils.book_new();
-  utils.book_append_sheet(wb, ws, "Sheet JS");
+    const ws = utils.json_to_sheet(data); // без raw
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "Sheet JS");
 
-  writeFile(
-    wb,
-    `Report_${device?.number}_${sess_period_start?.replace("T00:00", "")}_${sess_period_end?.replace("T23:59", "")}.xlsx`
-  );
-};
+    writeFile(
+      wb,
+      `Report_${device?.number}_${sess_period_start?.replace("T00:00", "")}_${sess_period_end?.replace("T23:59", "")}.xlsx`
+    );
+  };
 
   const handleExoprtCsv = () => {
     const table = document.getElementById("sessions-exel");
@@ -155,6 +156,19 @@ export const SessionTable: FC<Props> = ({
   useEffect(() => {
     setPage(0)
   }, [device?.id])
+
+  function mergeArrays(
+    sessions: ISession[]
+  ) {
+    return sessions?.map((item) => {
+      return {
+        date: moment(item?.time_dev).format('DD.MM.YYYY'),
+        akb: item?.level_akb
+      };
+    });
+  }
+
+  const data = mergeArrays(sessions)
 
   return (
     <div className={cx("container")}>
@@ -398,6 +412,18 @@ export const SessionTable: FC<Props> = ({
           )}
         </>
       )}
+      {sessions && <div style={{ width: "100%", height: 300, paddingTop: '20px' }}>
+        <ResponsiveContainer>
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="akb" strokeWidth={3} stroke="#00b646ff" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>}
     </div>
   );
 };
