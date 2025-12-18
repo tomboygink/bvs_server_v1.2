@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, FormEvent } from "react";
+import { FC, ChangeEvent, FormEvent, useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import { Button } from "@components/_shared/Button";
 import { SessionTable } from "../SessionTable";
@@ -8,6 +8,7 @@ import { ISession } from "@src/types/ISession";
 import { useStyles } from "@hooks/useStyles";
 import styles from "./styles.module.scss";
 import { IDev } from "@src/types/IDev";
+import { useAppSelector } from "@hooks/redux";
 
 interface Props {
   errors: FormErrors;
@@ -31,6 +32,8 @@ interface Props {
 export const SessonsTabView: FC<Props> = (props) => {
   const cx = useStyles(styles);
   const { errors, values, handleChange, handleSubmit, /*isValid,*/ ...other } = props;
+  const { selectedDev } = useAppSelector(state => state.devSlice)
+
   return (
     <div className={cx("container")}>
       <form onSubmit={handleSubmit}>
@@ -71,7 +74,7 @@ export const SessonsTabView: FC<Props> = (props) => {
           </Button>
         </fieldset>
       </form>
-      <SessionTable sess_period_start = {values.sess_period_start} sess_period_end= {values.sess_period_end} {...other} />
+      <SessionTable sess_period_start={values.sess_period_start} sess_period_end={values.sess_period_end} {...other} />
     </div>
   );
 };
